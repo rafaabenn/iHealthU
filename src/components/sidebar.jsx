@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import '../styles/sidebar.css';
+import logo from '../assets/logo.svg';  
 
 const navSections = [
   {
@@ -41,7 +42,10 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="logo">
-        <div className="logo-mark">i<span>Health</span>U</div>
+       <div className="logo-mark">
+            <img src={logo} alt="iHealthU logo" className="logo-img" />
+            i<span>Health</span>U
+       </div>
         <div className="logo-sub">Your daily wellness companion</div>
       </div>
       <nav className="nav-section">
