@@ -2,7 +2,6 @@ import Topbar from '../components/Topbar';
 import '../styles/goals.css';
 
 const goals = [
-  { icon: '👟', colorClass: 'g1', title: 'Daily steps', sub: 'Target: 10,000 steps', progress: 78, target: 10000, current: 7842 },
   { icon: '💧', colorClass: 'g2', title: 'Water intake', sub: 'Target: 8 glasses / day', progress: 75, target: 8, current: 6 },
   { icon: '🌙', colorClass: 'g3', title: 'Sleep duration', sub: 'Target: 8 hours / night', progress: 90, target: 8, current: 7.2 },
   { icon: '🏋️', colorClass: 'g4', title: 'Workouts per week', sub: 'Target: 5 sessions', progress: 60, target: 5, current: 3 },

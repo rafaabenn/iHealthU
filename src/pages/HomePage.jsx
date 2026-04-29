@@ -26,7 +26,6 @@ export default function HomePage() {
 
       <div className="stats-row col4">
         <StatCard icon="⚖️" value="62" unit="kg" label="Current weight" delta="▼ 0.4 kg this week" deltaClass="dn" colorClass="c1" />
-        <StatCard icon="👟" value="7,842" label="Steps today" delta="▲ 84% of daily goal" deltaClass="up" colorClass="c2" />
         <StatCard icon="🌙" value="7.2" unit="h" label="Sleep last night" delta="▲ Above average" deltaClass="up" colorClass="c3" />
         <StatCard icon="🔥" value="480" unit="kcal" label="Burned today" delta="▲ 2 workouts" deltaClass="up" colorClass="c4" />
       </div>
@@ -52,7 +51,6 @@ export default function HomePage() {
 
       <div className="bottom-grid">
         <Panel title="🎯 Daily goals" actionText="Edit" onAction={() => navigate('/goals')}>
-          <GoalItem name="Steps" pct="78%" width="78%" fillClass="gf1" />
           <GoalItem name="Water" pct="75%" width="75%" fillClass="gf2" />
           <GoalItem name="Sleep" pct="90%" width="90%" fillClass="gf3" />
           <GoalItem name="Workouts / week" pct="3 / 5" width="60%" fillClass="gf4" />
