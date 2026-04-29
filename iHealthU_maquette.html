@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iHealthU — Interactive Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F2F0EA;
+  --surface: #FDFCF8;
+  --forest: #1C4A3E;
+  --sage: #4A7C6F;
+  --mint: #A8D5C2;
+  --coral: #E8715A;
+  --amber: #E8A84A;
+  --sky: #6BA8C4;
+  --lav: #9B8EC4;
+  --text: #1A1A1A;
+  --text2: #6B6B6B;
+  --text3: #A0A0A0;
+  --border: rgba(0,0,0,0.07);
+  --shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+body { font-family:'Sora',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; display:flex; }
+
+/* ── SIDEBAR ── */
+.sidebar { width:230px; background:var(--forest); flex-shrink:0; display:flex; flex-direction:column; padding:24px 0; }
+.logo { padding:0 20px 24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:18px; }
+.logo-mark { font-size:20px; font-weight:700; color:#fff; letter-spacing:-0.5px; }
+.logo-mark span { color:var(--mint); }
+.logo-sub { font-size:11px; color:rgba(255,255,255,0.3); margin-top:2px; }
+.nav-section { padding:0 12px; flex:1; overflow-y:auto; }
+.nav-label { font-size:10px; font-weight:600; letter-spacing:1.2px; color:rgba(255,255,255,0.3); padding:0 8px; margin:14px 0 5px; text-transform:uppercase; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:10px; cursor:pointer; color:rgba(255,255,255,0.55); font-size:13px; font-weight:500; transition:all .2s; margin-bottom:2px; user-select:none; }
+.nav-item:hover { background:rgba(255,255,255,0.07); color:rgba(255,255,255,0.85); }
+.nav-item.active { background:rgba(168,213,194,0.18); color:var(--mint); }
+.nav-icon { font-size:15px; width:22px; text-align:center; }
+.nav-badge { margin-left:auto; background:var(--coral); color:#fff; font-size:10px; padding:2px 7px; border-radius:20px; font-weight:600; }
+.sidebar-footer { padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); }
+.user-chip { display:flex; align-items:center; gap:10px; }
+.avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--mint),var(--sage)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:var(--forest); flex-shrink:0; }
+.user-name { font-size:13px; font-weight:600; color:rgba(255,255,255,0.85); }
+.user-role { font-size:11px; color:rgba(255,255,255,0.35); }
+
+/* ── MAIN ── */
+.main { flex:1; overflow-y:auto; }
+.page { display:none; padding:26px 30px; flex-direction:column; gap:20px; min-height:100%; }
+.page.active { display:flex; }
+
+/* ── SHARED COMPONENTS ── */
+.topbar { display:flex; align-items:flex-start; justify-content:space-between; }
+.page-title-sm { font-size:12px; color:var(--text3); font-weight:500; margin-bottom:4px; }
+.page-title { font-size:24px; font-weight:700; letter-spacing:-0.5px; }
+.page-title span { color:var(--sage); }
+.topbar-right { display:flex; align-items:center; gap:10px; }
+.streak-chip { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:8px 14px; display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--coral); box-shadow:var(--shadow); }
+.notif-btn { width:38px; height:38px; background:var(--surface); border:1px solid var(--border); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:16px; cursor:pointer; }
+.panel { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow:var(--shadow); }
+.panel-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.panel-title { font-size:14px; font-weight:700; color:var(--text); }
+.panel-action { font-size:12px; color:var(--sage); font-weight:600; cursor:pointer; background:rgba(74,124,111,0.08); padding:5px 12px; border-radius:20px; transition:all .2s; }
+.panel-action:hover { background:rgba(74,124,111,0.18); }
+.stats-row { display:grid; gap:14px; }
+.stats-row.col4 { grid-template-columns:repeat(4,1fr); }
+.stats-row.col3 { grid-template-columns:repeat(3,1fr); }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+.stat-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; border-radius:0 0 16px 16px; }
+.c1::after{background:var(--sage)} .c2::after{background:var(--coral)} .c3::after{background:var(--amber)} .c4::after{background:var(--lav)} .c5::after{background:var(--sky)}
+.stat-icon { font-size:22px; margin-bottom:10px; }
+.stat-val { font-size:26px; font-weight:700; letter-spacing:-1px; }
+.stat-val sup { font-size:13px; font-weight:500; letter-spacing:0; color:var(--text2); }
+.stat-label { font-size:12px; color:var(--text2); margin-top:3px; }
+.stat-delta { font-size:11px; margin-top:7px; }
+.up{color:var(--sage)} .dn{color:var(--coral)}
+.tag { display:inline-block; font-size:11px; padding:3px 10px; border-radius:20px; font-weight:600; }
+.tag-green { background:#E8F4F0; color:var(--forest); }
+.tag-orange { background:#FEF0DC; color:#B05E00; }
+.tag-red { background:#FCE8E8; color:#B02020; }
+.tag-blue { background:#DCF0FB; color:#1A5C8A; }
+.tag-lav { background:#EEEAFC; color:#4A3A8A; }
+.btn-primary { background:var(--forest); color:#fff; border:none; border-radius:12px; padding:10px 20px; font-family:'Sora',sans-serif; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all .2s; }
+.btn-primary:hover { background:var(--sage); transform:translateY(-1px); }
+.btn-outline { background:var(--surface); color:var(--text); border:1px solid var(--border); border-radius:12px; padding:10px 20px; font-family:'Sora',sans-serif; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:all .2s; }
+.btn-outline:hover { border-color:var(--sage); color:var(--forest); }
+.form-group { margin-bottom:14px; }
+.form-label { font-size:12px; font-weight:600; color:var(--text2); margin-bottom:6px; display:block; }
+.form-input { width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:10px; font-family:'Sora',sans-serif; font-size:13px; background:var(--bg); color:var(--text); outline:none; transition:all .2s; }
+.form-input:focus { border-color:var(--sage); background:var(--surface); box-shadow:0 0 0 3px rgba(74,124,111,0.1); }
+.form-select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:36px; cursor:pointer; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+/* ── HOME PAGE ── */
+.quote-banner { background:var(--forest); border-radius:16px; padding:16px 22px; display:flex; align-items:center; gap:14px; position:relative; overflow:hidden; }
+.quote-banner::before { content:'"'; position:absolute; right:18px; top:-14px; font-size:90px; color:rgba(168,213,194,0.1); font-family:Georgia,serif; line-height:1; }
+.quote-leaf { font-size:28px; flex-shrink:0; }
+.quote-text { font-size:13px; color:rgba(255,255,255,0.82); line-height:1.55; }
+.quote-text strong { color:var(--mint); }
+.mid-grid { display:grid; grid-template-columns:1.5fr 1fr; gap:16px; }
+.bottom-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.workout-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); }
+.workout-item:last-child { border-bottom:none; padding-bottom:0; }
+.w-icon { width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+.w1{background:#E8F4F0} .w2{background:#FEF0DC} .w3{background:#FCE8E8} .w4{background:#EEF0FE}
+.w-info { flex:1; }
+.w-name { font-size:13px; font-weight:600; }
+.w-meta { font-size:11px; color:var(--text3); margin-top:2px; }
+.w-cal { font-size:13px; font-weight:600; color:var(--sage); background:rgba(74,124,111,0.08); padding:3px 8px; border-radius:8px; }
+.water-glasses { display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin:4px 0 12px; }
+.glass { height:42px; border-radius:10px; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; transition:all .15s; background:var(--bg); }
+.glass.filled { background:#DCF0FB; border-color:var(--sky); }
+.water-progress-bar { height:8px; background:var(--bg); border-radius:4px; overflow:hidden; }
+.water-fill { height:100%; background:linear-gradient(90deg,var(--sky),#93C8E0); border-radius:4px; width:75%; }
+.water-label { font-size:12px; color:var(--text2); margin-top:8px; display:flex; justify-content:space-between; }
+.goal-item { margin-bottom:12px; }
+.goal-item:last-child { margin-bottom:0; }
+.goal-header { display:flex; justify-content:space-between; margin-bottom:5px; }
+.goal-name { font-size:12px; font-weight:600; }
+.goal-pct { font-size:12px; color:var(--text3); font-family:'DM Mono',monospace; }
+.goal-bar { height:8px; background:var(--bg); border-radius:4px; overflow:hidden; }
+.goal-fill { height:100%; border-radius:4px; }
+.gf1{width:78%;background:linear-gradient(90deg,var(--sage),#6BAF9E)}
+.gf2{width:75%;background:linear-gradient(90deg,var(--sky),#93C8E0)}
+.gf3{width:90%;background:linear-gradient(90deg,var(--amber),#F0C070)}
+.gf4{width:60%;background:linear-gradient(90deg,var(--lav),#B8AED8)}
+.mood-row { display:flex; gap:7px; justify-content:space-between; margin:6px 0 14px; }
+.mood-btn { flex:1; height:44px; border-radius:10px; border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; transition:all .2s; background:var(--bg); }
+.mood-btn:hover { transform:scale(1.1); border-color:var(--amber); }
+.mood-btn.sel { background:#FEF0DC; border-color:var(--amber); transform:scale(1.1); box-shadow:0 4px 12px rgba(232,168,74,0.2); }
+.mood-history { display:flex; gap:4px; align-items:flex-end; height:38px; }
+.mbar { flex:1; border-radius:3px; background:var(--mint); opacity:0.45; }
+.mbar.today { opacity:1; background:var(--amber); }
+.bmi-arc-wrap { position:relative; display:flex; justify-content:center; margin:4px 0 6px; }
+.bmi-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-28%); text-align:center; }
+.bmi-big { font-size:28px; font-weight:700; color:var(--forest); letter-spacing:-1px; }
+.bmi-cat { font-size:11px; color:var(--sage); font-weight:600; letter-spacing:0.5px; text-transform:uppercase; }
+.bmi-footer { display:flex; justify-content:space-between; font-size:10px; color:var(--text3); }
+.quick-row { display:grid; grid-template-columns:repeat(6,1fr); gap:10px; }
+.qa-btn { background:var(--forest); color:rgba(255,255,255,0.9); border:none; border-radius:14px; padding:14px 8px; display:flex; flex-direction:column; align-items:center; gap:7px; cursor:pointer; font-family:'Sora',sans-serif; font-size:11px; font-weight:600; transition:all .2s; }
+.qa-btn:hover { background:var(--sage); transform:translateY(-3px); box-shadow:0 6px 16px rgba(28,74,62,0.2); }
+.qa-btn span { font-size:20px; }
+.qa-btn.outline { background:var(--surface); color:var(--text); border:1px solid var(--border); }
+.qa-btn.outline:hover { background:var(--bg); border-color:var(--sage); color:var(--forest); }
+
+/* ── WORKOUTS PAGE ── */
+.workout-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; }
+.filter-btn { padding:7px 16px; border-radius:20px; border:1px solid var(--border); background:var(--surface); font-family:'Sora',sans-serif; font-size:12px; font-weight:600; color:var(--text2); cursor:pointer; transition:all .2s; }
+.filter-btn:hover { border-color:var(--sage); color:var(--sage); }
+.filter-btn.on { background:var(--forest); color:#fff; border-color:var(--forest); }
+.workout-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:4px; }
+.workout-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px; box-shadow:var(--shadow); display:flex; flex-direction:column; gap:10px; transition:all .2s; }
+.workout-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,0.09); }
+.wc-top { display:flex; align-items:flex-start; justify-content:space-between; }
+.wc-icon-wrap { display:flex; align-items:center; gap:10px; }
+.wc-icon { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.wc-name { font-size:15px; font-weight:700; }
+.wc-date { font-size:11px; color:var(--text3); margin-top:2px; }
+.wc-stats { display:flex; gap:16px; }
+.wcs { display:flex; flex-direction:column; }
+.wcs-val { font-size:18px; font-weight:700; letter-spacing:-0.5px; }
+.wcs-label { font-size:11px; color:var(--text3); }
+.wc-bar { height:4px; background:var(--bg); border-radius:2px; overflow:hidden; }
+.wc-bar-fill { height:100%; border-radius:2px; }
+.add-workout-panel { background:var(--surface); border:2px dashed var(--border); border-radius:16px; padding:20px; }
+.add-workout-title { font-size:14px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.calorie-preview { background:linear-gradient(135deg,var(--forest),var(--sage)); border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; margin-top:4px; }
+.cal-label { font-size:12px; color:rgba(255,255,255,0.7); }
+.cal-val { font-size:24px; font-weight:700; color:#fff; }
+
+/* ── HEALTH METRICS ── */
+.metrics-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.metric-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow:var(--shadow); }
+.metric-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.metric-title { font-size:14px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.chart-bars { display:flex; gap:6px; align-items:flex-end; height:70px; margin:10px 0; }
+.bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.bar { width:100%; border-radius:4px; transition:height .3s; }
+.bar-day { font-size:10px; color:var(--text3); }
+.bar-val-sm { font-size:10px; font-weight:600; }
+.log-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+.log-row:last-child { border-bottom:none; }
+.log-date { font-size:12px; color:var(--text3); }
+.log-val { font-size:13px; font-weight:700; }
+.log-delta { font-size:11px; }
+
+/* ── BMI PAGE ── */
+.bmi-page-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:20px; }
+.bmi-big-arc { display:flex; justify-content:center; position:relative; }
+.bmi-result-box { text-align:center; margin:16px 0; }
+.bmi-result-num { font-size:56px; font-weight:700; letter-spacing:-2px; color:var(--forest); line-height:1; }
+.bmi-result-cat { font-size:16px; font-weight:600; color:var(--sage); margin-top:4px; }
+.bmi-scale { height:12px; border-radius:6px; background:linear-gradient(to right,#6BA8C4 18%,#A8D5C2 18% 50%,#E8A84A 50% 72%,#E8715A 72%); position:relative; margin:16px 0 6px; }
+.bmi-marker { position:absolute; top:-4px; width:20px; height:20px; border-radius:50%; background:var(--forest); border:3px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,0.2); transform:translateX(-50%); left:38%; }
+.bmi-scale-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--text3); }
+.bmi-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+.bmi-info-card { background:var(--bg); border-radius:12px; padding:12px 14px; }
+.bmi-info-label { font-size:11px; color:var(--text3); margin-bottom:4px; }
+.bmi-info-val { font-size:15px; font-weight:700; color:var(--text); }
+.range-slider-group { margin-bottom:16px; }
+.slider-label { display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px; }
+.slider-label span { font-weight:600; color:var(--forest); font-family:'DM Mono',monospace; }
+input[type=range] { width:100%; accent-color:var(--forest); cursor:pointer; }
+
+/* ── GOALS PAGE ── */
+.goals-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.goal-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; box-shadow:var(--shadow); }
+.goal-card-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.goal-icon-big { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+.goal-icon-big.g1{background:#E8F4F0} .goal-icon-big.g2{background:#DCF0FB} .goal-icon-big.g3{background:#FEF0DC} .goal-icon-big.g4{background:#EEEAFC}
+.goal-card-title { font-size:15px; font-weight:700; }
+.goal-card-sub { font-size:12px; color:var(--text3); }
+.big-progress { height:12px; background:var(--bg); border-radius:6px; overflow:hidden; margin:10px 0; }
+.big-progress-fill { height:100%; border-radius:6px; }
+.goal-nums { display:flex; justify-content:space-between; font-size:12px; color:var(--text3); margin-top:4px; }
+.goal-nums strong { color:var(--text); }
+
+/* ── WATER PAGE ── */
+.water-hero { background:linear-gradient(135deg,#2A6B9E,var(--sky)); border-radius:20px; padding:30px; text-align:center; color:#fff; position:relative; overflow:hidden; }
+.water-hero::before { content:'💧'; position:absolute; right:-20px; top:-20px; font-size:120px; opacity:0.1; }
+.water-hero-val { font-size:60px; font-weight:700; letter-spacing:-2px; line-height:1; }
+.water-hero-sub { font-size:14px; opacity:0.8; margin-top:6px; }
+.water-ring { width:140px; height:140px; border-radius:50%; margin:16px auto; position:relative; background:conic-gradient(rgba(255,255,255,0.9) 75%, rgba(255,255,255,0.2) 75%); display:flex; align-items:center; justify-content:center; }
+.water-ring::before { content:''; position:absolute; width:110px; height:110px; border-radius:50%; background:linear-gradient(135deg,#2A6B9E,var(--sky)); }
+.water-ring-text { position:relative; z-index:1; text-align:center; }
+.water-ring-pct { font-size:28px; font-weight:700; }
+.water-ring-label { font-size:11px; opacity:0.8; }
+.glass-grid { display:grid; grid-template-columns:repeat(8,1fr); gap:8px; }
+.glass-lg { height:54px; border-radius:12px; border:2px solid rgba(255,255,255,0.3); display:flex; align-items:center; justify-content:center; font-size:24px; cursor:pointer; transition:all .2s; background:rgba(255,255,255,0.15); }
+.glass-lg.filled { background:rgba(255,255,255,0.9); border-color:#fff; }
+.glass-lg:hover { transform:scale(1.08); }
+.water-tips { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-top:4px; }
+.tip-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; box-shadow:var(--shadow); }
+.tip-icon { font-size:24px; margin-bottom:6px; }
+.tip-title { font-size:12px; font-weight:700; margin-bottom:3px; }
+.tip-text { font-size:11px; color:var(--text3); line-height:1.4; }
+
+/* ── MOOD PAGE ── */
+.mood-big-row { display:flex; gap:10px; justify-content:center; margin:10px 0 20px; }
+.mood-big-btn { width:72px; height:72px; border-radius:16px; border:2px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:pointer; transition:all .2s; background:var(--bg); font-size:28px; }
+.mood-big-btn:hover { transform:scale(1.08); border-color:var(--amber); }
+.mood-big-btn.sel { background:#FEF0DC; border-color:var(--amber); transform:scale(1.12); box-shadow:0 6px 20px rgba(232,168,74,0.25); }
+.mood-big-label { font-size:10px; color:var(--text2); font-weight:600; }
+.mood-week-chart { display:flex; gap:8px; align-items:flex-end; height:80px; padding:0 4px; }
+.mood-bar-wrap { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.mood-bar { width:100%; border-radius:4px; background:var(--mint); opacity:0.5; }
+.mood-bar.today { opacity:1; background:var(--amber); }
+.mood-day-label { font-size:10px; color:var(--text3); }
+.mood-log-list { display:flex; flex-direction:column; gap:8px; margin-top:4px; }
+.mood-log-item { display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg); border-radius:12px; }
+.mood-log-emoji { font-size:22px; }
+.mood-log-info { flex:1; }
+.mood-log-text { font-size:13px; font-weight:600; }
+.mood-log-date { font-size:11px; color:var(--text3); }
+
+/* ── WEEKLY SUMMARY ── */
+.summary-hero { background:linear-gradient(135deg,var(--forest),var(--sage)); border-radius:20px; padding:24px 28px; color:#fff; display:flex; justify-content:space-between; align-items:center; }
+.summary-hero-left { }
+.summary-week { font-size:13px; opacity:0.7; margin-bottom:4px; }
+.summary-title { font-size:22px; font-weight:700; letter-spacing:-0.5px; }
+.summary-score { text-align:right; }
+.summary-score-num { font-size:48px; font-weight:700; letter-spacing:-2px; color:var(--mint); line-height:1; }
+.summary-score-label { font-size:12px; opacity:0.7; }
+.summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.sum-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px; text-align:center; box-shadow:var(--shadow); }
+.sum-icon { font-size:24px; margin-bottom:8px; }
+.sum-val { font-size:22px; font-weight:700; letter-spacing:-0.5px; }
+.sum-label { font-size:11px; color:var(--text3); margin-top:3px; }
+.achievement-list { display:flex; flex-direction:column; gap:10px; }
+.achievement { display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--bg); border-radius:12px; }
+.ach-icon { font-size:24px; }
+.ach-text { flex:1; font-size:13px; font-weight:600; }
+.ach-date { font-size:11px; color:var(--text3); }
+</style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">i<span>Health</span>U</div>
+    <div class="logo-sub">Your daily wellness companion</div>
+  </div>
+  <nav class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="goTo('home',this)"><span class="nav-icon">🏠</span> Home</div>
+    <div class="nav-item" onclick="goTo('summary',this)"><span class="nav-icon">📊</span> Weekly summary</div>
+    <div class="nav-label">Track</div>
+    <div class="nav-item" onclick="goTo('workouts',this)"><span class="nav-icon">🏋️</span> Workouts <span class="nav-badge">3</span></div>
+    <div class="nav-item" onclick="goTo('water',this)"><span class="nav-icon">💧</span> Water intake</div>
+    <div class="nav-item" onclick="goTo('mood',this)"><span class="nav-icon">😊</span> Mood logger</div>
+    <div class="nav-item" onclick="goTo('metrics',this)"><span class="nav-icon">📏</span> Health metrics</div>
+    <div class="nav-label">Tools</div>
+    <div class="nav-item" onclick="goTo('bmi',this)"><span class="nav-icon">⚖️</span> BMI Calculator</div>
+    <div class="nav-item" onclick="goTo('calories',this)"><span class="nav-icon">🔥</span> Calorie estimator</div>
+    <div class="nav-item" onclick="goTo('goals',this)"><span class="nav-icon">🎯</span> Daily goals</div>
+    <div class="nav-label">Account</div>
+    <div class="nav-item" onclick="goTo('home',this)"><span class="nav-icon">⚙️</span> Settings</div>
+    <div class="nav-item"><span class="nav-icon">🚪</span> Logout</div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-chip">
+      <div class="avatar">SA</div>
+      <div><div class="user-name">Sara A.</div><div class="user-role">Member since 2026</div></div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- ════════════════════════════════════════════ HOME ══ -->
+<div class="page active" id="page-home">
+  <div class="topbar">
+    <div><div class="page-title-sm">Wednesday, 29 April 2026</div><div class="page-title">Good morning, <span>Sara</span> 👋</div></div>
+    <div class="topbar-right"><div class="streak-chip">🔥 12-day streak</div><div class="notif-btn">🔔</div></div>
+  </div>
+  <div class="quote-banner">
+    <div class="quote-leaf">🌿</div>
+    <div class="quote-text"><strong>Quote of the day — </strong>"Take care of your body. It's the only place you have to live." — Jim Rohn</div>
+  </div>
+  <div class="stats-row col4">
+    <div class="stat-card c1"><div class="stat-icon">⚖️</div><div class="stat-val">62<sup> kg</sup></div><div class="stat-label">Current weight</div><div class="stat-delta dn">▼ 0.4 kg this week</div></div>
+    <div class="stat-card c2"><div class="stat-icon">👟</div><div class="stat-val">7,842</div><div class="stat-label">Steps today</div><div class="stat-delta up">▲ 84% of daily goal</div></div>
+    <div class="stat-card c3"><div class="stat-icon">🌙</div><div class="stat-val">7.2<sup> h</sup></div><div class="stat-label">Sleep last night</div><div class="stat-delta up">▲ Above average</div></div>
+    <div class="stat-card c4"><div class="stat-icon">🔥</div><div class="stat-val">480<sup> kcal</sup></div><div class="stat-label">Burned today</div><div class="stat-delta up">▲ 2 workouts</div></div>
+  </div>
+  <div class="mid-grid">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">Recent workouts</div><div class="panel-action" onclick="goTo('workouts',null)">View all →</div></div>
+      <div class="workout-item"><div class="w-icon w1">🧘</div><div class="w-info"><div class="w-name">Morning Yoga</div><div class="w-meta">Today · 30 min</div></div><div class="w-cal">120 kcal</div></div>
+      <div class="workout-item"><div class="w-icon w2">🚴</div><div class="w-info"><div class="w-name">Cycling</div><div class="w-meta">Today · 45 min</div></div><div class="w-cal">360 kcal</div></div>
+      <div class="workout-item"><div class="w-icon w3">🏃</div><div class="w-info"><div class="w-name">Evening Run</div><div class="w-meta">Yesterday · 25 min</div></div><div class="w-cal">210 kcal</div></div>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;">
+      <div class="panel-header"><div class="panel-title">💧 Water intake</div><div class="panel-action" onclick="goTo('water',null)">Track →</div></div>
+      <div class="water-glasses">
+        <div class="glass filled">💧</div><div class="glass filled">💧</div><div class="glass filled">💧</div><div class="glass filled">💧</div>
+        <div class="glass filled">💧</div><div class="glass filled">💧</div><div class="glass" style="font-size:20px;color:#CCC;">○</div><div class="glass" style="font-size:20px;color:#CCC;">○</div>
+      </div>
+      <div class="water-progress-bar"><div class="water-fill"></div></div>
+      <div class="water-label"><span>6 / 8 glasses</span><span style="color:var(--sky);font-weight:600">500 mL left</span></div>
+    </div>
+  </div>
+  <div class="bottom-grid">
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">🎯 Daily goals</div><div class="panel-action" onclick="goTo('goals',null)">Edit</div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Steps</span><span class="goal-pct">78%</span></div><div class="goal-bar"><div class="goal-fill gf1"></div></div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Water</span><span class="goal-pct">75%</span></div><div class="goal-bar"><div class="goal-fill gf2"></div></div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Sleep</span><span class="goal-pct">90%</span></div><div class="goal-bar"><div class="goal-fill gf3"></div></div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Workouts / week</span><span class="goal-pct">3 / 5</span></div><div class="goal-bar"><div class="goal-fill gf4"></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">😊 Today's mood</div><div class="panel-action" onclick="goTo('mood',null)">Log →</div></div>
+      <div class="mood-row">
+        <div class="mood-btn">😔</div><div class="mood-btn">😕</div><div class="mood-btn sel">😊</div><div class="mood-btn">😄</div><div class="mood-btn">🤩</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:6px;">This week</div>
+      <div class="mood-history">
+        <div class="mbar" style="height:50%"></div><div class="mbar" style="height:70%"></div><div class="mbar" style="height:40%"></div>
+        <div class="mbar" style="height:65%"></div><div class="mbar" style="height:80%"></div><div class="mbar" style="height:55%"></div><div class="mbar today" style="height:75%"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">⚖️ BMI</div><div class="panel-action" onclick="goTo('bmi',null)">Details →</div></div>
+      <div class="bmi-arc-wrap">
+        <svg width="150" height="86" viewBox="0 0 150 86" style="overflow:visible">
+          <path d="M 12 80 A 63 63 0 0 1 138 80" fill="none" stroke="#EEE" stroke-width="11" stroke-linecap="round"/>
+          <path d="M 12 80 A 63 63 0 0 1 138 80" fill="none" stroke="#A8D5C2" stroke-width="11" stroke-linecap="round" stroke-dasharray="198" stroke-dashoffset="100"/>
+          <circle cx="104" cy="30" r="7" fill="#1C4A3E" stroke="#FDFCF8" stroke-width="2.5"/>
+        </svg>
+        <div class="bmi-center"><div class="bmi-big">22.4</div><div class="bmi-cat">Normal</div></div>
+      </div>
+      <div class="bmi-footer"><span>Under</span><span>Normal</span><span>Over</span><span>Obese</span></div>
+      <div style="text-align:center;font-size:12px;color:var(--text2);margin-top:8px;">Healthy range: <strong style="color:var(--forest)">51.5–69.3 kg</strong></div>
+    </div>
+  </div>
+  <div class="panel" style="padding:16px 20px;">
+    <div class="panel-header" style="margin-bottom:12px;"><div class="panel-title">Quick actions</div></div>
+    <div class="quick-row">
+      <button class="qa-btn" onclick="goTo('workouts',null)"><span>🏋️</span>Log workout</button>
+      <button class="qa-btn" onclick="goTo('metrics',null)"><span>📏</span>Log metrics</button>
+      <button class="qa-btn" onclick="goTo('water',null)"><span>💧</span>Add glass</button>
+      <button class="qa-btn" onclick="goTo('calories',null)"><span>🔥</span>Est. calories</button>
+      <button class="qa-btn outline" onclick="goTo('summary',null)"><span>📊</span>Weekly report</button>
+      <button class="qa-btn outline" onclick="goTo('goals',null)"><span>🎯</span>Set goals</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ WORKOUTS ══ -->
+<div class="page" id="page-workouts">
+  <div class="topbar">
+    <div><div class="page-title-sm">Track your activity</div><div class="page-title">🏋️ Workouts</div></div>
+    <div class="topbar-right"><div class="streak-chip">🔥 12-day streak</div><button class="btn-primary">＋ Log workout</button></div>
+  </div>
+  <div class="stats-row col4">
+    <div class="stat-card c1"><div class="stat-icon">🗓️</div><div class="stat-val">18</div><div class="stat-label">This month</div><div class="stat-delta up">▲ +3 vs last month</div></div>
+    <div class="stat-card c2"><div class="stat-icon">⏱️</div><div class="stat-val">24<sup> h</sup></div><div class="stat-label">Total duration</div><div class="stat-delta up">▲ 8h more</div></div>
+    <div class="stat-card c3"><div class="stat-icon">🔥</div><div class="stat-val">6,240<sup> kcal</sup></div><div class="stat-label">Total burned</div><div class="stat-delta up">▲ Personal best</div></div>
+    <div class="stat-card c4"><div class="stat-icon">⚡</div><div class="stat-val">3</div><div class="stat-label">This week</div><div class="stat-delta">Goal: 5 / week</div></div>
+  </div>
+  <div class="workout-filters">
+    <button class="filter-btn on">All</button>
+    <button class="filter-btn">🏃 Running</button>
+    <button class="filter-btn">🚴 Cycling</button>
+    <button class="filter-btn">🧘 Yoga</button>
+    <button class="filter-btn">🏊 Swimming</button>
+    <button class="filter-btn">🏋️ Gym</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+    <div>
+      <div class="workout-grid">
+        <div class="workout-card">
+          <div class="wc-top"><div class="wc-icon-wrap"><div class="wc-icon w1">🧘</div><div><div class="wc-name">Morning Yoga</div><div class="wc-date">Today, 07:00</div></div></div><span class="tag tag-green">Done</span></div>
+          <div class="wc-stats"><div class="wcs"><div class="wcs-val">30<span style="font-size:13px;font-weight:400;color:var(--text2)"> min</span></div><div class="wcs-label">Duration</div></div><div class="wcs"><div class="wcs-val">120<span style="font-size:13px;font-weight:400;color:var(--text2)"> kcal</span></div><div class="wcs-label">Burned</div></div><div class="wcs"><div class="wcs-val">♥ 95</div><div class="wcs-label">Avg BPM</div></div></div>
+          <div class="wc-bar"><div class="wc-bar-fill" style="width:45%;background:var(--sage);height:4px;border-radius:2px;"></div></div>
+        </div>
+        <div class="workout-card">
+          <div class="wc-top"><div class="wc-icon-wrap"><div class="wc-icon w2">🚴</div><div><div class="wc-name">Cycling</div><div class="wc-date">Today, 17:30</div></div></div><span class="tag tag-green">Done</span></div>
+          <div class="wc-stats"><div class="wcs"><div class="wcs-val">45<span style="font-size:13px;font-weight:400;color:var(--text2)"> min</span></div><div class="wcs-label">Duration</div></div><div class="wcs"><div class="wcs-val">360<span style="font-size:13px;font-weight:400;color:var(--text2)"> kcal</span></div><div class="wcs-label">Burned</div></div><div class="wcs"><div class="wcs-val">♥ 138</div><div class="wcs-label">Avg BPM</div></div></div>
+          <div class="wc-bar"><div class="wc-bar-fill" style="width:72%;background:var(--amber);height:4px;border-radius:2px;"></div></div>
+        </div>
+        <div class="workout-card">
+          <div class="wc-top"><div class="wc-icon-wrap"><div class="wc-icon w3">🏃</div><div><div class="wc-name">Evening Run</div><div class="wc-date">Yesterday</div></div></div><span class="tag tag-green">Done</span></div>
+          <div class="wc-stats"><div class="wcs"><div class="wcs-val">25<span style="font-size:13px;font-weight:400;color:var(--text2)"> min</span></div><div class="wcs-label">Duration</div></div><div class="wcs"><div class="wcs-val">210<span style="font-size:13px;font-weight:400;color:var(--text2)"> kcal</span></div><div class="wcs-label">Burned</div></div><div class="wcs"><div class="wcs-val">♥ 152</div><div class="wcs-label">Avg BPM</div></div></div>
+          <div class="wc-bar"><div class="wc-bar-fill" style="width:85%;background:var(--coral);height:4px;border-radius:2px;"></div></div>
+        </div>
+        <div class="workout-card">
+          <div class="wc-top"><div class="wc-icon-wrap"><div class="wc-icon w4">🏊</div><div><div class="wc-name">Swimming</div><div class="wc-date">Mon 28 Apr</div></div></div><span class="tag tag-green">Done</span></div>
+          <div class="wc-stats"><div class="wcs"><div class="wcs-val">60<span style="font-size:13px;font-weight:400;color:var(--text2)"> min</span></div><div class="wcs-label">Duration</div></div><div class="wcs"><div class="wcs-val">450<span style="font-size:13px;font-weight:400;color:var(--text2)"> kcal</span></div><div class="wcs-label">Burned</div></div><div class="wcs"><div class="wcs-val">♥ 126</div><div class="wcs-label">Avg BPM</div></div></div>
+          <div class="wc-bar"><div class="wc-bar-fill" style="width:60%;background:var(--sky);height:4px;border-radius:2px;"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="add-workout-panel">
+      <div class="add-workout-title">＋ Log a new workout</div>
+      <div class="form-group"><label class="form-label">Exercise type</label><select class="form-input form-select"><option>🏃 Running</option><option>🚴 Cycling</option><option>🧘 Yoga</option><option>🏊 Swimming</option><option>🏋️ Gym</option><option>🚶 Walking</option></select></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Duration (min)</label><input class="form-input" type="number" placeholder="30" value="45"></div>
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" value="2026-04-29"></div>
+      </div>
+      <div class="calorie-preview">
+        <div><div class="cal-label">Estimated calories burned</div><div class="cal-val">360 kcal</div></div>
+        <div style="font-size:32px;">🔥</div>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;">
+        <button class="btn-primary" style="flex:1;justify-content:center;">Save workout</button>
+        <button class="btn-outline">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ METRICS ══ -->
+<div class="page" id="page-metrics">
+  <div class="topbar">
+    <div><div class="page-title-sm">Body & health data</div><div class="page-title">📏 Health metrics</div></div>
+    <div class="topbar-right"><button class="btn-primary">＋ Log today</button></div>
+  </div>
+  <div class="stats-row col3">
+    <div class="stat-card c1"><div class="stat-icon">⚖️</div><div class="stat-val">62<sup> kg</sup></div><div class="stat-label">Weight</div><div class="stat-delta dn">▼ 0.4 kg this week</div></div>
+    <div class="stat-card c3"><div class="stat-icon">🌙</div><div class="stat-val">7.2<sup> h</sup></div><div class="stat-label">Avg sleep</div><div class="stat-delta up">▲ +0.3h vs last week</div></div>
+    <div class="stat-card c2"><div class="stat-icon">👟</div><div class="stat-val">8,240</div><div class="stat-label">Avg steps / day</div><div class="stat-delta up">▲ On track</div></div>
+  </div>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-header"><div class="metric-title">⚖️ Weight (kg)</div><span class="tag tag-green">-0.4 kg this week</span></div>
+      <div class="chart-bars">
+        <div class="bar-wrap"><div class="bar" style="height:55%;background:var(--sage);opacity:0.5;"></div><div class="bar-day">M</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:60%;background:var(--sage);opacity:0.6;"></div><div class="bar-day">T</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:62%;background:var(--sage);opacity:0.7;"></div><div class="bar-day">W</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:58%;background:var(--sage);opacity:0.8;"></div><div class="bar-day">T</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:55%;background:var(--sage);opacity:0.9;"></div><div class="bar-day">F</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:53%;background:var(--sage);opacity:0.95;"></div><div class="bar-day">S</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:50%;background:var(--sage);"></div><div class="bar-day">S</div></div>
+      </div>
+      <div class="log-row"><span class="log-date">Today</span><span class="log-val">62.0 kg</span><span class="log-delta dn">▼ -0.2</span></div>
+      <div class="log-row"><span class="log-date">Yesterday</span><span class="log-val">62.2 kg</span><span class="log-delta dn">▼ -0.1</span></div>
+      <div class="log-row"><span class="log-date">Mon 28 Apr</span><span class="log-val">62.3 kg</span><span class="log-delta dn">▼ -0.1</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-header"><div class="metric-title">🌙 Sleep (hours)</div><span class="tag tag-blue">7.2h avg</span></div>
+      <div class="chart-bars">
+        <div class="bar-wrap"><div class="bar" style="height:70%;background:var(--lav);"></div><div class="bar-day">M</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:60%;background:var(--lav);"></div><div class="bar-day">T</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:90%;background:var(--lav);"></div><div class="bar-day">W</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:50%;background:var(--lav);"></div><div class="bar-day">T</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:80%;background:var(--lav);"></div><div class="bar-day">F</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:100%;background:var(--lav);"></div><div class="bar-day">S</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:75%;background:var(--amber);"></div><div class="bar-day">S</div></div>
+      </div>
+      <div class="log-row"><span class="log-date">Last night</span><span class="log-val">7.2 h</span><span class="log-delta up">▲ Good</span></div>
+      <div class="log-row"><span class="log-date">Prev night</span><span class="log-val">8.5 h</span><span class="log-delta up">▲ Excellent</span></div>
+      <div class="log-row"><span class="log-date">Mon night</span><span class="log-val">6.0 h</span><span class="log-delta dn">▼ Short</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-header"><div class="metric-title">👟 Steps</div><span class="tag tag-orange">7,842 today</span></div>
+      <div class="chart-bars">
+        <div class="bar-wrap"><div class="bar" style="height:80%;background:var(--amber);"></div><div class="bar-day">M</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:90%;background:var(--amber);"></div><div class="bar-day">T</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:70%;background:var(--amber);"></div><div class="bar-day">W</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:100%;background:var(--amber);"></div><div class="bar-day">T</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:60%;background:var(--amber);"></div><div class="bar-day">F</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:85%;background:var(--amber);"></div><div class="bar-day">S</div></div>
+        <div class="bar-wrap"><div class="bar" style="height:78%;background:var(--coral);"></div><div class="bar-day">S</div></div>
+      </div>
+      <div class="log-row"><span class="log-date">Today</span><span class="log-val">7,842</span><span class="log-delta">78% of goal</span></div>
+      <div class="log-row"><span class="log-date">Yesterday</span><span class="log-val">10,321</span><span class="log-delta up">▲ Goal met!</span></div>
+      <div class="log-row"><span class="log-date">Mon 28 Apr</span><span class="log-val">6,500</span><span class="log-delta dn">▼ 65%</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-header"><div class="metric-title">📋 Log today's metrics</div></div>
+      <div class="form-grid">
+        <div class="form-group"><label class="form-label">Weight (kg)</label><input class="form-input" type="number" placeholder="62.0" step="0.1"></div>
+        <div class="form-group"><label class="form-label">Sleep (hours)</label><input class="form-input" type="number" placeholder="7.5" step="0.5"></div>
+        <div class="form-group"><label class="form-label">Steps</label><input class="form-input" type="number" placeholder="8000"></div>
+        <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" value="2026-04-29"></div>
+      </div>
+      <button class="btn-primary" style="width:100%;justify-content:center;margin-top:4px;">Save metrics</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ BMI ══ -->
+<div class="page" id="page-bmi">
+  <div class="topbar">
+    <div><div class="page-title-sm">Body mass index</div><div class="page-title">⚖️ BMI Calculator</div></div>
+  </div>
+  <div class="bmi-page-grid">
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:20px;">Your measurements</div>
+      <div class="range-slider-group">
+        <div class="slider-label"><label class="form-label" style="margin:0;">Height</label><span id="hVal">170 cm</span></div>
+        <input type="range" min="140" max="210" value="170" oninput="calcBMI(this.value, document.getElementById('wSlider').value); document.getElementById('hVal').textContent=this.value+' cm'">
+      </div>
+      <div class="range-slider-group">
+        <div class="slider-label"><label class="form-label" style="margin:0;">Weight</label><span id="wVal">62 kg</span></div>
+        <input id="wSlider" type="range" min="40" max="150" value="62" oninput="calcBMI(document.getElementById('hSlider')?document.getElementById('hSlider').value:170, this.value); document.getElementById('wVal').textContent=this.value+' kg'">
+      </div>
+      <div class="bmi-info-grid">
+        <div class="bmi-info-card"><div class="bmi-info-label">Healthy weight range</div><div class="bmi-info-val" id="bmiRange">51.5 – 69.3 kg</div></div>
+        <div class="bmi-info-card"><div class="bmi-info-label">Ideal weight</div><div class="bmi-info-val" id="bmiIdeal">60.4 kg</div></div>
+        <div class="bmi-info-card"><div class="bmi-info-label">Weight to adjust</div><div class="bmi-info-val" id="bmiDiff" style="color:var(--sage)">In range ✓</div></div>
+        <div class="bmi-info-card"><div class="bmi-info-label">Category</div><div class="bmi-info-val" id="bmiCatBox" style="color:var(--sage)">Normal</div></div>
+      </div>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;align-items:center;">
+      <div class="bmi-result-box">
+        <div class="bmi-result-num" id="bmiDisplay">22.4</div>
+        <div class="bmi-result-cat" id="bmiCatDisplay">Normal weight</div>
+      </div>
+      <div style="width:100%;margin-top:8px;">
+        <div class="bmi-scale"><div class="bmi-marker" id="bmiMarker"></div></div>
+        <div class="bmi-scale-labels"><span>Underweight<br>&lt;18.5</span><span>Normal<br>18.5–25</span><span>Overweight<br>25–30</span><span>Obese<br>&gt;30</span></div>
+      </div>
+      <div style="margin-top:24px;width:100%;background:var(--bg);border-radius:14px;padding:16px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">What does this mean?</div>
+        <div id="bmiAdvice" style="font-size:12px;color:var(--text2);line-height:1.6;">Your BMI is within the healthy range. Keep up your balanced diet and regular exercise routine to maintain this result.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ GOALS ══ -->
+<div class="page" id="page-goals">
+  <div class="topbar">
+    <div><div class="page-title-sm">Set & track targets</div><div class="page-title">🎯 Daily goals</div></div>
+    <div class="topbar-right"><button class="btn-primary">Save goals</button></div>
+  </div>
+  <div class="goals-grid">
+    <div class="goal-card">
+      <div class="goal-card-header"><div class="goal-icon-big g1">👟</div><div><div class="goal-card-title">Daily steps</div><div class="goal-card-sub">Target: 10,000 steps</div></div></div>
+      <input class="form-input" type="number" value="10000" style="margin-bottom:10px;">
+      <div class="big-progress"><div class="big-progress-fill" style="width:78%;background:linear-gradient(90deg,var(--sage),#6BAF9E)"></div></div>
+      <div class="goal-nums"><span>Today: <strong>7,842</strong></span><span>78% complete</span></div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-card-header"><div class="goal-icon-big g2">💧</div><div><div class="goal-card-title">Water intake</div><div class="goal-card-sub">Target: 8 glasses / day</div></div></div>
+      <input class="form-input" type="number" value="8" style="margin-bottom:10px;">
+      <div class="big-progress"><div class="big-progress-fill" style="width:75%;background:linear-gradient(90deg,var(--sky),#93C8E0)"></div></div>
+      <div class="goal-nums"><span>Today: <strong>6 glasses</strong></span><span>75% complete</span></div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-card-header"><div class="goal-icon-big g3">🌙</div><div><div class="goal-card-title">Sleep duration</div><div class="goal-card-sub">Target: 8 hours / night</div></div></div>
+      <input class="form-input" type="number" value="8" style="margin-bottom:10px;">
+      <div class="big-progress"><div class="big-progress-fill" style="width:90%;background:linear-gradient(90deg,var(--amber),#F0C070)"></div></div>
+      <div class="goal-nums"><span>Last night: <strong>7.2 h</strong></span><span>90% complete</span></div>
+    </div>
+    <div class="goal-card">
+      <div class="goal-card-header"><div class="goal-icon-big g4">🏋️</div><div><div class="goal-card-title">Workouts per week</div><div class="goal-card-sub">Target: 5 sessions</div></div></div>
+      <input class="form-input" type="number" value="5" style="margin-bottom:10px;">
+      <div class="big-progress"><div class="big-progress-fill" style="width:60%;background:linear-gradient(90deg,var(--lav),#B8AED8)"></div></div>
+      <div class="goal-nums"><span>This week: <strong>3 sessions</strong></span><span>60% complete</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ WATER ══ -->
+<div class="page" id="page-water">
+  <div class="topbar">
+    <div><div class="page-title-sm">Stay hydrated</div><div class="page-title">💧 Water intake</div></div>
+  </div>
+  <div class="water-hero">
+    <div class="water-ring">
+      <div class="water-ring-text"><div class="water-ring-pct">75%</div><div class="water-ring-label">of daily goal</div></div>
+    </div>
+    <div style="margin-top:-10px;"><div style="font-size:13px;opacity:0.7;margin-bottom:4px;">Today you've had</div><div class="water-hero-val">1.5 L</div><div class="water-hero-sub">Goal: 2.0 L (8 glasses)</div></div>
+    <div style="width:100%;margin-top:16px;">
+      <div style="font-size:13px;opacity:0.7;margin-bottom:10px;">Tap to log a glass</div>
+      <div class="glass-grid">
+        <div class="glass-lg filled">💧</div><div class="glass-lg filled">💧</div><div class="glass-lg filled">💧</div><div class="glass-lg filled">💧</div>
+        <div class="glass-lg filled">💧</div><div class="glass-lg filled">💧</div><div class="glass-lg">+</div><div class="glass-lg">+</div>
+      </div>
+    </div>
+  </div>
+  <div class="water-tips">
+    <div class="tip-card"><div class="tip-icon">⏰</div><div class="tip-title">Morning routine</div><div class="tip-text">Drink a glass right after waking up to kickstart hydration</div></div>
+    <div class="tip-card"><div class="tip-icon">🥤</div><div class="tip-title">Before meals</div><div class="tip-text">Drinking before meals helps digestion and reduces appetite</div></div>
+    <div class="tip-card"><div class="tip-icon">🏋️</div><div class="tip-title">During workouts</div><div class="tip-text">Drink 200–300 mL every 20 minutes of intense exercise</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ MOOD ══ -->
+<div class="page" id="page-mood">
+  <div class="topbar">
+    <div><div class="page-title-sm">Mental wellness</div><div class="page-title">😊 Mood logger</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:6px;">How are you feeling today?</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:14px;">Tap to select your mood</div>
+      <div class="mood-big-row">
+        <div class="mood-big-btn"><div>😔</div><div class="mood-big-label">Sad</div></div>
+        <div class="mood-big-btn"><div>😕</div><div class="mood-big-label">Meh</div></div>
+        <div class="mood-big-btn sel"><div>😊</div><div class="mood-big-label">Good</div></div>
+        <div class="mood-big-btn"><div>😄</div><div class="mood-big-label">Happy</div></div>
+        <div class="mood-big-btn"><div>🤩</div><div class="mood-big-label">Amazing</div></div>
+      </div>
+      <div class="form-group"><label class="form-label">Add a note (optional)</label><textarea class="form-input" rows="3" placeholder="What's on your mind today?"></textarea></div>
+      <button class="btn-primary" style="width:100%;justify-content:center;">Save mood</button>
+    </div>
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">This week's mood</div></div>
+      <div class="mood-week-chart">
+        <div class="mood-bar-wrap"><div class="mood-bar" style="height:50%"></div><div class="mood-day-label">Mo</div></div>
+        <div class="mood-bar-wrap"><div class="mood-bar" style="height:70%"></div><div class="mood-day-label">Tu</div></div>
+        <div class="mood-bar-wrap"><div class="mood-bar" style="height:40%"></div><div class="mood-day-label">We</div></div>
+        <div class="mood-bar-wrap"><div class="mood-bar" style="height:65%"></div><div class="mood-day-label">Th</div></div>
+        <div class="mood-bar-wrap"><div class="mood-bar" style="height:80%"></div><div class="mood-day-label">Fr</div></div>
+        <div class="mood-bar-wrap"><div class="mood-bar" style="height:55%"></div><div class="mood-day-label">Sa</div></div>
+        <div class="mood-bar-wrap"><div class="mood-bar today" style="height:75%"></div><div class="mood-day-label">Su</div></div>
+      </div>
+      <div style="margin-top:16px;"><div class="panel-title" style="margin-bottom:10px;font-size:13px;">Recent logs</div>
+      <div class="mood-log-list">
+        <div class="mood-log-item"><div class="mood-log-emoji">😊</div><div class="mood-log-info"><div class="mood-log-text">Good — felt energetic after yoga</div><div class="mood-log-date">Today</div></div></div>
+        <div class="mood-log-item"><div class="mood-log-emoji">🤩</div><div class="mood-log-info"><div class="mood-log-text">Amazing — great workout day!</div><div class="mood-log-date">Yesterday</div></div></div>
+        <div class="mood-log-item"><div class="mood-log-emoji">😕</div><div class="mood-log-info"><div class="mood-log-text">Meh — tired from little sleep</div><div class="mood-log-date">Mon 28 Apr</div></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ CALORIES ══ -->
+<div class="page" id="page-calories">
+  <div class="topbar">
+    <div><div class="page-title-sm">Energy expenditure</div><div class="page-title">🔥 Calorie estimator</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:16px;">Estimate calories burned</div>
+      <div class="form-group"><label class="form-label">Exercise type</label><select class="form-input form-select" onchange="estimateCal()"><option value="4">🚶 Walking</option><option value="7" selected>🏃 Running</option><option value="8">🚴 Cycling</option><option value="6">🧘 Yoga</option><option value="9">🏊 Swimming</option><option value="10">🏋️ HIIT</option></select></div>
+      <div class="form-group"><label class="form-label">Duration (minutes)</label><input class="form-input" type="number" id="calDur" value="45" oninput="estimateCal()"></div>
+      <div class="form-group"><label class="form-label">Body weight (kg)</label><input class="form-input" type="number" id="calWeight" value="62" oninput="estimateCal()"></div>
+      <div style="background:linear-gradient(135deg,var(--forest),var(--sage));border-radius:16px;padding:20px;text-align:center;margin-top:8px;">
+        <div style="font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:6px;">Estimated calories burned</div>
+        <div style="font-size:52px;font-weight:700;color:#fff;letter-spacing:-2px;" id="calResult">326</div>
+        <div style="font-size:13px;color:var(--mint);">kcal in 45 minutes</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:14px;">Today's total</div>
+      <div style="text-align:center;margin:10px 0 20px;">
+        <div style="font-size:48px;font-weight:700;color:var(--coral);letter-spacing:-2px;">480</div>
+        <div style="font-size:13px;color:var(--text2);">kcal burned today</div>
+      </div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2);">Today's workouts</div>
+      <div class="workout-item"><div class="w-icon w1">🧘</div><div class="w-info"><div class="w-name">Yoga · 30 min</div></div><div class="w-cal">120 kcal</div></div>
+      <div class="workout-item"><div class="w-icon w2">🚴</div><div class="w-info"><div class="w-name">Cycling · 45 min</div></div><div class="w-cal">360 kcal</div></div>
+      <div style="margin-top:14px;padding:12px 14px;background:var(--bg);border-radius:12px;font-size:12px;color:var(--text2);line-height:1.6;">💡 Based on the MET formula: Calories = MET × weight (kg) × duration (h)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ SUMMARY ══ -->
+<div class="page" id="page-summary">
+  <div class="topbar">
+    <div><div class="page-title-sm">Your progress at a glance</div><div class="page-title">📊 Weekly summary</div></div>
+  </div>
+  <div class="summary-hero">
+    <div class="summary-hero-left"><div class="summary-week">Week of 23–29 April 2026</div><div class="summary-title">Great week, Sara! 🎉<br><span style="font-size:16px;opacity:0.8;font-weight:400;">You crushed 3 of your 4 goals.</span></div></div>
+    <div class="summary-score"><div style="font-size:13px;opacity:0.7;margin-bottom:4px;">Weekly score</div><div class="summary-score-num">84</div><div class="summary-score-label">/ 100</div></div>
+  </div>
+  <div class="summary-grid">
+    <div class="sum-card"><div class="sum-icon">🏋️</div><div class="sum-val">3</div><div class="sum-label">Workouts done</div></div>
+    <div class="sum-card"><div class="sum-icon">🌙</div><div class="sum-val">7.4<span style="font-size:14px;font-weight:400"> h</span></div><div class="sum-label">Avg sleep</div></div>
+    <div class="sum-card"><div class="sum-icon">👟</div><div class="sum-val">57k</div><div class="sum-label">Total steps</div></div>
+    <div class="sum-card"><div class="sum-icon">😊</div><div class="sum-val">3.8<span style="font-size:14px;font-weight:400"> /5</span></div><div class="sum-label">Avg mood</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:14px;">Goals achieved</div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Steps (avg 8,124 / day)</span><span style="color:var(--sage);font-size:12px;font-weight:700">✓ Met</span></div><div class="goal-bar"><div class="goal-fill" style="width:81%;background:var(--sage)"></div></div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Sleep (avg 7.4 h)</span><span style="color:var(--sage);font-size:12px;font-weight:700">✓ Met</span></div><div class="goal-bar"><div class="goal-fill" style="width:93%;background:var(--lav)"></div></div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Water (avg 6.2 glasses)</span><span style="color:var(--amber);font-size:12px;font-weight:700">⚠ Close</span></div><div class="goal-bar"><div class="goal-fill" style="width:77%;background:var(--sky)"></div></div></div>
+      <div class="goal-item"><div class="goal-header"><span class="goal-name">Workouts (3 / 5 goal)</span><span style="color:var(--coral);font-size:12px;font-weight:700">✗ Missed</span></div><div class="goal-bar"><div class="goal-fill" style="width:60%;background:var(--coral)"></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title" style="margin-bottom:14px;">🏅 Achievements this week</div>
+      <div class="achievement-list">
+        <div class="achievement"><div class="ach-icon">🔥</div><div class="ach-text">12-day workout streak!</div><div class="ach-date">Today</div></div>
+        <div class="achievement"><div class="ach-icon">💧</div><div class="ach-text">Hit water goal 4 days in a row</div><div class="ach-date">Sat 27 Apr</div></div>
+        <div class="achievement"><div class="ach-icon">👟</div><div class="ach-text">10,000 steps in a day</div><div class="ach-date">Fri 26 Apr</div></div>
+        <div class="achievement"><div class="ach-icon">⚖️</div><div class="ach-text">Lost 0.8 kg this week</div><div class="ach-date">This week</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ── Navigation ──
+function goTo(pageId, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pageId).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else {
+    const map = {home:'Home',workouts:'Workouts',water:'Water',mood:'Mood',metrics:'Health metrics',bmi:'BMI',calories:'Calorie',goals:'Daily goals',summary:'Weekly'};
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.textContent.includes(map[pageId])) n.classList.add('active');
+    });
+  }
+  document.querySelector('.main').scrollTop = 0;
+}
+
+// ── BMI Calc ──
+function calcBMI(h, w) {
+  const hm = h / 100, wkg = parseFloat(w);
+  const bmi = wkg / (hm * hm);
+  const cats = [{max:18.5,label:'Underweight',color:'#6BA8C4',advice:'Your BMI is below the healthy range. Consider consulting a healthcare provider for guidance on healthy weight gain.'},{max:25,label:'Normal weight',color:'#4A7C6F',advice:'Your BMI is within the healthy range. Maintain your balanced diet and regular exercise.'},{max:30,label:'Overweight',color:'#E8A84A',advice:'Your BMI is slightly above the healthy range. Small lifestyle changes can make a big difference.'},{max:999,label:'Obese',color:'#E8715A',advice:'Your BMI is significantly above the healthy range. A healthcare provider can help you create a personalised plan.'}];
+  const cat = cats.find(c => bmi < c.max);
+  document.getElementById('bmiDisplay').textContent = bmi.toFixed(1);
+  document.getElementById('bmiDisplay').style.color = cat.color;
+  document.getElementById('bmiCatDisplay').textContent = cat.label;
+  document.getElementById('bmiCatDisplay').style.color = cat.color;
+  document.getElementById('bmiCatBox').textContent = cat.label;
+  document.getElementById('bmiCatBox').style.color = cat.color;
+  document.getElementById('bmiAdvice').textContent = cat.advice;
+  const lo = (18.5 * hm * hm).toFixed(1), hi = (24.9 * hm * hm).toFixed(1), mid = ((parseFloat(lo)+parseFloat(hi))/2).toFixed(1);
+  document.getElementById('bmiRange').textContent = lo + ' – ' + hi + ' kg';
+  document.getElementById('bmiIdeal').textContent = mid + ' kg';
+  const diff = wkg - (bmi < 18.5 ? parseFloat(hi) : bmi > 25 ? parseFloat(lo) : wkg);
+  document.getElementById('bmiDiff').textContent = Math.abs(diff) < 0.1 ? 'In range ✓' : (diff > 0 ? '-' : '+') + Math.abs(diff).toFixed(1) + ' kg';
+  document.getElementById('bmiDiff').style.color = Math.abs(diff) < 0.1 ? 'var(--sage)' : diff > 0 ? 'var(--coral)' : 'var(--sky)';
+  const pct = Math.min(Math.max((bmi - 10) / 30, 0), 1) * 100;
+  document.getElementById('bmiMarker').style.left = pct.toFixed(1) + '%';
+}
+
+// ── Calorie Calc ──
+function estimateCal() {
+  const met = parseFloat(document.querySelector('#page-calories select').value);
+  const dur = parseFloat(document.getElementById('calDur').value) || 0;
+  const wt = parseFloat(document.getElementById('calWeight').value) || 70;
+  const cal = Math.round(met * wt * (dur / 60));
+  document.getElementById('calResult').textContent = cal;
+  document.querySelector('#page-calories .mint, #page-calories [style*="mint"]') && (document.querySelector('#page-calories div[style*="var(--mint)"]').textContent = `kcal in ${dur} minutes`);
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+  });
+});
+
+// Mood buttons
+document.querySelectorAll('.mood-big-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.mood-big-row').querySelectorAll('.mood-big-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+  });
+});
+document.querySelectorAll('.mood-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.closest('.mood-row').querySelectorAll('.mood-btn').forEach(b => b.classList.remove('sel'));
+    btn.classList.add('sel');
+  });
+});
+
+// Water glasses
+document.querySelectorAll('.glass-lg').forEach((g, i) => {
+  g.addEventListener('click', () => {
+    document.querySelectorAll('.glass-lg').forEach((gl, j) => {
+      gl.classList.toggle('filled', j <= i);
+      gl.textContent = j <= i ? '💧' : '+';
+    });
+  });
+});
+</script>
+</body>
+</html>
