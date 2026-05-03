@@ -1,0 +1,31 @@
+.quote-banner {
+  background: var(--forest);
+  border-radius: 16px;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.quote-banner::before {
+  content: '"';
+  position: absolute;
+  right: 18px;
+  top: -14px;
+  font-size: 90px;
+  color: rgba(168,213,194,0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+.quote-leaf { font-size: 28px; flex-shrink: 0; }
+.quote-text { font-size: 13px; color: rgba(255,255,255,0.82); line-height: 1.55; }
+.quote-text strong { color: var(--mint); }
+
+.stats-row { display: grid; gap: 14px; margin-bottom: 16px; }
+.stats-row.col4 { grid-template-columns: repeat(4, 1fr); }
+.stats-row.col3 { grid-template-columns: repeat(3, 1fr); }
+
+.mid-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 16px; margin-bottom: 16px; }
+.bottom-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }

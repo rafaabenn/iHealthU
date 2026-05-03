@@ -1,0 +1,125 @@
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  padding: 20px;
+}
+
+.authCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+}
+
+.authLogo {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--forest);
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.authLogo span { color: var(--sage); }
+
+.authSubtitle {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+.errorBanner {
+  background: #FCE8E8;
+  color: #B02020;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.form { display: flex; flex-direction: column; gap: 4px; }
+
+.formGroup { margin-bottom: 14px; }
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Sora', sans-serif;
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.input:focus {
+  border-color: var(--sage);
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgba(74,124,111,0.1);
+}
+
+.inputError {
+  border-color: var(--coral) !important;
+}
+
+.fieldError {
+  font-size: 11px;
+  color: var(--coral);
+  margin-top: 4px;
+  display: block;
+}
+
+.btnPrimary {
+  background: var(--forest);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background: var(--sage);
+  transform: translateY(-1px);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.authFooter {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text2);
+}
+
+.authFooter a {
+  color: var(--sage);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.authFooter a:hover { text-decoration: underline; }
