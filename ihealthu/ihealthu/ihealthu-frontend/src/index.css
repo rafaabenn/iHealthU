@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #F2F0EA;
+  --surface: #FDFCF8;
+  --forest: #1C4A3E;
+  --sage: #4A7C6F;
+  --mint: #A8D5C2;
+  --coral: #E8715A;
+  --amber: #E8A84A;
+  --sky: #6BA8C4;
+  --lav: #9B8EC4;
+  --text: #1A1A1A;
+  --text2: #6B6B6B;
+  --text3: #A0A0A0;
+  --border: rgba(0,0,0,0.07);
+  --shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+}
+
+/* Shared utility classes */
+.tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+.tag-green { background: #E8F4F0; color: var(--forest); }
+.tag-orange { background: #FEF0DC; color: #B05E00; }
+.tag-red { background: #FCE8E8; color: #B02020; }
+.tag-blue { background: #DCF0FB; color: #1A5C8A; }
+.tag-lav { background: #EEEAFC; color: #4A3A8A; }
+
+.up { color: var(--sage); }
+.dn { color: var(--coral); }
+
+/* Scrollbar styling */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 2px; }
