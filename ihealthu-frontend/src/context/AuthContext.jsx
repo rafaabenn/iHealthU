@@ -8,33 +8,27 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      api.get('/auth/me')
-        .then(res => setUser(res.data))
-        .catch(() => localStorage.removeItem('token'))
-        .finally(() => setLoading(false))
-    } else {
-      setLoading(false)
-    }
+    const stored = sessionStorage.getItem('user')
+    if (stored) setUser(JSON.parse(stored))
+    setLoading(false)
   }, [])
 
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password })
-    localStorage.setItem('token', res.data.access_token)
+    sessionStorage.setItem('user', JSON.stringify(res.data.user))
     setUser(res.data.user)
     return res.data
   }
 
   const register = async (data) => {
     const res = await api.post('/auth/register', data)
-    localStorage.setItem('token', res.data.access_token)
+    sessionStorage.setItem('user', JSON.stringify(res.data.user))
     setUser(res.data.user)
     return res.data
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
+    sessionStorage.removeItem('user')
     setUser(null)
   }
 
