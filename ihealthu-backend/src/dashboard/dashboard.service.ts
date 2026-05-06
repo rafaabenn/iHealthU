@@ -25,26 +25,15 @@ export class DashboardService {
     const activities = readJSON(ACTIVITIES_PATH) || [];
     const goals = readJSON(GOALS_PATH) || {};
 
-    // Filter today's and yesterday's activities
-    const todayActivities = activities.filter((a: any) =>
-      a.date?.startsWith(today)
-    );
-    const yesterdayActivities = activities.filter((a: any) =>
-      a.date?.startsWith(yesterday)
-    );
+    const todayActivities = activities.filter((a: any) => a.date?.startsWith(today));
+    const yesterdayActivities = activities.filter((a: any) => a.date?.startsWith(yesterday));
 
-    // Calories
-    const calories = todayActivities.reduce(
-      (sum: number, a: any) => sum + Number(a.calories || 0), 0
-    );
-    const caloriesYesterday = yesterdayActivities.reduce(
-      (sum: number, a: any) => sum + Number(a.calories || 0), 0
-    );
+    const calories = todayActivities.reduce((sum: number, a: any) => sum + Number(a.calories || 0), 0);
+    const caloriesYesterday = yesterdayActivities.reduce((sum: number, a: any) => sum + Number(a.calories || 0), 0);
     const caloriesDelta = caloriesYesterday > 0
       ? Math.round(((calories - caloriesYesterday) / caloriesYesterday) * 100)
       : null;
 
-    // Workouts list for dashboard cards
     const workouts = todayActivities.map((a: any) => ({
       icon: ICONS[a.type] || '🤸',
       name: a.type,
@@ -61,6 +50,52 @@ export class DashboardService {
       water: Number(goals.dailyWater) || 0,
       sleep: Number(goals.sleepHours) || 0,
       workouts,
+    };
+  }
+
+  getSummary() {
+    const activities = readJSON(ACTIVITIES_PATH) || [];
+    const goals = readJSON(GOALS_PATH) || {};
+
+    // Get current date at midnight for comparison
+    const now = new Date();
+    now.setHours(23, 59, 59, 999);
+    const weekAgo = new Date(now.getTime() - 7 * 86400000);
+    weekAgo.setHours(0, 0, 0, 0);
+    
+    const weekActivities = activities.filter((a: any) => {
+      const d = new Date(a.date);
+      return d >= weekAgo && d <= now;
+    });
+
+    const totalCalories = weekActivities.reduce((sum: number, a: any) => sum + Number(a.calories || 0), 0);
+    const totalWorkouts = weekActivities.length;
+    const totalDuration = weekActivities.reduce((sum: number, a: any) => sum + Number(a.duration || 0), 0);
+
+    // Group by day for chart (Last 7 days including today)
+    const dailyData = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+      const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });
+      
+      const dayActivities = activities.filter((a: any) => a.date === dateStr);
+      const dayCals = dayActivities.reduce((sum: number, a: any) => sum + Number(a.calories || 0), 0);
+      
+      dailyData.push({ day: dayName, calories: dayCals });
+    }
+
+    return {
+      totalCalories,
+      totalWorkouts,
+      totalDuration,
+      dailyData,
+      goals: {
+        water: goals.dailyWater || 0,
+        sleep: goals.sleepHours || 0,
+        weight: goals.weightGoal || 0
+      }
     };
   }
 }

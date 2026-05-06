@@ -10,7 +10,6 @@ const navItems = [
     { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
   ]},
   { section: 'HEALTH', items: [
-    { to: '/dashboard/health', icon: '❤️', label: 'Health metrics' },
     { to: '/dashboard/bmi', icon: '⚖️', label: 'BMI' },
     { to: '/dashboard/calories', icon: '🔥', label: 'Calorie tracker' },
   ]},
