@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../services/api'
-import styles from './Activities.module.css'
+import styles from '../styles/Activities.module.css'
 
 const ACTIVITY_TYPES = ['Running', 'Cycling', 'Swimming', 'Yoga', 'Weight training', 'Walking', 'HIIT', 'Other']
 const ICONS = { Running: '🏃', Cycling: '🚴', Swimming: '🏊', Yoga: '🧘', 'Weight training': '🏋️', Walking: '👟', HIIT: '⚡', Other: '🤸' }
