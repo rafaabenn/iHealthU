@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import styles from './Sidebar.module.css'
+import styles from '../styles/Sidebar.module.css'
 
 const navItems = [
   { section: 'OVERVIEW', items: [

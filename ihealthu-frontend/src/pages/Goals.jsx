@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../services/api'
-import styles from './Goals.module.css'
+import styles from '../styles/Goals.module.css'
 
 const DEFAULT_GOALS = {
   targetWeight: '',
