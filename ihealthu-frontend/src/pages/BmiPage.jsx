@@ -1,33 +1,39 @@
-import { useState, useEffect } from 'react';
-import Topbar from '../components/Topbar';
-import Panel from '../components/Panel';
-import { calcBMI } from '../utils/bmiCalculator';
-import '../styles/bmi.css';
+import { useState, useEffect } from 'react'
+import { calcBMI } from '../utils/bmiCalculator'
+import '../styles/bmi.css'
 
 export default function BmiPage() {
-  const [height, setHeight] = useState(170);
-  const [weight, setWeight] = useState(62);
-  const [data, setData] = useState(() => calcBMI(170, 62));
+  const [height, setHeight] = useState(170)
+  const [weight, setWeight] = useState(62)
+  const [data, setData] = useState(() => calcBMI(170, 62))
 
   useEffect(() => {
-    setData(calcBMI(height, weight));
-  }, [height, weight]);
+    setData(calcBMI(height, weight))
+  }, [height, weight])
 
-  const markerLeft = Math.min(Math.max((data.bmi - 10) / 30 * 100, 0), 100);
+  const markerLeft = Math.min(Math.max((data.bmi - 10) / 30 * 100, 0), 100)
 
   return (
     <div className="page">
-      <Topbar subtitle="Body mass index" title="⚖️ BMI Calculator" />
+      <div className="topbar">
+        <div>
+          <div className="page-title-sm">Body mass index</div>
+          <h1 className="page-title">⚖️ BMI <span>Calculator</span></h1>
+        </div>
+      </div>
+
       <div className="bmi-page-grid">
-        <Panel title="Your measurements">
+        <div className="panel">
+          <div className="panel-header">
+            <div className="panel-title">Your measurements</div>
+          </div>
           <div className="range-slider-group">
             <div className="slider-label">
               <label className="form-label">Height</label>
               <span>{height} cm</span>
             </div>
             <input type="range" min="140" max="210" value={height}
-              onChange={e => setHeight(Number(e.target.value))}
-            />
+              onChange={e => setHeight(Number(e.target.value))} />
           </div>
           <div className="range-slider-group">
             <div className="slider-label">
@@ -35,8 +41,7 @@ export default function BmiPage() {
               <span>{weight} kg</span>
             </div>
             <input type="range" min="40" max="150" value={weight}
-              onChange={e => setWeight(Number(e.target.value))}
-            />
+              onChange={e => setWeight(Number(e.target.value))} />
           </div>
           <div className="bmi-info-grid">
             <div className="bmi-info-card">
@@ -56,9 +61,9 @@ export default function BmiPage() {
               <div className="bmi-info-val" style={{ color: data.color }}>{data.category}</div>
             </div>
           </div>
-        </Panel>
+        </div>
 
-        <Panel>
+        <div className="panel">
           <div className="bmi-result-box">
             <div className="bmi-result-num" style={{ color: data.color }}>{data.bmi.toFixed(1)}</div>
             <div className="bmi-result-cat" style={{ color: data.color }}>{data.category}</div>
@@ -76,8 +81,8 @@ export default function BmiPage() {
             <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>What does this mean?</div>
             <div style={{ fontSize: 12, color: 'var(--text2)', lineHeight: 1.6 }}>{data.advice}</div>
           </div>
-        </Panel>
+        </div>
       </div>
     </div>
-  );
+  )
 }

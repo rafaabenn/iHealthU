@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import api from '../services/api'
+import axios from 'axios'
 import styles from '../styles/Activities.module.css'
 
 const ACTIVITY_TYPES = ['Running', 'Cycling', 'Swimming', 'Yoga', 'Weight training', 'Walking', 'HIIT', 'Other']
@@ -16,12 +16,16 @@ export default function Activities() {
   const [filter, setFilter] = useState('All')
   const [submitting, setSubmitting] = useState(false)
 
-  const fetchActivities = () => {
+  const fetchActivities = async () => {
     setLoading(true)
-    api.get('/activities')
-      .then(res => setActivities(res.data))
-      .catch(console.error)
-      .finally(() => setLoading(false))
+    try {
+      const res = await axios.get('http://localhost:3000/activities')
+      setActivities(res.data)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => { fetchActivities() }, [])
@@ -33,9 +37,9 @@ export default function Activities() {
     setSubmitting(true)
     try {
       if (editing) {
-        await api.put(`/activities/${editing}`, form)
+        await axios.put(`http://localhost:3000/activities/${editing}`, form)
       } else {
-        await api.post('/activities', form)
+        await axios.post('http://localhost:3000/activities', form)
       }
       fetchActivities()
       setShowForm(false)
@@ -50,14 +54,18 @@ export default function Activities() {
 
   const handleEdit = a => {
     setForm({ type: a.type, duration: a.duration, date: a.date?.split('T')[0], calories: a.calories, notes: a.notes || '' })
-    setEditing(a._id || a.id)
+    setEditing(a.id || a._id)
     setShowForm(true)
   }
 
   const handleDelete = async id => {
     if (!confirm('Delete this activity?')) return
-    await api.delete(`/activities/${id}`)
-    fetchActivities()
+    try {
+      await axios.delete(`http://localhost:3000/activities/${id}`)
+      fetchActivities()
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const filtered = filter === 'All' ? activities : activities.filter(a => a.type === filter)
@@ -66,53 +74,37 @@ export default function Activities() {
 
   return (
     <div className={styles.page}>
-      {/* Header */}
       <div className={styles.topbar}>
         <div>
           <div className={styles.pageTitleSm}>Fitness tracker</div>
-          <h1 className={styles.pageTitle}>Workouts <span>&amp; Activities</span></h1>
+          <h1 className={styles.pageTitle}>Workouts <span>& Activities</span></h1>
         </div>
         <button className={styles.btnPrimary} onClick={() => { setShowForm(true); setEditing(null); setForm(emptyForm) }}>
           + Add workout
         </button>
       </div>
 
-      {/* Summary cards */}
       <div className={styles.summaryRow}>
-        <div className={styles.sumCard}>
-          <div className={styles.sumIcon}>🏃</div>
-          <div className={styles.sumVal}>{activities.length}</div>
-          <div className={styles.sumLabel}>Total workouts</div>
+        <div className={styles.statCard} style={{ padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>🏃</div>
+          <div style={{ fontSize: 24, fontWeight: 700 }}>{activities.length}</div>
+          <div style={{ fontSize: 12, color: 'var(--text3)', textTransform: 'uppercase' }}>Workouts</div>
         </div>
-        <div className={styles.sumCard}>
-          <div className={styles.sumIcon}>🔥</div>
-          <div className={styles.sumVal}>{totalCal.toLocaleString()}<sup>kcal</sup></div>
-          <div className={styles.sumLabel}>Total burned</div>
+        <div className={styles.statCard} style={{ padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>🔥</div>
+          <div style={{ fontSize: 24, fontWeight: 700 }}>{totalCal.toLocaleString()}</div>
+          <div style={{ fontSize: 12, color: 'var(--text3)', textTransform: 'uppercase' }}>Kcal Burned</div>
         </div>
-        <div className={styles.sumCard}>
-          <div className={styles.sumIcon}>⏱️</div>
-          <div className={styles.sumVal}>{Math.floor(totalMin / 60)}<sup>h</sup> {totalMin % 60}<sup>m</sup></div>
-          <div className={styles.sumLabel}>Total time</div>
+        <div className={styles.statCard} style={{ padding: '20px', textAlign: 'center' }}>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>⏱️</div>
+          <div style={{ fontSize: 24, fontWeight: 700 }}>{Math.floor(totalMin / 60)}h {totalMin % 60}m</div>
+          <div style={{ fontSize: 12, color: 'var(--text3)', textTransform: 'uppercase' }}>Active Time</div>
         </div>
       </div>
 
-      {/* Filter bar */}
-      <div className={styles.filterBar}>
-        {['All', ...ACTIVITY_TYPES].map(f => (
-          <button key={f} className={`${styles.filterBtn} ${filter === f ? styles.on : ''}`}
-            onClick={() => setFilter(f)}>
-            {f}
-          </button>
-        ))}
-      </div>
-
-      {/* Add/Edit form */}
       {showForm && (
         <div className={styles.formPanel}>
-          <div className={styles.formHeader}>
-            <span className={styles.panelTitle}>{editing ? 'Edit workout' : 'New workout'}</span>
-            <button className={styles.closeBtn} onClick={() => { setShowForm(false); setEditing(null) }}>✕</button>
-          </div>
+          <div className={styles.panelTitle}>{editing ? 'Edit Workout' : 'New Workout'}</div>
           <form onSubmit={handleSubmit}>
             <div className={styles.formGrid}>
               <div className={styles.formGroup}>
@@ -127,56 +119,51 @@ export default function Activities() {
               </div>
               <div className={styles.formGroup}>
                 <label className={styles.label}>Duration (min)</label>
-                <input type="number" name="duration" value={form.duration} onChange={handleChange}
-                  className={styles.input} placeholder="45" min="1" required />
+                <input type="number" name="duration" value={form.duration} onChange={handleChange} className={styles.input} required />
               </div>
               <div className={styles.formGroup}>
-                <label className={styles.label}>Calories burned</label>
-                <input type="number" name="calories" value={form.calories} onChange={handleChange}
-                  className={styles.input} placeholder="300" min="0" />
+                <label className={styles.label}>Calories</label>
+                <input type="number" name="calories" value={form.calories} onChange={handleChange} className={styles.input} />
               </div>
             </div>
             <div className={styles.formGroup}>
-              <label className={styles.label}>Notes (optional)</label>
-              <input name="notes" value={form.notes} onChange={handleChange}
-                className={styles.input} placeholder="How did it feel?" />
+              <label className={styles.label}>Notes</label>
+              <input name="notes" value={form.notes} onChange={handleChange} className={styles.input} placeholder="How was your workout?" />
             </div>
             <div className={styles.formActions}>
-              <button type="button" className={styles.btnOutline} onClick={() => { setShowForm(false); setEditing(null) }}>Cancel</button>
+              <button type="button" className={styles.btnOutline} onClick={() => setShowForm(false)}>Cancel</button>
               <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-                {submitting ? 'Saving…' : editing ? 'Update' : 'Add workout'}
+                {submitting ? 'Saving...' : editing ? 'Update' : 'Add workout'}
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Activities list */}
       <div className={styles.activitiesList}>
         {loading ? (
-          <p style={{ color: 'var(--text3)', fontSize: 13, textAlign: 'center', padding: 30 }}>Loading…</p>
+          <div style={{ textAlign: 'center', padding: 40, color: 'var(--text3)' }}>Loading workouts...</div>
         ) : filtered.length === 0 ? (
-          <div className={styles.emptyState}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>🏃</div>
-            <p>No workouts yet. Add your first one!</p>
+          <div style={{ textAlign: 'center', padding: 60, background: 'var(--surface)', borderRadius: 20 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>👟</div>
+            <p style={{ color: 'var(--text2)' }}>No workouts recorded. Time to move!</p>
           </div>
         ) : (
           filtered.map(a => (
-            <div key={a._id || a.id} className={styles.activityCard}>
-              <div className={styles.actIcon}>{ICONS[a.type] || '🤸'}</div>
-              <div className={styles.actInfo}>
-                <div className={styles.actName}>{a.type}</div>
-                <div className={styles.actMeta}>
-                  📅 {new Date(a.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
-                  &nbsp;·&nbsp; ⏱️ {a.duration} min
-                  {a.notes && <>&nbsp;·&nbsp; {a.notes}</>}
+            <div key={a.id || a._id} className={styles.activityCard}>
+              <div className={styles.activityIcon}>{ICONS[a.type] || '🤸'}</div>
+              <div className={styles.activityInfo}>
+                <div className={styles.activityName}>{a.type}</div>
+                <div className={styles.activityMeta}>
+                  {new Date(a.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} · {a.duration} min
+                  {a.notes && ` · ${a.notes}`}
                 </div>
               </div>
-              <div className={styles.actRight}>
-                {a.calories && <div className={styles.actCal}>{a.calories} kcal</div>}
-                <div className={styles.actActions}>
-                  <button onClick={() => handleEdit(a)} className={styles.iconBtn}>✏️</button>
-                  <button onClick={() => handleDelete(a._id || a.id)} className={styles.iconBtnDanger}>🗑️</button>
+              <div className={styles.activityStats}>
+                <div className={styles.activityCal}>{a.calories} kcal</div>
+                <div style={{ display: 'flex', gap: 8, marginTop: 4, justifyContent: 'flex-end' }}>
+                  <button onClick={() => handleEdit(a)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14 }}>✏️</button>
+                  <button onClick={() => handleDelete(a.id || a._id)} className={styles.deleteBtn} style={{ opacity: 1, position: 'static' }}>🗑️</button>
                 </div>
               </div>
             </div>
