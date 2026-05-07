@@ -18,8 +18,4 @@ export class DashboardController {
     return this.dashboardService.getSummary(userId);
   }
 
-  @Get('summary')
-  getSummary() {
-    return this.dashboardService.getSummary();
-  }
 }
