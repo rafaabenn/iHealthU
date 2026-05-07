@@ -1,8 +1,10 @@
 {
-  "targetWeight": "50",
-  "dailyCalories": "300",
-  "weeklyWorkouts": "6",
-  "dailyWater": "8",
-  "dailySteps": "10000",
-  "sleepHours": "8"
+  "1777845639356": {
+    "targetWeight": "",
+    "dailyCalories": "",
+    "weeklyWorkouts": "",
+    "dailyWater": "16",
+    "dailySteps": "1200",
+    "sleepHours": ""
+  }
 }
