@@ -1,27 +1,34 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { ActivitiesService } from './activities.service';
+import { JwtGuard } from '../auth/jwt.guard';
+import { UserId } from '../auth/user-id.decorator';
 
+@UseGuards(JwtGuard)          // every route in this controller requires a valid token
 @Controller('activities')
 export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Get()
-  findAll() {
-    return this.activitiesService.findAll();
+  findAll(@UserId() userId: string) {
+    return this.activitiesService.findAll(userId);
   }
 
   @Post()
-  create(@Body() body: any) {
-    return this.activitiesService.create(body);
+  create(@UserId() userId: string, @Body() body: any) {
+    return this.activitiesService.create(userId, body);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body: any) {
-    return this.activitiesService.update(id, body);
+  update(
+    @UserId() userId: string,
+    @Param('id') id: string,
+    @Body() body: any,
+  ) {
+    return this.activitiesService.update(userId, id, body);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.activitiesService.remove(id);
+  remove(@UserId() userId: string, @Param('id') id: string) {
+    return this.activitiesService.remove(userId, id);
   }
 }

@@ -16,30 +16,33 @@ function writeActivities(data: any[]) {
 
 @Injectable()
 export class ActivitiesService {
-  findAll() {
-    return readActivities();
+  findAll(userId: string) {
+    const activities = readActivities();
+    return activities.filter((a: any) => a.userId === userId);
   }
 
-  create(body: any) {
+  create(userId: string, body: any) {
     const activities = readActivities();
-    const newActivity = { id: Date.now().toString(), ...body };
+    const newActivity = { id: Date.now().toString(), userId, ...body };
     activities.unshift(newActivity);
     writeActivities(activities);
     return newActivity;
   }
 
-  update(id: string, body: any) {
+  update(userId: string,  id: string, body: any) {
     const activities = readActivities();
-    const index = activities.findIndex((a: any) => a.id === id);
+    const index = activities.findIndex(
+        (a: any) => a.id === id && a.userId === userId);
     if (index === -1) throw new NotFoundException('Activity not found');
     activities[index] = { ...activities[index], ...body };
     writeActivities(activities);
     return activities[index];
   }
 
-  remove(id: string) {
+  remove(userId: string, id: string) {
     const activities = readActivities();
-    const filtered = activities.filter((a: any) => a.id !== id);
+    const filtered = activities.filter(
+        (a: any) => !(a.id === id && a.userId === userId))
     if (filtered.length === activities.length) throw new NotFoundException('Activity not found');
     writeActivities(filtered);
     return { message: 'Deleted' };

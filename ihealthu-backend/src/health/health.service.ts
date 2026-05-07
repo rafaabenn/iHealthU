@@ -16,21 +16,23 @@ function writeLogs(data: any[]) {
 
 @Injectable()
 export class HealthService {
-  findAll() {
-    return readLogs();
+  findAll(userId: string) {
+    const logs = readLogs();
+    return logs.filter((l: any) => l.userId === userId);
   }
 
-  create(body: any) {
+  create(userId: string, body: any) {
     const logs = readLogs();
-    const newLog = { id: Date.now().toString(), ...body };
+    const newLog = { id: Date.now().toString(), userId, ...body };
     logs.unshift(newLog);
     writeLogs(logs);
     return newLog;
   }
 
-  remove(id: string) {
+  remove(userId: string, id: string) {
     const logs = readLogs();
-    const filtered = logs.filter((l: any) => l.id !== id);
+    const filtered = logs.filter(
+        (l: any) => !(l.id === id && l.userId === userId));
     if (filtered.length === logs.length) throw new NotFoundException('Entry not found');
     writeLogs(filtered);
     return { message: 'Deleted' };

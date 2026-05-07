@@ -1,22 +1,25 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, UseGuards } from '@nestjs/common';
 import { HealthService } from './health.service';
+import { JwtGuard } from '../auth/jwt.guard';
+import { UserId } from '../auth/user-id.decorator';
 
+@UseGuards(JwtGuard)
 @Controller('health')
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
   @Get()
-  findAll() {
-    return this.healthService.findAll();
+  findAll(@UserId() userId: string) {
+    return this.healthService.findAll(userId);
   }
 
   @Post()
-  create(@Body() body: any) {
-    return this.healthService.create(body);
+  create(@UserId() userId: string, @Body() body: any) {
+    return this.healthService.create(userId, body);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.healthService.remove(id);
+  remove(@UserId() userId: string, @Param('id') id: string) {
+    return this.healthService.remove(userId, id);
   }
 }

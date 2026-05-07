@@ -4,24 +4,42 @@ import * as path from 'path';
 
 const DB_PATH = path.join(__dirname, '../../data/goals.json');
 
-function readGoals() {
+// Goals file structure — one object per user, keyed by userId:
+// {
+//   "userId-abc": { targetWeight: "70", dailyCalories: "400", ... },
+//   "userId-xyz": { targetWeight: "60", dailyCalories: "300", ... }
+// }
+
+function readAllGoals(): Record<string, any> {
   if (!fs.existsSync(DB_PATH)) return {};
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
+  try {
+    const raw = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
+    // If old flat format (before isolation), start fresh
+    const looksLikeOldFormat =
+      raw.targetWeight !== undefined || raw.dailyCalories !== undefined;
+    if (looksLikeOldFormat) return {};
+    return raw;
+  } catch {
+    return {};
+  }
 }
 
-function writeGoals(data: any) {
+function writeAllGoals(data: Record<string, any>) {
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
 
 @Injectable()
 export class GoalsService {
-  findAll() {
-    return readGoals();
+  findAll(userId: string) {
+    const all = readAllGoals();
+    return all[userId] ?? {};
   }
-
-  update(body: any) {
-    writeGoals(body);
+ 
+  update(userId: string, body: any) {
+    const all = readAllGoals();
+    all[userId] = body;
+    writeAllGoals(all);
     return body;
   }
 }
