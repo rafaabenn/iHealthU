@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import styles from './Sidebar.module.css'
+import styles from '../styles/Sidebar.module.css'
 
 const navItems = [
   { section: 'OVERVIEW', items: [
@@ -10,7 +10,6 @@ const navItems = [
     { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
   ]},
   { section: 'HEALTH', items: [
-    { to: '/dashboard/health', icon: '❤️', label: 'Health metrics' },
     { to: '/dashboard/bmi', icon: '⚖️', label: 'BMI' },
     { to: '/dashboard/calories', icon: '🔥', label: 'Calorie tracker' },
   ]},

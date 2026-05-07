@@ -1,5 +1,13 @@
 [
   {
+    "id": "1778109035709",
+    "type": "Walking",
+    "duration": "10",
+    "date": "2026-05-06",
+    "calories": "",
+    "notes": ""
+  },
+  {
     "id": "1778084044363",
     "type": "Cycling",
     "duration": "45",

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
-import styles from './Dashboard.module.css'
+import styles from '../styles/Dashboard.module.css'
 
 const QUOTES = [
   "Every step forward is a step toward a healthier you.",

@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import Topbar from '../components/Topbar';
-import '../styles/mood.css';
+import { useState } from 'react'
+import '../styles/mood.css'
 
 const moods = [
   { emoji: '😔', label: 'Sad' },
@@ -8,25 +7,46 @@ const moods = [
   { emoji: '😊', label: 'Good' },
   { emoji: '😄', label: 'Happy' },
   { emoji: '🤩', label: 'Amazing' },
-];
+]
 
-const log = [
+const initialLog = [
   { emoji: '😊', text: 'Good — felt energetic after yoga', date: 'Today' },
   { emoji: '🤩', text: 'Amazing — great workout day!', date: 'Yesterday' },
   { emoji: '😕', text: 'Meh — tired from little sleep', date: 'Mon 28 Apr' },
-];
+]
 
-const weekHeights = [50, 70, 40, 65, 80, 55, 75];
+const weekHeights = [50, 70, 40, 65, 80, 55, 75]
 
 export default function MoodPage() {
-  const [selected, setSelected] = useState(2);
+  const [selected, setSelected] = useState(2)
+  const [note, setNote] = useState('')
+  const [log, setLog] = useState(initialLog)
+
+  const handleSave = () => {
+    const m = moods[selected]
+    const entry = {
+      emoji: m.emoji,
+      text: `${m.label}${note ? ` — ${note}` : ''}`,
+      date: 'Just now',
+    }
+    setLog(prev => [entry, ...prev])
+    setNote('')
+  }
 
   return (
     <div className="page">
-      <Topbar subtitle="Mental wellness" title="😊 Mood logger" />
+      <div className="topbar">
+        <div>
+          <div className="page-title-sm">Mental wellness</div>
+          <h1 className="page-title">😊 Mood <span>Logger</span></h1>
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-        <div className="panel" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 20 }}>
-          <div className="panel-title" style={{ marginBottom: 6 }}>How are you feeling today?</div>
+        <div className="panel">
+          <div className="panel-header">
+            <div className="panel-title">How are you feeling today?</div>
+          </div>
           <div style={{ fontSize: 12, color: 'var(--text3)', marginBottom: 14 }}>Tap to select your mood</div>
           <div className="mood-big-row">
             {moods.map((m, idx) => (
@@ -42,13 +62,27 @@ export default function MoodPage() {
           </div>
           <div className="form-group">
             <label className="form-label">Add a note (optional)</label>
-            <textarea className="form-input" rows="3" placeholder="What's on your mind today?" />
+            <textarea
+              className="form-input"
+              rows="3"
+              placeholder="What's on your mind today?"
+              value={note}
+              onChange={e => setNote(e.target.value)}
+            />
           </div>
-          <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }}>Save mood</button>
+          <button
+            className="btn-primary"
+            style={{ width: '100%', justifyContent: 'center' }}
+            onClick={handleSave}
+          >
+            Save mood
+          </button>
         </div>
 
-        <div className="panel" style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 20 }}>
-          <div className="panel-header"><div className="panel-title">This week's mood</div></div>
+        <div className="panel">
+          <div className="panel-header">
+            <div className="panel-title">This week's mood</div>
+          </div>
           <div className="mood-week-chart">
             {weekHeights.map((h, i) => (
               <div key={i} className="mood-bar-wrap">
@@ -74,5 +108,5 @@ export default function MoodPage() {
         </div>
       </div>
     </div>
-  );
+  )
 }
