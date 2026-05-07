@@ -15,6 +15,8 @@ export function AuthProvider({ children }) {
 
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password })
+    
+    sessionStorage.setItem('token', res.data.token)
     sessionStorage.setItem('user', JSON.stringify(res.data.user))
     setUser(res.data.user)
     return res.data
@@ -22,12 +24,16 @@ export function AuthProvider({ children }) {
 
   const register = async (data) => {
     const res = await api.post('/auth/register', data)
+    
+    
+    sessionStorage.setItem('token', res.data.token)
     sessionStorage.setItem('user', JSON.stringify(res.data.user))
     setUser(res.data.user)
     return res.data
   }
 
   const logout = () => {
+    sessionStorage.removeItem('token')
     sessionStorage.removeItem('user')
     setUser(null)
   }
