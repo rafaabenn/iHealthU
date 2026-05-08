@@ -1,5 +1,32 @@
 [
   {
+    "id": "1778199433587",
+    "userId": "1777503137317",
+    "type": "Cycling",
+    "duration": "60",
+    "date": "2026-05-08",
+    "calories": "350",
+    "notes": "good"
+  },
+  {
+    "id": "1778199374918",
+    "userId": "1777503137317",
+    "type": "Running",
+    "duration": "6",
+    "date": "2026-05-08",
+    "calories": "789",
+    "notes": "Cycling day"
+  },
+  {
+    "id": "1778199166001",
+    "userId": "1777503137317",
+    "type": "Running",
+    "duration": "45",
+    "date": "2026-05-08",
+    "calories": "350",
+    "notes": "running"
+  },
+  {
     "id": "1778109035709",
     "type": "Walking",
     "duration": "10",
