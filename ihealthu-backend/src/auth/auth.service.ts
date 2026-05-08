@@ -31,12 +31,12 @@ function signToken(user: any): string {
 
 @Injectable()
 export class AuthService {
-  register(email: string, password: string) {
+  register(name: string, email: string, password: string) {
     const users = readUsers();
     const exists = users.find((u: any) => u.email === email);
     if (exists) throw new UnauthorizedException('Email already used');
 
-    const newUser = { id: Date.now().toString(), email, password };
+    const newUser = { id: Date.now().toString(), name, email, password };
     users.push(newUser);
     writeUsers(users);
 
