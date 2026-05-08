@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
-  const quote = QUOTES[new Date().getDay() % QUOTES.length]
+  const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)])
 
   useEffect(() => {
     api.get('/dashboard/today')
@@ -25,7 +25,7 @@ export default function Dashboard() {
   }, [])
 
   const statCards = [
-    { icon: '👟', val: stats?.steps ?? '—', unit: 'steps', label: 'Today\'s steps', delta: stats?.stepsDelta, color: 'c1' },
+    { icon: '⏱️', val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—', unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1' },
     { icon: '🔥', val: stats?.calories ?? '—', unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2' },
     { icon: '💧', val: stats?.water ?? '—', unit: 'glasses', label: 'Water intake', color: 'c3' },
     { icon: '😴', val: stats?.sleep ?? '—', unit: 'h', label: 'Sleep last night', color: 'c4' },
@@ -43,7 +43,6 @@ export default function Dashboard() {
         </div>
         <div className={styles.topbarRight}>
           <div className={styles.streakChip}>🔥 12-day streak</div>
-          <div className={styles.notifBtn}>🔔</div>
         </div>
       </div>
 
@@ -115,7 +114,7 @@ export default function Dashboard() {
         </div>
         <div className={styles.goalsGrid}>
           {[
-            { label: 'Steps', value: stats?.steps ?? 0, goal: 10000, color: 'var(--sage)' },
+            { label: 'Active Minutes', value: stats?.activeMinutes ?? 0, goal: stats?.activeMinutesGoal ?? 30, color: 'var(--sage)' },
             { label: 'Calories', value: stats?.calories ?? 0, goal: 500, color: 'var(--coral)' },
             { label: 'Water', value: (stats?.water ?? 0) * 250, goal: 2000, color: 'var(--sky)' },
             { label: 'Sleep', value: (stats?.sleep ?? 0) * 60, goal: 480, color: 'var(--lav)' },

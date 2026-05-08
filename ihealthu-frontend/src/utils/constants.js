@@ -9,6 +9,6 @@ export const TIPS = [
 export const ACHIEVEMENTS = [
   { icon: '🔥', text: '12-day workout streak!', date: 'Today' },
   { icon: '💧', text: 'Hit water goal 4 days in a row', date: 'Sat 27 Apr' },
-  { icon: '👟', text: '10,000 steps in a day', date: 'Fri 26 Apr' },
+  { icon: '⏱️', text: '60 min active in a day', date: 'Fri 26 Apr' },
   { icon: '⚖️', text: 'Lost 0.8 kg this week', date: 'This week' },
 ];

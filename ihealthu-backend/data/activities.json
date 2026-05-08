@@ -1,5 +1,23 @@
 [
   {
+    "id": "1778278021711",
+    "userId": "1778276463231",
+    "type": "Swimming",
+    "duration": "60",
+    "date": "2026-05-08",
+    "calories": "260",
+    "notes": ""
+  },
+  {
+    "id": "1778277268261",
+    "userId": "1778276463231",
+    "type": "Running",
+    "duration": "45",
+    "date": "2026-05-08",
+    "calories": "400",
+    "notes": ""
+  },
+  {
     "id": "1778199433587",
     "userId": "1777503137317",
     "type": "Cycling",

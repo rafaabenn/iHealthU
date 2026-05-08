@@ -31,6 +31,17 @@ export class DashboardService {
     const todayActivities = activities.filter((a) => a.date?.startsWith(today));
     const yesterdayActivities = activities.filter((a) => a.date?.startsWith(yesterday));
  
+    const activeMinutes = todayActivities.reduce(
+      (sum: number, a: any) => sum + Number(a.duration || 0), 0,
+    );
+    const activeMinutesYesterday = yesterdayActivities.reduce(
+      (sum: number, a: any) => sum + Number(a.duration || 0), 0,
+    );
+    const activeMinutesDelta =
+      activeMinutesYesterday > 0
+        ? Math.round(((activeMinutes - activeMinutesYesterday) / activeMinutesYesterday) * 100)
+        : null;
+
     const calories = todayActivities.reduce(
       (sum: number, a: any) => sum + Number(a.calories || 0), 0,
     );
@@ -41,7 +52,7 @@ export class DashboardService {
       caloriesYesterday > 0
         ? Math.round(((calories - caloriesYesterday) / caloriesYesterday) * 100)
         : null;
- 
+
     const workouts = todayActivities.map((a: any) => ({
       icon: ICONS[a.type] || '🤸',
       name: a.type,
@@ -49,10 +60,11 @@ export class DashboardService {
       date: 'Today',
       calories: a.calories,
     }));
- 
+
     return {
-      steps: 0,
-      stepsDelta: null,
+      activeMinutes,
+      activeMinutesDelta,
+      activeMinutesGoal: Number(goals.dailyActiveMinutes) || 30,
       calories,
       caloriesDelta,
       water: Number(goals.dailyWater) || 0,
@@ -108,6 +120,7 @@ export class DashboardService {
         water: goals.dailyWater || 0,
         sleep: goals.sleepHours || 0,
         weight: goals.targetWeight || 0,
+        activeMinutes: goals.dailyActiveMinutes || 0,
       },
     };
   }

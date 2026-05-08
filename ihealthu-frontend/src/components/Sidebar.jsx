@@ -3,20 +3,26 @@ import { useAuth } from '../context/AuthContext'
 import styles from '../styles/Sidebar.module.css'
 
 const navItems = [
-  { section: 'OVERVIEW', items: [
-    { to: '/dashboard', icon: '⊞', label: 'Home' },
-    { to: '/dashboard/activities', icon: '🏃', label: 'Workouts', badge: null },
-    { to: '/dashboard/water', icon: '💧', label: 'Water' },
-    { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
-  ]},
-  { section: 'HEALTH', items: [
-    { to: '/dashboard/bmi', icon: '⚖️', label: 'BMI' },
-    { to: '/dashboard/calories', icon: '🔥', label: 'Calorie tracker' },
-  ]},
-  { section: 'GOALS', items: [
-    { to: '/dashboard/goals', icon: '🎯', label: 'Daily goals' },
-    { to: '/dashboard/summary', icon: '📊', label: 'Weekly summary' },
-  ]},
+  {
+    section: 'OVERVIEW', items: [
+      { to: '/dashboard', icon: '🏠', label: 'Home' },
+      { to: '/dashboard/activities', icon: '🏃', label: 'Workouts', badge: null },
+      { to: '/dashboard/water', icon: '💧', label: 'Water' },
+      { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
+    ]
+  },
+  {
+    section: 'HEALTH', items: [
+      { to: '/dashboard/bmi', icon: '⚖️', label: 'BMI' },
+      { to: '/dashboard/calories', icon: '🔥', label: 'Calorie tracker' },
+    ]
+  },
+  {
+    section: 'GOALS', items: [
+      { to: '/dashboard/goals', icon: '🎯', label: 'Daily goals' },
+      { to: '/dashboard/summary', icon: '📊', label: 'Weekly summary' },
+    ]
+  },
 ]
 
 export default function Sidebar() {
@@ -36,6 +42,7 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <div className={styles.logoMark}>
+          <img src="public/logo1.png" alt="logo" style={{ width: '35px', height: '35px' }} />
           iHealth<span>U</span>
         </div>
         <div className={styles.logoSub}>Your wellness companion</div>
