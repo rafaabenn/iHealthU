@@ -12,6 +12,7 @@
   padding: 0 20px 24px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
   margin-bottom: 18px;
+  
 }
 
 .logoMark {
@@ -21,6 +22,13 @@
   letter-spacing: -0.5px;
   display: flex;
   align-items: center;
+  gap: 5px;
+}
+
+.logoMark img {
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .logoMark span {
