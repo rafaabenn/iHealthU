@@ -1,0 +1,282 @@
+import { useState, useEffect, useRef } from 'react'
+import { useAuth } from '../context/AuthContext'
+import api from '../services/api'
+import styles from '../styles/Activities.module.css'
+
+const TYPES = ['Running', 'Cycling', 'Swimming', 'Yoga', 'Weight training', 'Walking', 'HIIT', 'Other']
+const META = {
+  Running:           { icon: '🏃', color: '#E85D3A', bg: 'rgba(232,93,58,0.1)',  tag: 'Cardio'     },
+  Cycling:           { icon: '🚴', color: '#3A9BE8', bg: 'rgba(58,155,232,0.1)', tag: 'Cardio'     },
+  Swimming:          { icon: '🏊', color: '#3AB8E8', bg: 'rgba(58,184,232,0.1)', tag: 'Cardio'     },
+  Yoga:              { icon: '🧘', color: '#9B6FE8', bg: 'rgba(155,111,232,0.1)',tag: 'Flexibility' },
+  'Weight training': { icon: '🏋️', color: '#E8A23A', bg: 'rgba(232,162,58,0.1)', tag: 'Strength'   },
+  Walking:           { icon: '👟', color: '#5AE872', bg: 'rgba(90,232,114,0.1)', tag: 'Cardio'     },
+  HIIT:              { icon: '⚡', color: '#E8C83A', bg: 'rgba(232,200,58,0.1)', tag: 'Intensity'  },
+  Other:             { icon: '🤸', color: '#E85D9B', bg: 'rgba(232,93,155,0.1)', tag: 'Activity'   },
+}
+
+const emptyForm = {
+  type: 'Running',
+  duration: '',
+  date: new Date().toISOString().split('T')[0],
+  calories: '',
+  notes: '',
+}
+
+export default function Activities() {
+  const { user } = useAuth()
+  const [activities, setActivities] = useState([])
+  const [loading, setLoading]       = useState(true)
+  const [showForm, setShowForm]     = useState(false)
+  const [editing, setEditing]       = useState(null)
+  const [form, setForm]             = useState(emptyForm)
+  const [filter, setFilter]         = useState('All')
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError]           = useState(null)
+  const formRef = useRef(null)
+
+  const fetchActivities = async () => {
+    setLoading(true); setError(null)
+    try {
+      const res = await api.get('/activities')
+      setActivities(res.data)
+    } catch (err) {
+      if (err.response?.status === 401) setError('Session expirée — reconnecte-toi.')
+      else setError('Erreur de chargement des activités.')
+    } finally { setLoading(false) }
+  }
+  useEffect(() => { fetchActivities() }, [])
+
+  useEffect(() => {
+    if (showForm && formRef.current)
+      setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
+  }, [showForm])
+
+  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
+  const openAdd  = () => { setEditing(null); setForm(emptyForm); setShowForm(true) }
+  const closeForm = () => { setShowForm(false); setEditing(null) }
+
+  const handleSubmit = async e => {
+    e.preventDefault(); setSubmitting(true)
+    const tempId = 'temp_' + Date.now()
+
+    if (editing) {
+      setActivities(prev => prev.map(a =>
+        (a.id === editing || a._id === editing) ? { ...a, ...form } : a
+      ))
+      closeForm()
+      try { await api.put(`/activities/${editing}`, form); fetchActivities() }
+      catch { fetchActivities() }
+    } else {
+      setActivities(prev => [{ ...form, id: tempId }, ...prev])
+      closeForm()
+      try {
+        const res = await api.post('/activities', form)
+        setActivities(prev => prev.map(a => a.id === tempId ? res.data : a))
+      } catch {
+        setActivities(prev => prev.filter(a => a.id !== tempId))
+      }
+    }
+    setSubmitting(false)
+  }
+
+  const handleEdit = a => {
+    setForm({
+      type: a.type, duration: a.duration,
+      date: a.date?.split('T')[0], calories: a.calories, notes: a.notes || '',
+    })
+    setEditing(a.id || a._id); setShowForm(true)
+  }
+
+  const handleDelete = async id => {
+    if (!confirm('Supprimer cette activité ?')) return
+    setActivities(prev => prev.filter(a => (a.id || a._id) !== id))
+    try { await api.delete(`/activities/${id}`) }
+    catch { fetchActivities() }
+  }
+
+  const filtered = filter === 'All' ? activities : activities.filter(a => a.type === filter)
+  const totalCal = activities.reduce((s, a) => s + Number(a.calories || 0), 0)
+  const totalMin = activities.reduce((s, a) => s + Number(a.duration || 0), 0)
+
+  return (
+    <div className={styles.page}>
+
+      {/* TOPBAR */}
+      <div className={styles.topbar}>
+        <div>
+          <p className={styles.subtitle}>
+            {new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+          </p>
+          <h1 className={styles.title}>
+            Workouts <span className={styles.accent}>&amp; Activities</span>
+          </h1>
+        </div>
+        <button className={styles.btnAdd} onClick={openAdd}>
+          <span>+</span> Add workout
+        </button>
+      </div>
+
+      {/* STATS */}
+      <div className={styles.statsRow}>
+        <div className={styles.statCard}>
+          <span className={styles.statEmoji}>🏆</span>
+          <div>
+            <div className={styles.statVal}>{activities.length}</div>
+            <div className={styles.statLabel}>Total Workouts</div>
+          </div>
+        </div>
+        <div className={styles.statCard}>
+          <span className={styles.statEmoji}>🔥</span>
+          <div>
+            <div className={styles.statVal}>{totalCal.toLocaleString()} <span className={styles.statUnit}>kcal</span></div>
+            <div className={styles.statLabel}>Calories Burned</div>
+          </div>
+        </div>
+        <div className={styles.statCard}>
+          <span className={styles.statEmoji}>⏱️</span>
+          <div>
+            <div className={styles.statVal}>{Math.floor(totalMin / 60)}h {totalMin % 60}m</div>
+            <div className={styles.statLabel}>Active Time</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ERROR */}
+      {error && <div className={styles.errorBanner}>⚠️ {error}</div>}
+
+      {/* FORM */}
+      {showForm && (
+        <div className={styles.formCard} ref={formRef}>
+          <div className={styles.formHeader}>
+            <span className={styles.formTitle}>{editing ? '✏️ Edit Workout' : '🆕 New Workout'}</span>
+            <button className={styles.closeBtn} onClick={closeForm}>✕</button>
+          </div>
+
+          <div className={styles.typePicker}>
+            {TYPES.map(t => (
+              <button
+                key={t}
+                type="button"
+                className={`${styles.typeChip} ${form.type === t ? styles.typeChipActive : ''}`}
+                style={form.type === t
+                  ? { background: META[t].bg, borderColor: META[t].color, color: META[t].color }
+                  : {}}
+                onClick={() => setForm(f => ({ ...f, type: t }))}
+              >
+                {META[t].icon} {t}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <div className={styles.formGrid}>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Date</label>
+                <input type="date" name="date" value={form.date} onChange={handleChange} className={styles.input} required />
+              </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Duration (min)</label>
+                <input type="number" name="duration" value={form.duration} onChange={handleChange}
+                  className={styles.input} min="1" required placeholder="45" />
+              </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Calories burned</label>
+                <input type="number" name="calories" value={form.calories} onChange={handleChange}
+                  className={styles.input} placeholder="350" />
+              </div>
+              <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
+                <label className={styles.label}>Notes</label>
+                <input name="notes" value={form.notes} onChange={handleChange}
+                  className={styles.input} placeholder="How was your session?" />
+              </div>
+            </div>
+            <div className={styles.formActions}>
+              <button type="button" className={styles.btnCancel} onClick={closeForm}>Cancel</button>
+              <button type="submit" className={styles.btnSave} disabled={submitting}>
+                {submitting ? 'Saving…' : editing ? 'Update workout' : 'Save workout'}
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* FILTERS */}
+      <div className={styles.filterRow}>
+        {['All', ...TYPES].map(t => (
+          <button
+            key={t}
+            className={`${styles.filterPill} ${filter === t ? styles.filterPillActive : ''}`}
+            style={filter === t && t !== 'All'
+              ? { background: META[t].bg, borderColor: META[t].color, color: META[t].color }
+              : {}}
+            onClick={() => setFilter(t)}
+          >
+            {t !== 'All' && <span style={{ marginRight: 4 }}>{META[t].icon}</span>}{t}
+          </button>
+        ))}
+      </div>
+
+      {/* LIST */}
+      <div className={styles.list}>
+        {loading ? (
+          <div className={styles.empty}>
+            <div className={styles.emptyIcon}>⏳</div>
+            <p>Loading your workouts…</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className={styles.empty}>
+            <div className={styles.emptyIcon}>👟</div>
+            <p>No workouts yet{filter !== 'All' ? ` for ${filter}` : ''}.</p>
+            <button className={styles.btnSave} onClick={openAdd} style={{ marginTop: 20 }}>
+              + Add your first workout
+            </button>
+          </div>
+        ) : (
+          filtered.map(a => {
+            const m   = META[a.type] || META.Other
+            const tid = String(a.id || '').startsWith('temp_')
+            return (
+              <div
+                key={a.id || a._id}
+                className={styles.card}
+                style={{ opacity: tid ? 0.5 : 1 }}
+              >
+                <div className={styles.cardBar} style={{ background: m.color }} />
+                <div className={styles.cardIcon} style={{ background: m.bg }}>
+                  {m.icon}
+                </div>
+                <div className={styles.cardInfo}>
+                  <div className={styles.cardName}>{a.type}</div>
+                  <div className={styles.cardMeta}>
+                    <span className={styles.cardTag}
+                      style={{ background: m.bg, color: m.color }}>{m.tag}</span>
+                    <span>📅 {new Date(a.date).toLocaleDateString('en-GB',
+                      { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    <span>⏱ {a.duration} min</span>
+                    {a.notes && <span className={styles.cardNote}>· {a.notes}</span>}
+                  </div>
+                </div>
+                <div className={styles.cardRight}>
+                  <div className={styles.cardCal}>
+                    {a.calories ? `${Number(a.calories).toLocaleString()} kcal` : '—'}
+                  </div>
+                  {!tid && (
+                    <div className={styles.cardActions}>
+                      <button className={styles.actionBtn} onClick={() => handleEdit(a)} title="Edit">✏️</button>
+                      <button
+                        className={`${styles.actionBtn} ${styles.actionBtnDel}`}
+                        onClick={() => handleDelete(a.id || a._id)}
+                        title="Delete"
+                      >🗑️</button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })
+        )}
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,181 @@
+import { useState, useEffect } from 'react'
+import { useAuth } from '../context/AuthContext'
+import api from '../services/api'
+import styles from '../styles/Dashboard.module.css'
+
+const QUOTES = [
+  "Every step forward is a step toward a healthier you.",
+  "Small progress is still progress. Keep moving.",
+  "Your body keeps the score — make today count.",
+  "Consistency beats perfection every single time.",
+]
+
+export default function Dashboard() {
+  const { user } = useAuth()
+  const [stats, setStats] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
+  const quote = QUOTES[new Date().getDay() % QUOTES.length]
+
+  useEffect(() => {
+    api.get('/dashboard/today')
+      .then(res => setStats(res.data))
+      .catch(() => setStats(null))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const statCards = [
+    { icon: '👟', val: stats?.steps ?? '—', unit: 'steps', label: 'Today\'s steps', delta: stats?.stepsDelta, color: 'c1' },
+    { icon: '🔥', val: stats?.calories ?? '—', unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2' },
+    { icon: '💧', val: stats?.water ?? '—', unit: 'glasses', label: 'Water intake', color: 'c3' },
+    { icon: '😴', val: stats?.sleep ?? '—', unit: 'h', label: 'Sleep last night', color: 'c4' },
+  ]
+
+  return (
+    <div className={styles.page}>
+      {/* Topbar */}
+      <div className={styles.topbar}>
+        <div>
+          <div className={styles.pageTitleSm}>{today}</div>
+          <h1 className={styles.pageTitle}>
+            Good morning, <span>{user?.name?.split(' ')[0] || 'there'}</span> 👋
+          </h1>
+        </div>
+        <div className={styles.topbarRight}>
+          <div className={styles.streakChip}>🔥 12-day streak</div>
+          <div className={styles.notifBtn}>🔔</div>
+        </div>
+      </div>
+
+      {/* Quote banner */}
+      <div className={styles.quoteBanner}>
+        <span className={styles.quoteLeaf}>🌿</span>
+        <p className={styles.quoteText}>
+          <strong>Daily reminder —</strong> {quote}
+        </p>
+      </div>
+
+      {/* Stat cards */}
+      <div className={`${styles.statsRow} ${styles.col4}`}>
+        {statCards.map((s, i) => (
+          <div key={i} className={`${styles.statCard} ${styles[s.color]}`}>
+            <div className={styles.statIcon}>{s.icon}</div>
+            <div className={styles.statVal}>{s.val}<sup>{s.unit}</sup></div>
+            <div className={styles.statLabel}>{s.label}</div>
+            {s.delta && (
+              <div className={`${styles.statDelta} ${s.delta > 0 ? 'up' : 'dn'}`}>
+                {s.delta > 0 ? '↑' : '↓'} {Math.abs(s.delta)}% vs yesterday
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Mid grid */}
+      <div className={styles.midGrid}>
+        {/* Today's workouts */}
+        <div className={styles.panel}>
+          <div className={styles.panelHeader}>
+            <span className={styles.panelTitle}>Today's workouts</span>
+            <span className={styles.panelAction}>+ Add</span>
+          </div>
+          {loading ? (
+            <p style={{ color: 'var(--text3)', fontSize: 13 }}>Loading…</p>
+          ) : stats?.workouts?.length ? (
+            stats.workouts.map((w, i) => (
+              <div key={i} className={styles.workoutItem}>
+                <div className={`${styles.wIcon} ${styles[`w${(i%4)+1}`]}`}>{w.icon}</div>
+                <div className={styles.wInfo}>
+                  <div className={styles.wName}>{w.name}</div>
+                  <div className={styles.wMeta}>{w.duration} min · {w.date}</div>
+                </div>
+                <div className={styles.wCal}>{w.calories} kcal</div>
+              </div>
+            ))
+          ) : (
+            <p style={{ color: 'var(--text3)', fontSize: 13 }}>No workouts logged today</p>
+          )}
+        </div>
+
+        {/* Water tracker */}
+        <div className={styles.panel}>
+          <div className={styles.panelHeader}>
+            <span className={styles.panelTitle}>💧 Water intake</span>
+            <span className={styles.panelAction}>Log</span>
+          </div>
+          <WaterTracker glasses={stats?.water ?? 0} />
+        </div>
+      </div>
+
+      {/* Progress goals */}
+      <div className={styles.panel}>
+        <div className={styles.panelHeader}>
+          <span className={styles.panelTitle}>Today's progress</span>
+          <span className={styles.panelAction}>View all goals →</span>
+        </div>
+        <div className={styles.goalsGrid}>
+          {[
+            { label: 'Steps', value: stats?.steps ?? 0, goal: 10000, color: 'var(--sage)' },
+            { label: 'Calories', value: stats?.calories ?? 0, goal: 500, color: 'var(--coral)' },
+            { label: 'Water', value: (stats?.water ?? 0) * 250, goal: 2000, color: 'var(--sky)' },
+            { label: 'Sleep', value: (stats?.sleep ?? 0) * 60, goal: 480, color: 'var(--lav)' },
+          ].map(g => (
+            <div key={g.label}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                <span style={{ fontSize: 12, fontWeight: 600 }}>{g.label}</span>
+                <span style={{ fontSize: 12, color: 'var(--text2)' }}>
+                  {Math.min(Math.round(g.value / g.goal * 100), 100)}%
+                </span>
+              </div>
+              <div className={styles.goalBar}>
+                <div
+                  className={styles.goalFill}
+                  style={{
+                    width: `${Math.min(g.value / g.goal * 100, 100)}%`,
+                    background: g.color
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function WaterTracker({ glasses }) {
+  const [count, setCount] = useState(glasses)
+  const total = 8
+
+  return (
+    <>
+      <div style={{ textAlign: 'center', marginBottom: 12 }}>
+        <span style={{ fontSize: 32, fontWeight: 700, color: 'var(--sky)' }}>{count}</span>
+        <span style={{ fontSize: 14, color: 'var(--text2)' }}> / {total} glasses</span>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 7 }}>
+        {Array.from({ length: total }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCount(i + 1)}
+            style={{
+              height: 42,
+              borderRadius: 10,
+              border: `1.5px solid ${i < count ? 'var(--sky)' : 'var(--border)'}`,
+              background: i < count ? 'rgba(107,168,196,0.15)' : 'var(--bg)',
+              fontSize: 18,
+              cursor: 'pointer',
+              transition: 'all 0.15s',
+            }}
+          >
+            {i < count ? '💧' : '+'}
+          </button>
+        ))}
+      </div>
+      <p style={{ fontSize: 11, color: 'var(--text3)', textAlign: 'center', marginTop: 8 }}>
+        Goal: {total} glasses · {count * 250} ml consumed
+      </p>
+    </>
+  )
+}

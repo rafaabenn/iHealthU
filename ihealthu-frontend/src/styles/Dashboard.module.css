@@ -1,0 +1,246 @@
+.page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100%;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.pageTitleSm {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.pageTitle span { color: var(--sage); }
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.streakChip {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--coral);
+  box-shadow: var(--shadow);
+}
+
+.notifBtn {
+  width: 38px;
+  height: 38px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.quoteBanner {
+  background: var(--forest);
+  border-radius: 16px;
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.quoteBanner::before {
+  content: '"';
+  position: absolute;
+  right: 18px;
+  top: -14px;
+  font-size: 90px;
+  color: rgba(168,213,194,0.1);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.quoteLeaf { font-size: 28px; flex-shrink: 0; }
+
+.quoteText {
+  font-size: 13px;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.55;
+}
+
+.quoteText strong { color: var(--mint); }
+
+.statsRow { display: grid; gap: 14px; }
+.col4 { grid-template-columns: repeat(4, 1fr); }
+.col3 { grid-template-columns: repeat(3, 1fr); }
+
+.statCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 0 0 16px 16px;
+}
+
+.c1::after { background: var(--sage); }
+.c2::after { background: var(--coral); }
+.c3::after { background: var(--amber); }
+.c4::after { background: var(--lav); }
+.c5::after { background: var(--sky); }
+
+.statIcon { font-size: 22px; margin-bottom: 10px; }
+
+.statVal {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.statVal sup {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text2);
+}
+
+.statLabel {
+  font-size: 12px;
+  color: var(--text2);
+  margin-top: 3px;
+}
+
+.statDelta {
+  font-size: 11px;
+  margin-top: 7px;
+}
+
+.midGrid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 16px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.panelTitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.panelAction {
+  font-size: 12px;
+  color: var(--sage);
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(74,124,111,0.08);
+  padding: 5px 12px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.panelAction:hover { background: rgba(74,124,111,0.18); }
+
+.workoutItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.workoutItem:last-child { border-bottom: none; padding-bottom: 0; }
+
+.wIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.w1 { background: #E8F4F0; }
+.w2 { background: #FEF0DC; }
+.w3 { background: #FCE8E8; }
+.w4 { background: #EEF0FE; }
+
+.wInfo { flex: 1; }
+.wName { font-size: 13px; font-weight: 600; }
+.wMeta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.wCal {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sage);
+  background: rgba(74,124,111,0.08);
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+.goalsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.goalBar {
+  height: 8px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.goalFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
