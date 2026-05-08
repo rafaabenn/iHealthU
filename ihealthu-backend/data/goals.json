@@ -4,7 +4,15 @@
     "dailyCalories": "",
     "weeklyWorkouts": "",
     "dailyWater": "16",
-    "dailySteps": "1200",
+    "dailyActiveMinutes": "1200",
+    "sleepHours": ""
+  },
+  "1778276463231": {
+    "targetWeight": "",
+    "dailyCalories": "",
+    "weeklyWorkouts": "",
+    "dailyWater": "6",
+    "dailyActiveMinutes": "90",
     "sleepHours": ""
   }
 }

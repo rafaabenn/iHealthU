@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import api from '../services/api'
 import styles from '../styles/WeeklySummary.module.css'
 
 export default function WeeklySummary() {
@@ -13,7 +13,7 @@ export default function WeeklySummary() {
 
   const fetchSummary = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/dashboard/summary')
+      const res = await api.get('/dashboard/summary')
       setData(res.data)
     } catch (err) {
       console.error('Failed to fetch summary', err)

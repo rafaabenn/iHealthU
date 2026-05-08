@@ -7,7 +7,7 @@ const DEFAULT_GOALS = {
   dailyCalories: '',
   weeklyWorkouts: '',
   dailyWater: '',
-  dailySteps: '',
+  dailyActiveMinutes: '',
   sleepHours: '',
 }
 
@@ -42,7 +42,7 @@ export default function Goals() {
     { name: 'dailyCalories', icon: '🔥', label: 'Daily calories target', unit: 'kcal burned', placeholder: '400', type: 'number', hint: 'Calories to burn through exercise per day' },
     { name: 'weeklyWorkouts', icon: '🏋️', label: 'Workouts per week', unit: 'sessions', placeholder: '4', type: 'number', hint: 'How many workout sessions per week' },
     { name: 'dailyWater', icon: '💧', label: 'Daily water intake', unit: 'glasses (250ml)', placeholder: '8', type: 'number', hint: 'Number of water glasses per day' },
-    { name: 'dailySteps', icon: '👟', label: 'Daily step goal', unit: 'steps', placeholder: '10000', type: 'number', hint: 'Steps to take each day' },
+    { name: 'dailyActiveMinutes', icon: '⏱️', label: 'Daily active minutes', unit: 'min', placeholder: '30', type: 'number', hint: 'Total workout duration target per day' },
     { name: 'sleepHours', icon: '🌙', label: 'Sleep target', unit: 'hours / night', placeholder: '8', type: 'number', hint: 'Target sleep duration', step: 0.5 },
   ]
 
