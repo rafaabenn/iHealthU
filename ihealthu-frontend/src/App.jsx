@@ -9,8 +9,6 @@ import Activities from './pages/Activities'
 import Goals from './pages/Goals'
 import WaterPage from './pages/waterPage'
 import Mood from './pages/Mood'
-import BmiPage from './pages/BmiPage'
-import CaloriesPage from './pages/caloriesPage'
 import WeeklySummary from './pages/WeeklySummary'
 import Profile from './pages/Profile'
 import Sleep from './pages/Sleep'
@@ -36,8 +34,6 @@ export default function App() {
             <Route path="goals" element={<Goals />} />
             <Route path="water" element={<WaterPage />} />
             <Route path="mood" element={<Mood />} />
-            <Route path="bmi" element={<BmiPage />} />
-            <Route path="calories" element={<CaloriesPage />} />
             <Route path="summary" element={<WeeklySummary />} />
             <Route path="profile" element={<Profile />} />
             <Route path="sleep" element={<Sleep />} />

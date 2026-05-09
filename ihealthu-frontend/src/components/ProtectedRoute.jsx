@@ -1,3 +1,4 @@
+//protéger les routes, rediriger vers connexion si pas connecté.
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 

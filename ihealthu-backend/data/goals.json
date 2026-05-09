@@ -6,32 +6,11 @@
     "dailyActiveMinutes": "30",
     "sleepHours": ""
   },
-  "1778276463231": {
-    "dailyCalories": "",
-    "weeklyWorkouts": "5",
-    "dailyWater": "1.5",
-    "dailyActiveMinutes": "",
-    "sleepHours": "8"
-  },
   "1777503137317": {
     "dailyCalories": "500",
     "weeklyWorkouts": "5",
     "dailyWater": "1.5",
     "dailyActiveMinutes": "30",
-    "sleepHours": "8"
-  },
-  "1778286253017": {
-    "dailyCalories": "",
-    "weeklyWorkouts": "",
-    "dailyWater": "1.5",
-    "dailyActiveMinutes": "",
-    "sleepHours": ""
-  },
-  "1778333110232": {
-    "dailyCalories": "500",
-    "weeklyWorkouts": "4",
-    "dailyWater": "2",
-    "dailyActiveMinutes": "60",
     "sleepHours": "8"
   }
 }

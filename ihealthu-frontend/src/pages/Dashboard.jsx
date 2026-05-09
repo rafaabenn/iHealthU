@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import styles from '../styles/Dashboard.module.css'
-
 const QUOTES = [
   "Every step forward is a step toward a healthier you.",
   "Small progress is still progress. Keep moving.",
@@ -12,6 +12,7 @@ const QUOTES = [
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
@@ -90,15 +91,15 @@ export default function Dashboard() {
         {/* Today's workouts */}
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
-            <span className={styles.panelTitle}>Today's workouts</span>
-            <span className={styles.panelAction}>+ Add</span>
+            <span className={styles.panelTitle}>Today's activities</span>
+            <span className={styles.panelAction} onClick={() => navigate("/dashboard/activities")}>+ Add</span>
           </div>
           {loading ? (
             <p style={{ color: 'var(--text3)', fontSize: 13 }}>Loading…</p>
           ) : stats?.workouts?.length ? (
             stats.workouts.map((w, i) => (
               <div key={i} className={styles.workoutItem}>
-                <div className={`${styles.wIcon} ${styles[`w${(i%4)+1}`]}`}>{w.icon}</div>
+                <div className={`${styles.wIcon} ${styles[`w${(i % 4) + 1}`]}`}>{w.icon}</div>
                 <div className={styles.wInfo}>
                   <div className={styles.wName}>{w.name}</div>
                   <div className={styles.wMeta}>{w.duration} min · {w.date}</div>
@@ -115,11 +116,11 @@ export default function Dashboard() {
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
             <span className={styles.panelTitle}>💧 Water intake</span>
-            <span className={styles.panelAction}>Log</span>
+            <span className={styles.panelAction} onClick={() => navigate("/dashboard/water")}>Log</span>
           </div>
-          <WaterTracker 
-            liters={stats?.water ?? 0} 
-            goal={stats?.dailyWaterGoal ?? 2.0} 
+          <WaterTracker
+            liters={stats?.water ?? 0}
+            goal={stats?.dailyWaterGoal ?? 2.0}
             onUpdate={handleWaterUpdate}
           />
         </div>
@@ -182,7 +183,7 @@ function WaterTracker({ liters, goal, onUpdate }) {
           Target: {total.toFixed(1)}L ({totalGlasses} glasses)
         </div>
       </div>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6 }}>
         {Array.from({ length: Math.ceil(total / 0.2) }).map((_, i) => {
           const val = (i + 1) * 0.2

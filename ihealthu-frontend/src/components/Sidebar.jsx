@@ -6,16 +6,10 @@ const navItems = [
   {
     section: 'OVERVIEW', items: [
       { to: '/dashboard', icon: '🏠', label: 'Home' },
-      { to: '/dashboard/activities', icon: '🏃', label: 'Workouts', badge: null },
+      { to: '/dashboard/activities', icon: '🏃', label: 'Activities', badge: null },
       { to: '/dashboard/water', icon: '💧', label: 'Water' },
       { to: '/dashboard/sleep', icon: '🌙', label: 'Sleep' },
       { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
-    ]
-  },
-  {
-    section: 'HEALTH', items: [
-      { to: '/dashboard/bmi', icon: '⚖️', label: 'BMI' },
-      { to: '/dashboard/calories', icon: '🔥', label: 'Calorie tracker' },
     ]
   },
   {
