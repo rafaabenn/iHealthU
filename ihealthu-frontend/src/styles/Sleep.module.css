@@ -1,0 +1,270 @@
+.page {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.header {
+  margin-bottom: 30px;
+}
+
+.pageTitleSm {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--lav);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.pageTitle {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text1);
+}
+
+.pageTitle span {
+  color: var(--lav);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.panel {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  border: 1px solid var(--border);
+}
+
+.panelTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--text1);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.timeInput {
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--text1);
+  background: var(--bg);
+  transition: all 0.2s;
+}
+
+.timeInput:focus {
+  outline: none;
+  border-color: var(--lav);
+  box-shadow: 0 0 0 4px rgba(186, 171, 255, 0.1);
+}
+
+.calculation {
+  margin-top: 8px;
+  padding: 20px;
+  background: var(--bg);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.calcLabel {
+  font-size: 12px;
+  color: var(--text3);
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.calcVal {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--lav);
+  margin-bottom: 12px;
+}
+
+.calcVal span {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.calcProgress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progressBar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--lav);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.calcProgress span {
+  font-size: 12px;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.btnLog {
+  margin-top: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: var(--lav);
+  color: white;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnLog:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(186, 171, 255, 0.3);
+}
+
+.btnLog:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.summaryCard {
+  background: linear-gradient(135deg, var(--lav) 0%, #a289ff 100%);
+  border-radius: 20px;
+  padding: 30px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.summaryIcon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.summaryTitle {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.summaryVal {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.summaryVal span {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.summaryHint {
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.historyPanel {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  border: 1px solid var(--border);
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.historyItem {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 1fr 1fr;
+  align-items: center;
+  padding: 16px;
+  border-radius: 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+}
+
+.historyDate {
+  font-weight: 700;
+  color: var(--text1);
+}
+
+.historyTimes {
+  font-size: 14px;
+  color: var(--text2);
+}
+
+.historyTimes span {
+  color: var(--text1);
+  font-weight: 600;
+}
+
+.historyDuration {
+  color: var(--lav);
+}
+
+.historyStatus {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: right;
+  color: var(--text3);
+}
+
+.empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text3);
+  font-style: italic;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

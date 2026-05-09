@@ -8,6 +8,7 @@ const navItems = [
       { to: '/dashboard', icon: '🏠', label: 'Home' },
       { to: '/dashboard/activities', icon: '🏃', label: 'Workouts', badge: null },
       { to: '/dashboard/water', icon: '💧', label: 'Water' },
+      { to: '/dashboard/sleep', icon: '🌙', label: 'Sleep' },
       { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
     ]
   },
@@ -47,7 +48,7 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <div className={styles.logoMark}>
-          <img src="public/image.png" alt="logo" style={{ width: '35px', height: '35px' }} />
+          <img src="public/image.png" alt="logo" style={{ width: '35px', height: '35px' ,margin:'5px'}} />
           iHealth<span>U</span>
         </div>
         <div className={styles.logoSub}>Your wellness companion</div>

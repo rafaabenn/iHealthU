@@ -18,21 +18,29 @@ export default function Dashboard() {
   const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)])
 
   useEffect(() => {
+    fetchStats()
+  }, [])
+
+  const fetchStats = () => {
     api.get('/dashboard/today')
       .then(res => setStats(res.data))
       .catch(() => setStats(null))
       .finally(() => setLoading(false))
-  }, [])
+  }
 
-  const handleWaterUpdate = (newAmount) => {
+  const handleWaterUpdate = async (newAmount) => {
     setStats(prev => ({ ...prev, water: newAmount }))
-    // Optional: api.put('/water/today', { amount: newAmount }) if you had an endpoint
+    try {
+      await api.put('/dashboard/water', { amount: newAmount })
+    } catch (err) {
+      console.error('Failed to save water intake', err)
+    }
   }
 
   const statCards = [
     { icon: '⏱️', val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—', unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1' },
     { icon: '🔥', val: stats?.calories ?? '—', unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2' },
-    { icon: '💧', val: stats?.water ?? '—', unit: 'L', label: 'Water intake', color: 'c3' },
+    { icon: '💧', val: stats ? (Number(stats.water) || 0).toFixed(1) : '—', unit: 'L', label: 'Water intake', color: 'c3' },
     { icon: '😴', val: stats?.sleep ?? '—', unit: 'h', label: 'Sleep last night', color: 'c4' },
   ]
 
@@ -169,12 +177,12 @@ function WaterTracker({ liters, goal, onUpdate }) {
           {percentage}% of daily goal
         </div>
         <div style={{ fontSize: 13, color: 'var(--text3)' }}>
-          Target: {total}L ({totalGlasses} glasses)
+          Target: {total.toFixed(1)}L ({totalGlasses} glasses)
         </div>
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6 }}>
-        {Array.from({ length: 10 }).map((_, i) => {
+        {Array.from({ length: Math.ceil(total / 0.2) }).map((_, i) => {
           const val = (i + 1) * 0.2
           const isFilled = val <= currentLiters + 0.01 // tiny buffer for float math
           return (

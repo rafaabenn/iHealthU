@@ -24,12 +24,21 @@
     "dailyActiveMinutes": "",
     "sleepHours": ""
   },
+<<<<<<< HEAD
+  "1778286253017": {
+    "targetWeight": "",
+    "dailyCalories": "",
+    "weeklyWorkouts": "",
+    "dailyWater": "1.5",
+    "dailyActiveMinutes": "",
+=======
   "123456789012": {
     "targetWeight": "79",
     "dailyCalories": "500",
     "weeklyWorkouts": "3",
     "dailyWater": "",
     "dailyActiveMinutes": "30",
+>>>>>>> main
     "sleepHours": ""
   }
 }
