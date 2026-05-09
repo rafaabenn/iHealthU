@@ -1,5 +1,23 @@
 [
   {
+    "id": "1778333278726",
+    "userId": "1778333110232",
+    "type": "Walking",
+    "duration": "30",
+    "date": "2026-05-09",
+    "calories": "300",
+    "notes": "walked to the beach!!"
+  },
+  {
+    "id": "1778333218262",
+    "userId": "1778333110232",
+    "type": "Weight training",
+    "duration": "30",
+    "date": "2026-05-09",
+    "calories": "200",
+    "notes": "i trained legs and arms"
+  },
+  {
     "id": "1778295090547",
     "userId": "1777845639356",
     "type": "Cycling",

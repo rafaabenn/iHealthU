@@ -135,9 +135,8 @@
 
 .c1::after { background: var(--sage); }
 .c2::after { background: var(--coral); }
-.c3::after { background: var(--amber); }
+.c3::after { background: var(--sky); }
 .c4::after { background: var(--lav); }
-.c5::after { background: var(--sky); }
 
 .statIcon { font-size: 22px; margin-bottom: 10px; }
 
