@@ -4,10 +4,15 @@
     "name": "Test User",
     "email": "test@test.com",
     "password": "123456",
+<<<<<<< HEAD
+    "currentStreak": 16,
+    "lastStreakDate": "2026-05-08"
+=======
     "age": 28,
     "weight": 75,
     "height": 180,
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya"
+>>>>>>> main
   },
   {
     "id": "1777845639356",
@@ -23,10 +28,20 @@
     "id": "1778276463231",
     "name": "Aya",
     "email": "aya@test.com",
+<<<<<<< HEAD
+    "password": "15987a"
+  },
+    {
+    "id": "123456789012",
+    "name": "Amal",
+    "email": "Amal@test.com",
+    "password": "123456"
+=======
     "password": "15987a",
     "age": "20",
     "weight": "55",
     "height": "160",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Adrian"
+>>>>>>> main
   }
 ]

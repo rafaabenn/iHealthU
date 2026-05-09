@@ -6,9 +6,10 @@ import { ActivitiesModule } from './activities/activities.module';
 import { HealthModule } from './health/health.module';
 import { GoalsModule } from './goals/goals.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { DailyModule } from './daily/daily.module'; 
 
 @Module({
-  imports: [AuthModule, ActivitiesModule, HealthModule, GoalsModule, DashboardModule],
+  imports: [AuthModule, ActivitiesModule, HealthModule, GoalsModule, DashboardModule, DailyModule],
   controllers: [AppController],
   providers: [AppService],
 })

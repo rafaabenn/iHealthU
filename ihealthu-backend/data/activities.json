@@ -1,11 +1,47 @@
 [
   {
+<<<<<<< HEAD
     "id": "1778287048550",
     "userId": "1778286253017",
     "type": "Swimming",
     "duration": "72",
     "date": "2026-05-09",
     "calories": "500",
+=======
+    "id": "1778287140254",
+    "userId": "123456789012",
+    "type": "Running",
+    "duration": "7",
+    "date": "2026-05-09",
+    "calories": "300",
+    "notes": "cycling"
+  },
+  {
+    "id": "1778287120368",
+    "userId": "123456789012",
+    "type": "Running",
+    "duration": "2",
+    "date": "2026-05-09",
+    "calories": "100",
+    "notes": "walk"
+  },
+  {
+    "id": "1778287084294",
+    "userId": "123456789012",
+    "type": "Running",
+    "duration": "10",
+    "date": "2026-05-09",
+    "calories": "200",
+    "notes": "run"
+  },
+  {
+    "id": "1778284562826",
+    "userId": "1777503137317",
+    "type": "Running",
+    "duration": "35",
+    "date": "2026-05-08",
+    "calories": "456",
+>>>>>>> main
     "notes": ""
   },
   {
