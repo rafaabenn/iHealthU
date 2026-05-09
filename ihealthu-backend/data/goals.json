@@ -3,22 +3,25 @@
     "targetWeight": "",
     "dailyCalories": "",
     "weeklyWorkouts": "",
-    "dailyWater": "4.0",
-    "dailyActiveMinutes": "1200",
+    "dailyWater": "2.0",
+    "dailyActiveMinutes": "30",
     "sleepHours": ""
   },
   "1778276463231": {
-    "sleepHours": "8",
+    "targetWeight": "",
+    "dailyCalories": "",
+    "weeklyWorkouts": "5",
     "dailyWater": "1.5",
-    "weeklyWorkouts": "5"
+    "dailyActiveMinutes": "",
+    "sleepHours": "8"
   },
   "1777503137317": {
     "targetWeight": "",
     "dailyCalories": "",
     "weeklyWorkouts": "",
-    "dailyWater": "2",
+    "dailyWater": "1.5",
     "dailyActiveMinutes": "",
-    "sleepHours": ""
+    "sleepHours": "8"
   },
   "1778286253017": {
     "targetWeight": "",

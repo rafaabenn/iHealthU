@@ -1,5 +1,41 @@
 [
   {
+    "id": "1778295090547",
+    "userId": "1777845639356",
+    "type": "Cycling",
+    "duration": "50",
+    "date": "2026-05-09",
+    "calories": "500",
+    "notes": ""
+  },
+  {
+    "id": "1778295055069",
+    "userId": "1777845639356",
+    "type": "Swimming",
+    "duration": "30",
+    "date": "2026-05-09",
+    "calories": "400",
+    "notes": ""
+  },
+  {
+    "id": "1778292875648",
+    "userId": "1777503137317",
+    "type": "Weight training",
+    "duration": "20",
+    "date": "2026-05-09",
+    "calories": "400",
+    "notes": ""
+  },
+  {
+    "id": "1778291379248",
+    "userId": "1777503137317",
+    "type": "Walking",
+    "duration": "45",
+    "date": "2026-05-09",
+    "calories": "300",
+    "notes": ""
+  },
+  {
     "id": "1778287048550",
     "userId": "1778286253017",
     "type": "Swimming",
