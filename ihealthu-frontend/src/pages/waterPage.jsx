@@ -18,11 +18,13 @@ export default function WaterPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/goals')
-      .then(res => {
-        if (res.data?.dailyWater) {
-          setTotal(Number(res.data.dailyWater))
-        }
+    Promise.all([
+      api.get('/goals'),
+      api.get('/daily/today'),
+    ])
+      .then(([goalsRes, dailyRes]) => {
+        if (goalsRes.data?.dailyWater) setTotal(Number(goalsRes.data.dailyWater))
+        if (dailyRes.data?.water)      setFilled(Number(dailyRes.data.water))
       })
       .catch(console.error)
       .finally(() => setLoading(false))
@@ -33,9 +35,9 @@ export default function WaterPage() {
   const goalLiters = ((total  * ML_PER_GLASS) / 1000).toFixed(1)
 
   const handleGlassClick = (i) => {
-    // Click on already-filled glass → unfill from that index
-    // Click on next empty glass → fill up to that index
-    setFilled(i < filled ? i : i + 1)
+    const newFilled = i < filled ? i : i + 1
+    setFilled(newFilled)
+    api.post('/daily/today', { water: newFilled }).catch(console.error)
   }
 
   if (loading) {
@@ -56,7 +58,6 @@ export default function WaterPage() {
       </div>
 
       <div className="water-hero">
-        {/* Conic ring — reflects real percentage */}
         <div
           className="water-ring"
           style={{
@@ -69,7 +70,6 @@ export default function WaterPage() {
           </div>
         </div>
 
-        {/* Summary */}
         <div style={{ marginTop: -10 }}>
           <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 4 }}>Today you've had</div>
           <div className="water-hero-val">{liters} L</div>
@@ -78,7 +78,6 @@ export default function WaterPage() {
           </div>
         </div>
 
-        {/* Glasses grid */}
         <div style={{ width: '100%', marginTop: 16 }}>
           <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 10 }}>Tap to log a glass</div>
           <div className="glass-grid">
@@ -95,7 +94,6 @@ export default function WaterPage() {
         </div>
       </div>
 
-      {/* Tips */}
       <div className="water-tips">
         {TIPS.map((tip, i) => (
           <div key={i} className="tip-card">

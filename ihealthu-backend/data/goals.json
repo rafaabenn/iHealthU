@@ -17,10 +17,18 @@
   },
   "1777503137317": {
     "targetWeight": "",
-    "dailyCalories": "",
+    "dailyCalories": "29",
     "weeklyWorkouts": "",
-    "dailyWater": "10",
+    "dailyWater": "6",
     "dailyActiveMinutes": "",
+    "sleepHours": ""
+  },
+  "123456789012": {
+    "targetWeight": "79",
+    "dailyCalories": "500",
+    "weeklyWorkouts": "3",
+    "dailyWater": "",
+    "dailyActiveMinutes": "30",
     "sleepHours": ""
   }
 }
