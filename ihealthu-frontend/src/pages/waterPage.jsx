@@ -2,41 +2,50 @@ import { useState, useEffect } from 'react'
 import api from '../services/api'
 import '../styles/water.css'
 
-const ML_PER_GLASS = 250
-
 const TIPS = [
   { icon: '⏰', title: 'Morning routine', text: 'Drink a glass right after waking up to kickstart hydration' },
   { icon: '🥤', title: 'Before meals',    text: 'Drinking before meals helps digestion and reduces appetite' },
   { icon: '🏋️', title: 'During workouts', text: 'Drink 200–300 mL every 20 minutes of intense exercise' },
 ]
 
-const DEFAULT_GLASSES = 8
-
 export default function WaterPage() {
   const [filled, setFilled]   = useState(0)
-  const [total, setTotal]     = useState(DEFAULT_GLASSES)
+  const [total, setTotal]     = useState(2.0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/goals')
-      .then(res => {
-        if (res.data?.dailyWater) {
-          setTotal(Number(res.data.dailyWater))
-        }
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
+    fetchWater()
   }, [])
+
+  const fetchWater = async () => {
+    try {
+      const res = await api.get('/dashboard/today')
+      if (res.data) {
+        setTotal(res.data.dailyWaterGoal || 2.0)
+        setFilled(Math.round(res.data.water / 0.2))
+      }
+    } catch (err) {
+      console.error('Failed to fetch water data', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleGlassClick = async (i) => {
+    const newFilled = i < filled ? i : i + 1
+    setFilled(newFilled)
+    try {
+      await api.put('/dashboard/water', { amount: newFilled * 0.2 })
+    } catch (err) {
+      console.error('Failed to save water intake', err)
+    }
+  }
 
   const currentLiters = filled * 0.2
   const percentage = Math.min(Math.round((currentLiters / total) * 100), 100)
   const liters     = currentLiters.toFixed(1)
   const goalLiters = (total).toFixed(1)
   const glassesGoal = Math.round(total / 0.2)
-
-  const handleGlassClick = (i) => {
-    setFilled(i < filled ? i : i + 1)
-  }
 
   if (loading) {
     return (
