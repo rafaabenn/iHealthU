@@ -23,6 +23,11 @@ const navItems = [
       { to: '/dashboard/summary', icon: '📊', label: 'Weekly summary' },
     ]
   },
+  {
+    section: 'ACCOUNT', items: [
+      { to: '/dashboard/profile', icon: '👤', label: 'My Profile' },
+    ]
+  },
 ]
 
 export default function Sidebar() {
@@ -42,7 +47,7 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <div className={styles.logoMark}>
-          <img src="public/logo1.png" alt="logo" style={{ width: '35px', height: '35px' }} />
+          <img src="public/image.png" alt="logo" style={{ width: '35px', height: '35px' }} />
           iHealth<span>U</span>
         </div>
         <div className={styles.logoSub}>Your wellness companion</div>
@@ -72,7 +77,12 @@ export default function Sidebar() {
 
       <div className={styles.sidebarFooter}>
         <div className={styles.userChip}>
-          <div className={styles.avatar}>{initials}</div>
+          <img 
+            src={user?.avatar || 'https://api.dicebear.com/9.x/micah/svg?seed=Adrian'} 
+            alt="Avatar" 
+            className={styles.avatar} 
+            style={{ objectFit: 'cover' }} 
+          />
           <div style={{ flex: 1 }}>
             <div className={styles.userName}>{user?.name || 'User'}</div>
             <div className={styles.userRole}>{user?.email || ''}</div>

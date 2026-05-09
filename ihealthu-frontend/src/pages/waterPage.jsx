@@ -28,13 +28,13 @@ export default function WaterPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  const percentage = Math.round((filled / total) * 100)
-  const liters     = ((filled * ML_PER_GLASS) / 1000).toFixed(1)
-  const goalLiters = ((total  * ML_PER_GLASS) / 1000).toFixed(1)
+  const currentLiters = filled * 0.2
+  const percentage = Math.min(Math.round((currentLiters / total) * 100), 100)
+  const liters     = currentLiters.toFixed(1)
+  const goalLiters = (total).toFixed(1)
+  const glassesGoal = Math.round(total / 0.2)
 
   const handleGlassClick = (i) => {
-    // Click on already-filled glass → unfill from that index
-    // Click on next empty glass → fill up to that index
     setFilled(i < filled ? i : i + 1)
   }
 
@@ -74,15 +74,15 @@ export default function WaterPage() {
           <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 4 }}>Today you've had</div>
           <div className="water-hero-val">{liters} L</div>
           <div className="water-hero-sub">
-            Goal: {goalLiters} L ({total} glasses)
+            Goal: {goalLiters} L ({glassesGoal} glasses)
           </div>
         </div>
 
         {/* Glasses grid */}
         <div style={{ width: '100%', marginTop: 16 }}>
-          <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 10 }}>Tap to log a glass</div>
+          <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 10 }}>Tap to log 0.2L</div>
           <div className="glass-grid">
-            {Array.from({ length: total }, (_, i) => (
+            {Array.from({ length: Math.ceil(total / 0.2) }, (_, i) => (
               <div
                 key={i}
                 className={`glass-lg ${i < filled ? 'filled' : ''}`}
