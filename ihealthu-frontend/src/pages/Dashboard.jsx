@@ -182,7 +182,7 @@ function WaterTracker({ liters, goal, onUpdate }) {
       </div>
       
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6 }}>
-        {Array.from({ length: 10 }).map((_, i) => {
+        {Array.from({ length: Math.ceil(total / 0.2) }).map((_, i) => {
           const val = (i + 1) * 0.2
           const isFilled = val <= currentLiters + 0.01 // tiny buffer for float math
           return (

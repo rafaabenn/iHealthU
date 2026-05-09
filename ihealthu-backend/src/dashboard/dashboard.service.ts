@@ -5,6 +5,7 @@ import * as path from 'path';
 const ACTIVITIES_PATH = path.join(__dirname, '../../data/activities.json');
 const GOALS_PATH = path.join(__dirname, '../../data/goals.json');
 const WATER_LOGS_PATH = path.join(__dirname, '../../data/water_logs.json');
+const SLEEP_LOGS_PATH = path.join(__dirname, '../../data/sleep_logs.json');
 
 function readJSON(filePath: string) {
   if (!fs.existsSync(filePath)) return null;
@@ -30,10 +31,12 @@ export class DashboardService {
     const allActivities: any[] = readJSON(ACTIVITIES_PATH) ?? [];
     const allGoals: Record<string, any> = readJSON(GOALS_PATH) ?? {};
     const allWater: Record<string, any> = readJSON(WATER_LOGS_PATH) ?? {};
+    const allSleep: Record<string, any> = readJSON(SLEEP_LOGS_PATH) ?? {};
  
     const activities = allActivities.filter((a) => a.userId === userId);
     const goals = allGoals[userId] ?? {};
     const userWater = allWater[userId] ?? {};
+    const userSleep = allSleep[userId] ?? {};
  
     const todayActivities = activities.filter((a) => a.date?.startsWith(today));
     const yesterdayActivities = activities.filter((a) => a.date?.startsWith(yesterday));
@@ -68,6 +71,10 @@ export class DashboardService {
       calories: a.calories,
     }));
 
+    // Find the most recent sleep log
+    const sleepLogs = userSleep ? Object.values(userSleep) : [];
+    const latestSleep: any = sleepLogs.length > 0 ? sleepLogs[sleepLogs.length - 1] : null;
+
     return {
       activeMinutes,
       activeMinutesDelta,
@@ -76,7 +83,8 @@ export class DashboardService {
       caloriesDelta,
       water: Number(userWater[today] || 0),
       dailyWaterGoal: Number(goals.dailyWater) || 2.0,
-      sleep: Number(goals.sleepHours) || 0,
+      sleep: latestSleep ? Number(latestSleep.duration) : 0,
+      sleepGoal: Number(goals.sleepHours) || 8,
       workouts,
     };
   }
@@ -91,15 +99,40 @@ export class DashboardService {
     writeJSON(WATER_LOGS_PATH, allWater);
     return { success: true, water: amount };
   }
+
+  getSleepLogs(userId: string) {
+    const allSleep = readJSON(SLEEP_LOGS_PATH) ?? {};
+    const userSleep = allSleep[userId] ?? {};
+    // Return sorted by date descending
+    return Object.entries(userSleep)
+      .map(([date, data]: [string, any]) => ({ date, ...data }))
+      .sort((a, b) => b.date.localeCompare(a.date));
+  }
+
+  logSleep(userId: string, sleepData: { bedtime: string; waketime: string; duration: number }) {
+    const date = new Date().toISOString().split('T')[0];
+    const allSleep = readJSON(SLEEP_LOGS_PATH) ?? {};
+    
+    if (!allSleep[userId]) allSleep[userId] = {};
+    allSleep[userId][date] = {
+      ...sleepData,
+      loggedAt: new Date().toISOString()
+    };
+    
+    writeJSON(SLEEP_LOGS_PATH, allSleep);
+    return { success: true, log: allSleep[userId][date] };
+  }
  
   getSummary(userId: string) {
     const allActivities: any[] = readJSON(ACTIVITIES_PATH) ?? [];
     const allGoals: Record<string, any> = readJSON(GOALS_PATH) ?? {};
     const allWater: Record<string, any> = readJSON(WATER_LOGS_PATH) ?? {};
+    const allSleep: Record<string, any> = readJSON(SLEEP_LOGS_PATH) ?? {};
  
     const activities = allActivities.filter((a) => a.userId === userId);
     const goals = allGoals[userId] ?? {};
     const userWater = allWater[userId] ?? {};
+    const userSleep = allSleep[userId] ?? {};
  
     const now = new Date();
     now.setHours(23, 59, 59, 999);
@@ -145,7 +178,8 @@ export class DashboardService {
         weight: goals.targetWeight || 0,
         activeMinutes: goals.dailyActiveMinutes || 0,
       },
-      currentWater: Number(userWater[todayStr] || 0)
+      currentWater: Number(userWater[todayStr] || 0),
+      currentSleep: userSleep[todayStr] ? userSleep[todayStr].duration : 0
     };
   }
 }
