@@ -18,16 +18,16 @@ export default function Profile() {
   const [profileForm, setProfileForm] = useState({
     name: '', email: '', age: '', weight: '', height: '', avatar: ''
   })
-  const [loading, setLoading]           = useState(true)
+  const [loading, setLoading] = useState(true)
   const [savingProfile, setSavingProfile] = useState(false)
-  const [status, setStatus]             = useState({ type: '', message: '' })
+  const [status, setStatus] = useState({ type: '', message: '' })
 
   useEffect(() => {
     if (user) {
       setProfileForm({
-        name:   user.name   || '',
-        email:  user.email  || '',
-        age:    user.age    || '',
+        name: user.name || '',
+        email: user.email || '',
+        age: user.age || '',
         weight: user.weight || '',
         height: user.height || '',
         avatar: user.avatar || ''
@@ -90,6 +90,43 @@ export default function Profile() {
           {status.message && (
             <div className={`${styles.statusMessage} ${styles[status.type]}`}>
               {status.message}
+            </div>
+          )}
+          {profileForm.weight && profileForm.height ? (() => {
+            const bmi = profileForm.weight / Math.pow(profileForm.height / 100, 2)
+            const rounded = Math.round(bmi * 10) / 10
+            const category =
+              bmi < 18.5 ? { label: 'Underweight', color: '#4587a3ff', pct: 10 } :
+                bmi < 25 ? { label: 'Normal', color: '#4e8b6aff', pct: 38 } :
+                  bmi < 30 ? { label: 'Overweight', color: '#c58a59', pct: 65 } :
+                    { label: 'Obese', color: '#c94b4bff', pct: 88 }
+
+            return (
+              <div className={styles.bmiCard}>
+                <p className={styles.bmiTitle}>BMI Score</p>
+                <div className={styles.bmiScoreRow}>
+                  <span className={styles.bmiValue} style={{ color: category.color }}>
+                    {rounded}
+                  </span>
+                  <span className={styles.bmiCategory} style={{ color: category.color, background: category.color + '22' }}>
+                    {category.label}
+                  </span>
+                </div>
+                <div className={styles.bmiTrack}>
+                  <div className={styles.bmiThumb} style={{ left: `${category.pct}%`, background: category.color }} />
+                </div>
+                <div className={styles.bmiLegend}>
+                  <span>&lt;18.5</span><span>18.5–24.9</span><span>25–29.9</span><span>30+</span>
+                </div>
+              </div>
+            )
+          })() : (
+            <div className={styles.bmiCard}>
+              <p className={styles.bmiTitle}>BMI Score</p>
+              <p className={styles.bmiEmpty}>Enter your weight and height to calculate your BMI.</p>
+              <p className={styles.bmiLegend}>
+               BMI (Body Mass Index) is a simple health indicator calculated using a person's weight and height. It helps estimate whether a person has a healthy body weight range.
+              </p>
             </div>
           )}
         </aside>

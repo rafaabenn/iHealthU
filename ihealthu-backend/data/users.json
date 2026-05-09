@@ -5,8 +5,8 @@
     "email": "test@test.com",
     "password": "123456",
     "age": "20",
-    "weight": 53,
-    "height": "167",
+    "weight": "53",
+    "height": "160",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya",
     "bmi": ""
   },

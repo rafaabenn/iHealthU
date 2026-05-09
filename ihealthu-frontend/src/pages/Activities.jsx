@@ -13,12 +13,30 @@ const TYPES = ['Running', 'Cycling', 'Swimming', 'Yoga', 'Weight training', 'Wal
 const META = {
   Running:           { Icon: PersonSimpleRun, color: '#e85d3ad2', bg: 'rgba(232,93,58,0.1)',   tag: 'Cardio'      },
   Cycling:           { Icon: Bicycle,         color: '#3a9ae8da', bg: 'rgba(58,155,232,0.1)',  tag: 'Cardio'      },
-  Swimming:          { Icon: Waves,           color: '#3AB8E8', bg: 'rgba(58,184,232,0.1)',  tag: 'Cardio'      },
+  Swimming:          { Icon: Waves,           color: '#3AB8E8',   bg: 'rgba(58,184,232,0.1)',  tag: 'Cardio'      },
   Yoga:              { Icon: Person,          color: '#9b6fe8e0', bg: 'rgba(155,111,232,0.1)', tag: 'Flexibility' },
   'Weight training': { Icon: Barbell,         color: '#edad4ddc', bg: 'rgba(232,162,58,0.1)',  tag: 'Strength'    },
   Walking:           { Icon: Footprints,      color: '#53b863d0', bg: 'rgba(90,232,114,0.1)',  tag: 'Cardio'      },
-  HIIT:              { Icon: Lightning,       color: '#E8C83A', bg: 'rgba(232,200,58,0.1)',  tag: 'Intensity'   },
+  HIIT:              { Icon: Lightning,       color: '#E8C83A',   bg: 'rgba(232,200,58,0.1)',  tag: 'Intensity'   },
   Other:             { Icon: Heartbeat,       color: '#e85d9ccf', bg: 'rgba(232,93,155,0.1)',  tag: 'Activity'    },
+}
+
+// MET (Metabolic Equivalent of Task) values per activity type
+const MET = {
+  Running:           9.8,
+  Cycling:           7.5,
+  Swimming:          8.0,
+  Yoga:              3.0,
+  'Weight training': 5.0,
+  Walking:           3.5,
+  HIIT:              10.0,
+  Other:             5.0,
+}
+
+// Formula: calories = MET × weight(kg) × duration(hours)
+const calcCalories = (type, durationMin, weightKg) => {
+  if (!durationMin || !weightKg) return ''
+  return Math.round(MET[type] * Number(weightKg) * (Number(durationMin) / 60))
 }
 
 const emptyForm = {
@@ -48,8 +66,8 @@ export default function Activities() {
       const res = await api.get('/activities')
       setActivities(res.data)
     } catch (err) {
-      if (err.response?.status === 401) setError('Session expirée — reconnecte-toi.')
-      else setError('Erreur de chargement des activités.')
+      if (err.response?.status === 401) setError('Session expired — please log in again.')
+      else setError('Failed to load activities.')
     } finally { setLoading(false) }
   }
   useEffect(() => { fetchActivities() }, [])
@@ -59,8 +77,24 @@ export default function Activities() {
       setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }, [showForm])
 
-  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-  const openAdd   = () => { setEditing(null); setForm(emptyForm); setShowForm(true) }
+  const handleChange = e => {
+    const { name, value } = e.target
+    setForm(f => {
+      const updated = { ...f, [name]: value }
+      // Recalculate calories whenever type or duration changes
+      if (name === 'duration' || name === 'type') {
+        const weight = Number(user?.weight)
+        updated.calories = calcCalories(updated.type, Number(updated.duration), weight)
+      }
+      return updated
+    })
+  }
+
+  const openAdd = () => {
+    setEditing(null)
+    setForm({ ...emptyForm, calories: '' })
+    setShowForm(true)
+  }
   const closeForm = () => { setShowForm(false); setEditing(null) }
 
   const handleSubmit = async e => {
@@ -88,17 +122,29 @@ export default function Activities() {
 
   const handleEdit = a => {
     setForm({
-      type: a.type, duration: a.duration,
-      date: a.date?.split('T')[0], calories: a.calories, notes: a.notes || '',
+      type:     a.type,
+      duration: a.duration,
+      date:     a.date?.split('T')[0],
+      calories: a.calories,
+      notes:    a.notes || '',
     })
     setEditing(a.id || a._id); setShowForm(true)
   }
 
   const handleDelete = async id => {
-    if (!confirm('Supprimer cette activité ?')) return
+    if (!confirm('Delete this activity?')) return
     setActivities(prev => prev.filter(a => (a.id || a._id) !== id))
     try { await api.delete(`/activities/${id}`) }
     catch { fetchActivities() }
+  }
+
+  // When the user picks a type chip, also recalculate calories
+  const handleTypeSelect = (type) => {
+    setForm(f => {
+      const weight = Number(user?.weight)
+      const calories = calcCalories(type, Number(f.duration), weight)
+      return { ...f, type, calories }
+    })
   }
 
   const filtered = activities.filter(a => {
@@ -176,6 +222,7 @@ export default function Activities() {
             </button>
           </div>
 
+          {/* Activity type picker */}
           <div className={styles.typePicker}>
             {TYPES.map(t => {
               const m = META[t]
@@ -187,7 +234,7 @@ export default function Activities() {
                   style={form.type === t
                     ? { background: m.bg, borderColor: m.color, color: m.color }
                     : { borderColor: m.color + '60' }}
-                  onClick={() => setForm(f => ({ ...f, type: t }))}
+                  onClick={() => handleTypeSelect(t)}
                 >
                   <m.Icon size={14} weight="duotone" color={m.color} />
                   {t}
@@ -202,22 +249,69 @@ export default function Activities() {
                 <label className={styles.label}>Date</label>
                 <input type="date" name="date" value={form.date} onChange={handleChange} className={styles.input} required />
               </div>
+
               <div className={styles.formGroup}>
                 <label className={styles.label}>Duration (min)</label>
-                <input type="number" name="duration" value={form.duration} onChange={handleChange}
-                  className={styles.input} min="1" required placeholder="45" />
+                <input
+                  type="number"
+                  name="duration"
+                  value={form.duration}
+                  onChange={handleChange}
+                  className={styles.input}
+                  min="1"
+                  required
+                  placeholder="45"
+                />
               </div>
+
               <div className={styles.formGroup}>
-                <label className={styles.label}>Calories burned</label>
-                <input type="number" name="calories" value={form.calories} onChange={handleChange}
-                  className={styles.input} placeholder="350" />
+                <label className={styles.label}>
+                  Calories burned
+                  {user?.weight
+                    ? <span style={{ fontSize: 11, color: 'var(--text3)', fontWeight: 400, marginLeft: 6 }}>
+                        auto-calculated
+                      </span>
+                    : <span style={{ fontSize: 11, color: 'var(--coral)', fontWeight: 400, marginLeft: 6 }}>
+                        add weight in profile for auto-calc
+                      </span>
+                  }
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="number"
+                    name="calories"
+                    value={form.calories}
+                    onChange={handleChange}
+                    className={styles.input}
+                    placeholder={user?.weight ? 'Enter duration first' : '350'}
+                    style={{ paddingRight: 44 }}
+                  />
+                  <span style={{
+                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                    fontSize: 12, color: 'var(--text3)', pointerEvents: 'none'
+                  }}>
+                    kcal
+                  </span>
+                </div>
+                {user?.weight && form.duration && (
+                  <p style={{ fontSize: 11, color: 'var(--text3)', marginTop: 4 }}>
+                    Based on MET {MET[form.type]} · {user.weight} kg · {form.duration} min
+                  </p>
+                )}
               </div>
+
               <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
                 <label className={styles.label}>Notes</label>
-                <input name="notes" value={form.notes} onChange={handleChange}
-                  className={styles.input} placeholder="How was your session?" />
+                <input
+                  name="notes"
+                  value={form.notes}
+                  onChange={handleChange}
+                  className={styles.input}
+                  placeholder="How was your session?"
+                />
               </div>
             </div>
+
             <div className={styles.formActions}>
               <button type="button" className={styles.btnCancel} onClick={closeForm}>Cancel</button>
               <button type="submit" className={styles.btnSave} disabled={submitting}>
@@ -260,8 +354,10 @@ export default function Activities() {
             style={{ padding: '6px 12px', width: 'auto', minHeight: 36 }}
           />
           {dateFilter && (
-            <button onClick={() => setDateFilter('')}
-              style={{ background: 'none', border: 'none', color: 'var(--text3)', cursor: 'pointer' }}>
+            <button
+              onClick={() => setDateFilter('')}
+              style={{ background: 'none', border: 'none', color: 'var(--text3)', cursor: 'pointer' }}
+            >
               <X size={16} />
             </button>
           )}

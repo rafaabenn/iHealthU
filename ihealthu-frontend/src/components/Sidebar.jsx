@@ -47,7 +47,7 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <div className={styles.logoMark}>
-          <img src="/image.png" alt="logo" style={{ width: '35px', height: '35px', margin: '5px' }} />
+          <img src="/white.png" alt="logo" style={{ width: '35px', height: '35px', margin: '5px' }} />
           <span>i</span>Health<span>U</span>
         </div>
         <div className={styles.logoSub}>Your wellness companion</div>
