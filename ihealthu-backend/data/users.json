@@ -1,12 +1,12 @@
 [
   {
     "id": "1777503137317",
-    "name": "Test User",
+    "name": "Test ",
     "email": "test@test.com",
     "password": "123456",
-    "age": 28,
-    "weight": 75,
-    "height": 180,
+    "age": "20",
+    "weight": 53,
+    "height": 160,
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya"
   },
   {

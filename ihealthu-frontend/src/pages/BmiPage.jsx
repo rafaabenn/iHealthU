@@ -1,15 +1,37 @@
 import { useState, useEffect } from 'react'
+import api from '../services/api'
+import { useAuth } from '../context/AuthContext'
 import { calcBMI } from '../utils/bmiCalculator'
 import '../styles/bmi.css'
 
 export default function BmiPage() {
-  const [height, setHeight] = useState(170)
-  const [weight, setWeight] = useState(62)
-  const [data, setData] = useState(() => calcBMI(170, 62))
+  const { user, setUser } = useAuth()
+  // Initialize with user profile if available
+  const [height, setHeight] = useState(user?.height || 170)
+  const [weight, setWeight] = useState(user?.weight || 62)
+  const [data, setData] = useState(() => calcBMI(height, weight))
+  const [saving, setSaving] = useState(false)
+  const [status, setStatus] = useState('')
 
   useEffect(() => {
     setData(calcBMI(height, weight))
   }, [height, weight])
+
+  const handleUpdateProfile = async () => {
+    setSaving(true)
+    setStatus('')
+    try {
+      const res = await api.put('/auth/profile', { height, weight })
+      sessionStorage.setItem('user', JSON.stringify(res.data.user))
+      setUser(res.data.user)
+      setStatus('✅ Profile updated!')
+      setTimeout(() => setStatus(''), 3000)
+    } catch (err) {
+      setStatus('❌ Failed to update')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   const markerLeft = Math.min(Math.max((data.bmi - 10) / 30 * 100, 0), 100)
 
@@ -43,7 +65,34 @@ export default function BmiPage() {
             <input type="range" min="40" max="150" value={weight}
               onChange={e => setWeight(Number(e.target.value))} />
           </div>
-          <div className="bmi-info-grid">
+          
+          <button 
+            onClick={handleUpdateProfile} 
+            disabled={saving}
+            style={{ 
+              marginTop: 10,
+              padding: '12px 20px', 
+              borderRadius: 14, 
+              border: '1px solid var(--border)', 
+              background: 'var(--surface)', 
+              color: 'var(--text1)', 
+              fontWeight: 600, 
+              cursor: 'pointer',
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: 8,
+              transition: 'background 0.2s'
+            }}
+            onMouseOver={e => e.currentTarget.style.background = 'var(--bg)'}
+            onMouseOut={e => e.currentTarget.style.background = 'var(--surface)'}
+          >
+            {saving ? 'Updating...' : '💾 Update My Profile'}
+          </button>
+          {status && <div style={{ marginTop: 8, fontSize: 13, textAlign: 'center', color: 'var(--text2)' }}>{status}</div>}
+
+          <div className="bmi-info-grid" style={{ marginTop: 20 }}>
             <div className="bmi-info-card">
               <div className="bmi-info-label">Healthy weight range</div>
               <div className="bmi-info-val">{data.range}</div>

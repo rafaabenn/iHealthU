@@ -22,14 +22,8 @@ export default function Profile() {
     height: '',
     avatar: ''
   })
-  const [goalsForm, setGoalsForm] = useState({
-    sleepHours: '',
-    dailyWater: '',
-    weeklyWorkouts: ''
-  })
   const [loading, setLoading] = useState(true)
   const [savingProfile, setSavingProfile] = useState(false)
-  const [savingGoals, setSavingGoals] = useState(false)
   const [status, setStatus] = useState({ type: '', message: '' })
 
   useEffect(() => {
@@ -43,22 +37,11 @@ export default function Profile() {
         avatar: user.avatar || ''
       })
     }
-
-    // Fetch current goals
-    api.get('/goals')
-      .then(res => {
-        setGoalsForm({
-          sleepHours: res.data.sleepHours || '',
-          dailyWater: res.data.dailyWater || '',
-          weeklyWorkouts: res.data.weeklyWorkouts || ''
-        })
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
+    // Just finish loading after profile is set
+    setLoading(false)
   }, [user])
 
   const handleProfileChange = e => setProfileForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  const handleGoalsChange = e => setGoalsForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
 
   const showStatus = (type, message) => {
     setStatus({ type, message })
@@ -81,18 +64,6 @@ export default function Profile() {
     }
   }
 
-  const handleUpdateGoals = async (e) => {
-    e.preventDefault()
-    setSavingGoals(true)
-    try {
-      await api.put('/goals', goalsForm)
-      showStatus('success', 'Goals updated successfully!')
-    } catch (err) {
-      showStatus('error', 'Failed to update goals')
-    } finally {
-      setSavingGoals(false)
-    }
-  }
 
   if (loading) return <div className="page-loading">Loading profile...</div>
 
@@ -206,60 +177,6 @@ export default function Profile() {
                 disabled={savingProfile}
               >
                 {savingProfile ? 'Saving...' : 'Save Personal Info'}
-              </button>
-            </form>
-          </div>
-
-          <div className={styles.panel}>
-            <div className={styles.panelHeader}>
-              <span className={styles.panelIcon}>🎯</span>
-              <h2 className={styles.panelTitle}>Personal Goals</h2>
-            </div>
-            <form onSubmit={handleUpdateGoals}>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Sleep Goal (hours)</label>
-                  <input
-                    type="number"
-                    step="0.5"
-                    name="sleepHours"
-                    value={goalsForm.sleepHours}
-                    onChange={handleGoalsChange}
-                    className={styles.input}
-                    placeholder="e.g. 8"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Water Goal (Litres)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    name="dailyWater"
-                    value={goalsForm.dailyWater}
-                    onChange={handleGoalsChange}
-                    className={styles.input}
-                    placeholder="e.g. 2.5"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Weekly Workout Goal</label>
-                  <input
-                    type="number"
-                    name="weeklyWorkouts"
-                    value={goalsForm.weeklyWorkouts}
-                    onChange={handleGoalsChange}
-                    className={styles.input}
-                    placeholder="sessions per week"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className={styles.btnPrimary}
-                style={{ marginTop: 24 }}
-                disabled={savingGoals}
-              >
-                {savingGoals ? 'Saving...' : 'Save Goals'}
               </button>
             </form>
           </div>

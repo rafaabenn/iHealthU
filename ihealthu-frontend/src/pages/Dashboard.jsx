@@ -55,7 +55,9 @@ export default function Dashboard() {
           </h1>
         </div>
         <div className={styles.topbarRight}>
-          <div className={styles.streakChip}>🔥 12-day streak</div>
+          <div className={`${styles.streakChip} ${stats?.streak > 0 ? styles.streakActive : ''}`}>
+            <span className={styles.streakEmoji}>🔥</span> {stats?.streak || 0}-day streak
+          </div>
         </div>
       </div>
 

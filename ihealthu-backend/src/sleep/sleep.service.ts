@@ -24,11 +24,26 @@ export class SleepService {
     const allLogs = readJSON(SLEEP_LOGS_PATH) ?? {};
     if (!allLogs[userId]) allLogs[userId] = [];
     
-    // Add new log at the beginning
-    allLogs[userId].unshift({
+    const existingIndex = allLogs[userId].findIndex((log: any) => log.date === data.date);
+    
+    if (existingIndex !== -1) {
+      allLogs[userId][existingIndex] = {
+        ...allLogs[userId][existingIndex],
+        ...data
+      };
+      
+      allLogs[userId].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      writeJSON(SLEEP_LOGS_PATH, allLogs);
+      return allLogs[userId][existingIndex];
+    }
+    
+    const newLog = {
       id: Date.now().toString(),
       ...data
-    });
+    };
+    allLogs[userId].unshift(newLog);
+    
+    allLogs[userId].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     // Keep only last 30 logs
     if (allLogs[userId].length > 30) {
@@ -36,7 +51,7 @@ export class SleepService {
     }
     
     writeJSON(SLEEP_LOGS_PATH, allLogs);
-    return allLogs[userId][0];
+    return newLog;
   }
 
   deleteLog(userId: string, logId: string) {

@@ -3,7 +3,6 @@ import api from '../services/api'
 import styles from '../styles/Goals.module.css'
 
 const DEFAULT_GOALS = {
-  targetWeight: '',
   dailyCalories: '',
   weeklyWorkouts: '',
   dailyWater: '',
@@ -38,7 +37,6 @@ export default function Goals() {
   }
 
   const goalFields = [
-    { name: 'targetWeight', icon: '⚖️', label: 'Target weight', unit: 'kg', placeholder: '70', type: 'number', hint: 'Your ideal body weight goal' },
     { name: 'dailyCalories', icon: '🔥', label: 'Daily calories target', unit: 'kcal burned', placeholder: '400', type: 'number', hint: 'Calories to burn through exercise per day' },
     { name: 'weeklyWorkouts', icon: '🏋️', label: 'Workouts per week', unit: 'sessions', placeholder: '4', type: 'number', hint: 'How many workout sessions per week' },
     { name: 'dailyWater', icon: '💧', label: 'Daily water intake', unit: 'Litres', placeholder: '2.5', type: 'number', hint: 'Amount of water to drink per day', step: 0.1 },

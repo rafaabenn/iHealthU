@@ -31,6 +31,7 @@ export default function Activities() {
   const [editing, setEditing]       = useState(null)
   const [form, setForm]             = useState(emptyForm)
   const [filter, setFilter]         = useState('All')
+  const [dateFilter, setDateFilter] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError]           = useState(null)
   const formRef = useRef(null)
@@ -95,9 +96,13 @@ export default function Activities() {
     catch { fetchActivities() }
   }
 
-  const filtered = filter === 'All' ? activities : activities.filter(a => a.type === filter)
-  const totalCal = activities.reduce((s, a) => s + Number(a.calories || 0), 0)
-  const totalMin = activities.reduce((s, a) => s + Number(a.duration || 0), 0)
+  const filtered = activities.filter(a => {
+    const matchType = filter === 'All' || a.type === filter;
+    const matchDate = !dateFilter || a.date?.startsWith(dateFilter);
+    return matchType && matchDate;
+  })
+  const totalCal = filtered.reduce((s, a) => s + Number(a.calories || 0), 0)
+  const totalMin = filtered.reduce((s, a) => s + Number(a.duration || 0), 0)
 
   return (
     <div className={styles.page}>
@@ -122,7 +127,7 @@ export default function Activities() {
         <div className={styles.statCard}>
           <span className={styles.statEmoji}>🏆</span>
           <div>
-            <div className={styles.statVal}>{activities.length}</div>
+            <div className={styles.statVal}>{filtered.length}</div>
             <div className={styles.statLabel}>Total Workouts</div>
           </div>
         </div>
@@ -202,19 +207,34 @@ export default function Activities() {
       )}
 
       {/* FILTERS */}
-      <div className={styles.filterRow}>
-        {['All', ...TYPES].map(t => (
-          <button
-            key={t}
-            className={`${styles.filterPill} ${filter === t ? styles.filterPillActive : ''}`}
-            style={filter === t && t !== 'All'
-              ? { background: META[t].bg, borderColor: META[t].color, color: META[t].color }
-              : {}}
-            onClick={() => setFilter(t)}
-          >
-            {t !== 'All' && <span style={{ marginRight: 4 }}>{META[t].icon}</span>}{t}
-          </button>
-        ))}
+      <div className={styles.filterRow} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', flex: 1 }}>
+          {['All', ...TYPES].map(t => (
+            <button
+              key={t}
+              className={`${styles.filterPill} ${filter === t ? styles.filterPillActive : ''}`}
+              style={filter === t && t !== 'All'
+                ? { background: META[t].bg, borderColor: META[t].color, color: META[t].color }
+                : {}}
+              onClick={() => setFilter(t)}
+            >
+              {t !== 'All' && <span style={{ marginRight: 4 }}>{META[t].icon}</span>}{t}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 13, color: 'var(--text3)', fontWeight: 600 }}>Filter Date:</span>
+          <input 
+            type="date" 
+            value={dateFilter} 
+            onChange={e => setDateFilter(e.target.value)} 
+            className={styles.input} 
+            style={{ padding: '6px 12px', width: 'auto', minHeight: 36 }}
+          />
+          {dateFilter && (
+            <button onClick={() => setDateFilter('')} style={{ background: 'none', border: 'none', color: 'var(--text3)', cursor: 'pointer', fontSize: 18 }}>✕</button>
+          )}
+        </div>
       </div>
 
       {/* LIST */}

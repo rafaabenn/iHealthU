@@ -16,6 +16,17 @@ export default function Sleep() {
     fetchLogs()
   }, [])
 
+  useEffect(() => {
+    const existingLog = logs.find(l => l.date === form.date)
+    if (existingLog) {
+      setForm(prev => ({
+        ...prev,
+        startTime: existingLog.startTime,
+        endTime: existingLog.endTime
+      }))
+    }
+  }, [form.date, logs])
+
   const fetchLogs = async () => {
     try {
       const res = await api.get('/sleep')
@@ -41,8 +52,9 @@ export default function Sleep() {
     setSaving(true)
     const duration = calculateDuration(form.startTime, form.endTime)
     try {
-      const res = await api.post('/sleep', { ...form, duration })
-      setLogs(prev => [res.data, ...prev])
+      await api.post('/sleep', { ...form, duration })
+      await fetchLogs()
+      // Reset form to today if needed, or keep current
     } catch (err) {
       console.error('Failed to save sleep log', err)
     } finally {
@@ -59,6 +71,7 @@ export default function Sleep() {
 
   const todayStr = new Date().toISOString().split('T')[0]
   const todayStats = logs.find(l => l.date === todayStr)
+  const isUpdating = logs.some(l => l.date === form.date)
 
   return (
     <div className={styles.page}>
@@ -70,9 +83,18 @@ export default function Sleep() {
       <div className={styles.grid}>
         {/* Left Card: Log Sleep */}
         <div className={styles.panel}>
-          <h2 className={styles.panelTitle}>Log Last Night</h2>
+          <h2 className={styles.panelTitle}>Log Sleep</h2>
           
           <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.inputGroup}>
+              <label>Date</label>
+              <input 
+                type="date" 
+                value={form.date} 
+                onChange={e => setForm({...form, date: e.target.value})}
+                className={styles.timeInput}
+              />
+            </div>
             <div className={styles.inputGroup}>
               <label>Bedtime</label>
               <input 
@@ -94,6 +116,7 @@ export default function Sleep() {
             </div>
 
             <div className={styles.calculation}>
+              {isUpdating && <div style={{ color: 'var(--lav)', fontSize: '12px', fontWeight: 'bold', marginBottom: '10px' }}>📝 Editing existing log for this date</div>}
               <div className={styles.calcLabel}>Calculated Duration</div>
               <div className={styles.calcVal}>{duration.toFixed(1)} <span>hours</span></div>
               
@@ -106,12 +129,12 @@ export default function Sleep() {
             </div>
 
             <button type="submit" className={styles.btnLog} disabled={saving}>
-              {saving ? 'Logging...' : 'Log Sleep'}
+              {saving ? 'Logging...' : (isUpdating ? 'Update Sleep' : 'Log Sleep')}
             </button>
           </form>
         </div>
 
-        {/* Right Card: Summary */}
+        {/* Right Card: Summary  */}
         <div className={styles.summaryCard}>
           <div className={styles.summaryIcon}>😴</div>
           <div className={styles.summaryTitle}>Weekly Average</div>
@@ -145,6 +168,7 @@ export default function Sleep() {
                   <div className={styles.historyStatus}>
                     {isMet ? '✅ On track' : '🌊 Under goal'}
                   </div>
+
                 </div>
               )
             })}

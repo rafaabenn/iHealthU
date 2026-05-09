@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import api from '../services/api'
+import { useNavigate } from 'react-router-dom'
 import '../styles/calories.css'
 
 const ACTIVITY_METS = [
@@ -14,9 +16,40 @@ export default function CaloriesPage() {
   const [met, setMet]           = useState(7)
   const [duration, setDuration] = useState(45)
   const [weight, setWeight]     = useState(62)
+  const [saving, setSaving]     = useState(false)
+  const [status, setStatus]     = useState('')
+  const navigate = useNavigate()
 
   // MET formula: Calories = MET × weight(kg) × duration(hours)
   const calories = Math.round(met * weight * (duration / 60))
+
+  const handleLogWorkout = async () => {
+    setSaving(true)
+    setStatus('')
+    
+    // Find the type label based on MET
+    const activity = ACTIVITY_METS.find(a => a.met === met)
+    // Extract string without the emoji
+    const typeLabel = activity ? activity.label.split(' ')[1] : 'Other'
+
+    const payload = {
+      type: typeLabel,
+      duration: duration,
+      calories: calories,
+      date: new Date().toISOString().split('T')[0],
+      notes: 'Logged from Calorie Estimator'
+    }
+
+    try {
+      await api.post('/activities', payload)
+      setStatus('✅ Workout saved successfully!')
+      setTimeout(() => navigate('/dashboard/activities'), 1500)
+    } catch (error) {
+      setStatus('❌ Failed to save workout')
+    } finally {
+      setSaving(false)
+    }
+  }
 
   return (
     <div className="page">
@@ -81,6 +114,27 @@ export default function CaloriesPage() {
             <div style={{ fontSize: 13, color: 'var(--mint)' }}>
               kcal in {duration} minutes
             </div>
+            <button 
+              onClick={handleLogWorkout} 
+              disabled={saving}
+              style={{ 
+                marginTop: 20, 
+                padding: '10px 20px', 
+                borderRadius: 20, 
+                border: 'none', 
+                background: 'rgba(255,255,255,0.2)', 
+                color: 'white', 
+                fontWeight: 600, 
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+                width: '100%'
+              }}
+              onMouseOver={e => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'}
+              onMouseOut={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+            >
+              {saving ? 'Saving...' : '➕ Log as Workout'}
+            </button>
+            {status && <div style={{ marginTop: 10, fontSize: 13, color: 'white' }}>{status}</div>}
           </div>
         </div>
 
