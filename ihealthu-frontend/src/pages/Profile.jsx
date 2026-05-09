@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import styles from '../styles/Profile.module.css'
+import { User, Camera, PencilSimple } from '@phosphor-icons/react'
 
 const PRESET_AVATARS = [
   'https://api.dicebear.com/9.x/micah/svg?seed=Adrian',
@@ -15,29 +16,23 @@ const PRESET_AVATARS = [
 export default function Profile() {
   const { user, setUser } = useAuth()
   const [profileForm, setProfileForm] = useState({
-    name: '',
-    email: '',
-    age: '',
-    weight: '',
-    height: '',
-    avatar: ''
+    name: '', email: '', age: '', weight: '', height: '', avatar: ''
   })
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading]           = useState(true)
   const [savingProfile, setSavingProfile] = useState(false)
-  const [status, setStatus] = useState({ type: '', message: '' })
+  const [status, setStatus]             = useState({ type: '', message: '' })
 
   useEffect(() => {
     if (user) {
       setProfileForm({
-        name: user.name || '',
-        email: user.email || '',
-        age: user.age || '',
+        name:   user.name   || '',
+        email:  user.email  || '',
+        age:    user.age    || '',
         weight: user.weight || '',
         height: user.height || '',
         avatar: user.avatar || ''
       })
     }
-    // Just finish loading after profile is set
     setLoading(false)
   }, [user])
 
@@ -49,11 +44,9 @@ export default function Profile() {
   }
 
   const handleUpdateProfile = async (e) => {
-    e.preventDefault()
-    setSavingProfile(true)
+    e.preventDefault(); setSavingProfile(true)
     try {
       const res = await api.put('/auth/profile', profileForm)
-      // Update session storage and context
       sessionStorage.setItem('user', JSON.stringify(res.data.user))
       setUser(res.data.user)
       showStatus('success', 'Profile updated successfully!')
@@ -64,13 +57,16 @@ export default function Profile() {
     }
   }
 
-
   if (loading) return <div className="page-loading">Loading profile...</div>
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>👤 My <span>Profile</span></h1>
+        <h1 className={styles.title}>
+          <User size={26} weight="duotone" color="var(--sage)"
+            style={{ verticalAlign: 'middle', marginRight: 8 }} />
+          My <span>Profile</span>
+        </h1>
         <p className={styles.subtitle}>Manage your personal information and wellness targets</p>
       </header>
 
@@ -79,11 +75,13 @@ export default function Profile() {
           <div className={styles.avatarCard}>
             <div className={styles.avatarWrapper}>
               <img
-                src={user?.avatar || `https://api.dicebear.com/9.x/micah/svg?seed=Adrian`}
+                src={user?.avatar || 'https://api.dicebear.com/9.x/micah/svg?seed=Adrian'}
                 alt="Avatar"
                 className={styles.avatarImg}
               />
-              <div className={styles.changeAvatarBtn}>📷</div>
+              <div className={styles.changeAvatarBtn}>
+                <Camera size={15} weight="duotone" color="#fff" />
+              </div>
             </div>
             <h2 className={styles.avatarName}>{user?.name}</h2>
             <p className={styles.avatarEmail}>{user?.email}</p>
@@ -99,7 +97,9 @@ export default function Profile() {
         <main className={styles.content}>
           <div className={styles.panel}>
             <div className={styles.panelHeader}>
-              <span className={styles.panelIcon}>📝</span>
+              <span className={styles.panelIcon}>
+                <PencilSimple size={20} weight="duotone" color="var(--sage)" />
+              </span>
               <h2 className={styles.panelTitle}>Personal Information</h2>
             </div>
             <form onSubmit={handleUpdateProfile}>
@@ -119,63 +119,31 @@ export default function Profile() {
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Full Name</label>
-                  <input
-                    name="name"
-                    value={profileForm.name}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="Enter your name"
-                  />
+                  <input name="name" value={profileForm.name} onChange={handleProfileChange}
+                    className={styles.input} placeholder="Enter your name" />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Email Address</label>
-                  <input
-                    name="email"
-                    value={profileForm.email}
-                    disabled
-                    className={styles.input}
-                  />
+                  <input name="email" value={profileForm.email} disabled className={styles.input} />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Age</label>
-                  <input
-                    type="number"
-                    name="age"
-                    value={profileForm.age}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="e.g. 25"
-                  />
+                  <input type="number" name="age" value={profileForm.age}
+                    onChange={handleProfileChange} className={styles.input} placeholder="e.g. 25" />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Weight (kg)</label>
-                  <input
-                    type="number"
-                    name="weight"
-                    value={profileForm.weight}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="e.g. 70"
-                  />
+                  <input type="number" name="weight" value={profileForm.weight}
+                    onChange={handleProfileChange} className={styles.input} placeholder="e.g. 70" />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Height (cm)</label>
-                  <input
-                    type="number"
-                    name="height"
-                    value={profileForm.height}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="e.g. 180"
-                  />
+                  <input type="number" name="height" value={profileForm.height}
+                    onChange={handleProfileChange} className={styles.input} placeholder="e.g. 180" />
                 </div>
               </div>
-              <button
-                type="submit"
-                className={styles.btnPrimary}
-                style={{ marginTop: 24 }}
-                disabled={savingProfile}
-              >
+              <button type="submit" className={styles.btnPrimary}
+                style={{ marginTop: 24 }} disabled={savingProfile}>
                 {savingProfile ? 'Saving...' : 'Save Personal Info'}
               </button>
             </form>

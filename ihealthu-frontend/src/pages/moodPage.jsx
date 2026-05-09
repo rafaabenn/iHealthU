@@ -1,35 +1,35 @@
 import { useState } from 'react'
 import '../styles/mood.css'
+import { Smiley, SmileySad, SmileyMeh, SmileyWink, SmileySticker } from '@phosphor-icons/react'
 
 const moods = [
-  { emoji: '😔', label: 'Sad' },
-  { emoji: '😕', label: 'Meh' },
-  { emoji: '😊', label: 'Good' },
-  { emoji: '😄', label: 'Happy' },
-  { emoji: '🤩', label: 'Amazing' },
+  { Icon: SmileySad,     label: 'Sad',     color: '#6BA8C4' },
+  { Icon: SmileyMeh,     label: 'Meh',     color: '#A0A0A0' },
+  { Icon: Smiley,        label: 'Good',    color: '#4A7C6F' },
+  { Icon: SmileyWink,    label: 'Happy',   color: '#E8A84A' },
+  { Icon: SmileySticker, label: 'Amazing', color: '#E8715A' },
 ]
 
 const initialLog = [
-  { emoji: '😊', text: 'Good — felt energetic after yoga', date: 'Today' },
-  { emoji: '🤩', text: 'Amazing — great workout day!', date: 'Yesterday' },
-  { emoji: '😕', text: 'Meh — tired from little sleep', date: 'Mon 28 Apr' },
+  { moodIndex: 2, text: 'Good — felt energetic after yoga', date: 'Today'       },
+  { moodIndex: 4, text: 'Amazing — great workout day!',     date: 'Yesterday'   },
+  { moodIndex: 1, text: 'Meh — tired from little sleep',    date: 'Mon 28 Apr'  },
 ]
 
 const weekHeights = [50, 70, 40, 65, 80, 55, 75]
 
 export default function MoodPage() {
   const [selected, setSelected] = useState(2)
-  const [note, setNote] = useState('')
-  const [log, setLog] = useState(initialLog)
+  const [note, setNote]         = useState('')
+  const [log, setLog]           = useState(initialLog)
 
   const handleSave = () => {
     const m = moods[selected]
-    const entry = {
-      emoji: m.emoji,
+    setLog(prev => [{
+      moodIndex: selected,
       text: `${m.label}${note ? ` — ${note}` : ''}`,
       date: 'Just now',
-    }
-    setLog(prev => [entry, ...prev])
+    }, ...prev])
     setNote('')
   }
 
@@ -38,7 +38,11 @@ export default function MoodPage() {
       <div className="topbar">
         <div>
           <div className="page-title-sm">Mental wellness</div>
-          <h1 className="page-title">😊 Mood <span>Logger</span></h1>
+          <h1 className="page-title">
+            <Smiley size={26} weight="duotone" color="var(--amber)"
+              style={{ verticalAlign: 'middle', marginRight: 6 }} />
+            Mood <span>Logger</span>
+          </h1>
         </div>
       </div>
 
@@ -55,7 +59,11 @@ export default function MoodPage() {
                 className={`mood-big-btn ${idx === selected ? 'sel' : ''}`}
                 onClick={() => setSelected(idx)}
               >
-                <div>{m.emoji}</div>
+                <m.Icon
+                  size={32}
+                  weight="duotone"
+                  color={idx === selected ? m.color : 'var(--text3)'}
+                />
                 <div className="mood-big-label">{m.label}</div>
               </div>
             ))}
@@ -94,15 +102,23 @@ export default function MoodPage() {
           <div style={{ marginTop: 16 }}>
             <div className="panel-title" style={{ marginBottom: 10, fontSize: 13 }}>Recent logs</div>
             <div className="mood-log-list">
-              {log.map((entry, i) => (
-                <div key={i} className="mood-log-item">
-                  <div className="mood-log-emoji">{entry.emoji}</div>
-                  <div className="mood-log-info">
-                    <div className="mood-log-text">{entry.text}</div>
-                    <div className="mood-log-date">{entry.date}</div>
+              {log.map((entry, i) => {
+                const m = moods[entry.moodIndex]
+                return (
+                  <div key={i} className="mood-log-item">
+                    <div className="mood-log-emoji">
+                      <m.Icon 
+                      size={24} 
+                      weight="duotone" 
+                      color={m.color} />
+                    </div>
+                    <div className="mood-log-info">
+                      <div className="mood-log-text">{entry.text}</div>
+                      <div className="mood-log-date">{entry.date}</div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         </div>

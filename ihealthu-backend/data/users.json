@@ -14,9 +14,9 @@
     "name": "Rafaa",
     "email": "rafaa@test.com",
     "password": "123456",
-    "age": 25,
-    "weight": 70,
-    "height": 175,
+    "age": "22",
+    "weight": "45",
+    "height": "155",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley"
   },
   {

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../services/api'
 import styles from '../styles/Sleep.module.css'
+import { Moon, Bed, CheckCircle, CloudMoon } from '@phosphor-icons/react'
 
 export default function SleepPage() {
   const [bedtime, setBedtime] = useState('22:00')
@@ -11,13 +12,8 @@ export default function SleepPage() {
   const [saving, setSaving] = useState(false)
   const [goal, setGoal] = useState(8)
 
-  useEffect(() => {
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    calculateDuration()
-  }, [bedtime, waketime])
+  useEffect(() => { fetchData() }, [])
+  useEffect(() => { calculateDuration() }, [bedtime, waketime])
 
   const fetchData = async () => {
     try {
@@ -26,9 +22,7 @@ export default function SleepPage() {
         api.get('/dashboard/today')
       ])
       setHistory(historyRes.data)
-      if (todayRes.data?.sleepGoal) {
-        setGoal(todayRes.data.sleepGoal)
-      }
+      if (todayRes.data?.sleepGoal) setGoal(todayRes.data.sleepGoal)
     } catch (err) {
       console.error('Failed to fetch sleep data', err)
     } finally {
@@ -39,28 +33,17 @@ export default function SleepPage() {
   const calculateDuration = () => {
     const [bedH, bedM] = bedtime.split(':').map(Number)
     const [wakeH, wakeM] = waketime.split(':').map(Number)
-    
-    let start = new Date()
-    start.setHours(bedH, bedM, 0)
-    
-    let end = new Date()
-    end.setHours(wakeH, wakeM, 0)
-    
-    if (end < start) {
-      end.setDate(end.getDate() + 1)
-    }
-    
-    const diffMs = end - start
-    const diffHours = diffMs / (1000 * 60 * 60)
-    setDuration(diffHours)
+    let start = new Date(); start.setHours(bedH, bedM, 0)
+    let end   = new Date(); end.setHours(wakeH, wakeM, 0)
+    if (end < start) end.setDate(end.getDate() + 1)
+    setDuration((end - start) / (1000 * 60 * 60))
   }
 
   const handleLogSleep = async (e) => {
-    e.preventDefault()
-    setSaving(true)
+    e.preventDefault(); setSaving(true)
     try {
       await api.post('/dashboard/sleep', { bedtime, waketime, duration })
-      fetchData() // Refresh history
+      fetchData()
     } catch (err) {
       console.error('Failed to log sleep', err)
     } finally {
@@ -70,7 +53,6 @@ export default function SleepPage() {
 
   if (loading) return <div className="loading">Loading sleep data...</div>
 
-  const lastNight = history[0]
   const percentage = Math.min(Math.round((duration / goal) * 100), 100)
 
   return (
@@ -78,7 +60,10 @@ export default function SleepPage() {
       <header className={styles.header}>
         <div>
           <div className={styles.pageTitleSm}>Rest & Recovery</div>
-          <h1 className={styles.pageTitle}>🌙 Sleep <span>Tracker</span></h1>
+          <h1 className={styles.pageTitle}>
+            <Moon size={26} weight="duotone" color="var(--lav)" style={{ verticalAlign: 'middle', marginRight: 6 }} />
+            Sleep <span>Tracker</span>
+          </h1>
         </div>
       </header>
 
@@ -89,19 +74,19 @@ export default function SleepPage() {
           <form onSubmit={handleLogSleep} className={styles.form}>
             <div className={styles.inputGroup}>
               <label>Bedtime</label>
-              <input 
-                type="time" 
-                value={bedtime} 
-                onChange={(e) => setBedtime(e.target.value)} 
+              <input
+                type="time"
+                value={bedtime}
+                onChange={e => setBedtime(e.target.value)}
                 className={styles.timeInput}
               />
             </div>
             <div className={styles.inputGroup}>
               <label>Wake up time</label>
-              <input 
-                type="time" 
-                value={waketime} 
-                onChange={(e) => setWaketime(e.target.value)} 
+              <input
+                type="time"
+                value={waketime}
+                onChange={e => setWaketime(e.target.value)}
                 className={styles.timeInput}
               />
             </div>
@@ -111,10 +96,7 @@ export default function SleepPage() {
               <div className={styles.calcVal}>{duration.toFixed(1)} <span>hours</span></div>
               <div className={styles.calcProgress}>
                 <div className={styles.progressBar}>
-                  <div 
-                    className={styles.progressFill} 
-                    style={{ width: `${percentage}%` }}
-                  />
+                  <div className={styles.progressFill} style={{ width: `${percentage}%` }} />
                 </div>
                 <span>{percentage}% of {goal}h goal</span>
               </div>
@@ -128,10 +110,12 @@ export default function SleepPage() {
 
         {/* Summary Card */}
         <div className={styles.summaryCard}>
-          <div className={styles.summaryIcon}>😴</div>
+          <div className={styles.summaryIcon}>
+            <Bed size={40} weight="duotone" color="rgba(255,255,255,0.9)" />
+          </div>
           <h3 className={styles.summaryTitle}>Weekly Average</h3>
           <div className={styles.summaryVal}>
-            {history.length > 0 
+            {history.length > 0
               ? (history.reduce((acc, curr) => acc + curr.duration, 0) / history.length).toFixed(1)
               : '—'
             }
@@ -151,7 +135,8 @@ export default function SleepPage() {
             history.map((log, i) => (
               <div key={i} className={styles.historyItem}>
                 <div className={styles.historyDate}>
-                  {new Date(log.date).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
+                  {new Date(log.date).toLocaleDateString('en-GB',
+                    { weekday: 'short', day: 'numeric', month: 'short' })}
                 </div>
                 <div className={styles.historyTimes}>
                   <span>{log.bedtime}</span> → <span>{log.waketime}</span>
@@ -160,7 +145,15 @@ export default function SleepPage() {
                   <strong>{log.duration.toFixed(1)}h</strong>
                 </div>
                 <div className={styles.historyStatus}>
-                  {log.duration >= goal ? '✅ Goal met' : '💤 Under goal'}
+                  {log.duration >= goal ? (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--sage)' }}>
+                      <CheckCircle size={14} weight="duotone" color="var(--sage)" /> Goal met
+                    </span>
+                  ) : (
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--text3)' }}>
+                      <CloudMoon size={14} weight="duotone" color="var(--lav)" /> Under goal
+                    </span>
+                  )}
                 </div>
               </div>
             ))

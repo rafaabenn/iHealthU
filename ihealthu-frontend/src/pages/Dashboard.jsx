@@ -2,6 +2,24 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import styles from '../styles/Dashboard.module.css'
+import {
+  Timer, Fire, Drop, Bed, Leaf,
+  Barbell, Bicycle, Person, Footprints,
+  Waves, Lightning, Heartbeat, HandWaving
+} from '@phosphor-icons/react'
+
+
+const WORKOUT_ICONS = {
+  Running:           { icon: <Heartbeat size={17} weight="duotone" />,   color: '#E85D3A', bg: 'rgba(232,93,58,0.1)'   },
+  Cycling:           { icon: <Bicycle size={17} weight="duotone" />,    color: '#3A9BE8', bg: 'rgba(58,155,232,0.1)'  },
+  Swimming:          { icon: <Waves size={17} weight="duotone" />,      color: '#3AB8E8', bg: 'rgba(58,184,232,0.1)'  },
+  Yoga:              { icon: <Person size={17} weight="duotone" />,     color: '#9B6FE8', bg: 'rgba(155,111,232,0.1)' },
+  'Weight training': { icon: <Barbell size={17} weight="duotone" />,    color: '#E8A23A', bg: 'rgba(232,162,58,0.1)'  },
+  Walking:           { icon: <Footprints size={17} weight="duotone" />, color: '#5AE872', bg: 'rgba(90,232,114,0.1)'  },
+  HIIT:              { icon: <Lightning size={17} weight="duotone" />,  color: '#E8C83A', bg: 'rgba(232,200,58,0.1)'  },
+  Other:             { icon: <Heartbeat size={17} weight="duotone" />,   color: '#E85D9B', bg: 'rgba(232,93,155,0.1)'  },
+}
+
 
 const QUOTES = [
   "Every step forward is a step toward a healthier you.",
@@ -37,12 +55,29 @@ export default function Dashboard() {
     }
   }
 
-  const statCards = [
-    { icon: '⏱️', val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—', unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1' },
-    { icon: '🔥', val: stats?.calories ?? '—', unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2' },
-    { icon: '💧', val: stats ? (Number(stats.water) || 0).toFixed(1) : '—', unit: 'L', label: 'Water intake', color: 'c3' },
-    { icon: '😴', val: stats?.sleep ?? '—', unit: 'h', label: 'Sleep last night', color: 'c4' },
+const statCards = [
+    {
+      icon: <Timer size={22} weight="duotone" />,
+      val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—',
+      unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1'
+    },
+    {
+      icon: <Fire size={22} weight="duotone" />,
+      val: stats?.calories ?? '—',
+      unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2'
+    },
+    {
+      icon: <Drop size={22} weight="duotone" />,
+      val: stats ? (Number(stats.water) || 0).toFixed(1) : '—',
+      unit: 'L', label: 'Water intake', color: 'c3'
+    },
+    {
+      icon: <Bed size={22} weight="duotone" />,
+      val: stats?.sleep ?? '—',
+      unit: 'h', label: 'Sleep last night', color: 'c4'
+    },
   ]
+
 
   return (
     <div className={styles.page}>
@@ -51,20 +86,21 @@ export default function Dashboard() {
         <div>
           <div className={styles.pageTitleSm}>{today}</div>
           <h1 className={styles.pageTitle}>
-            Good morning, <span>{user?.name?.split(' ')[0] || 'there'}</span> 👋
+            Good morning, <span>{user?.name?.split(' ')[0] || 'there'}</span>{' '}
+            <HandWaving size={20} weight="duotone" color="#4A7C6F" />
           </h1>
         </div>
         <div className={styles.topbarRight}>
-          <div className={`${styles.streakChip} ${stats?.streak > 0 ? styles.streakActive : ''}`}>
-            <span className={styles.streakEmoji}>🔥</span> {stats?.streak || 0}-day streak
+          <div className={`${styles.streakChip} ${stats?.currentStreak > 0 ? styles.streakActive : ''}`}>
+            <Fire size={14} weight="duotone" style={{ color: 'var(--coral)' }} />
+            {stats?.currentStreak ?? 0}-day streak
           </div>
         </div>
       </div>
 
       {/* Quote banner */}
       <div className={styles.quoteBanner}>
-        <span className={styles.quoteLeaf}>🌿</span>
-        <p className={styles.quoteText}>
+          <Leaf size={24} weight="duotone" style={{ color: 'var(--mint)', flexShrink: 0 }} />        <p className={styles.quoteText}>
           <strong>Daily reminder —</strong> {quote}
         </p>
       </div>
@@ -96,16 +132,24 @@ export default function Dashboard() {
           {loading ? (
             <p style={{ color: 'var(--text3)', fontSize: 13 }}>Loading…</p>
           ) : stats?.workouts?.length ? (
-            stats.workouts.map((w, i) => (
-              <div key={i} className={styles.workoutItem}>
-                <div className={`${styles.wIcon} ${styles[`w${(i%4)+1}`]}`}>{w.icon}</div>
-                <div className={styles.wInfo}>
-                  <div className={styles.wName}>{w.name}</div>
-                  <div className={styles.wMeta}>{w.duration} min · {w.date}</div>
+            stats.workouts.map((w, i) => {
+              const meta = WORKOUT_ICONS[w.name] ?? WORKOUT_ICONS.Other
+              return (
+                <div key={i} className={styles.workoutItem}>
+                  <div
+                    className={styles.wIcon}
+                    style={{ background: meta.bg, color: meta.color }}
+                  >
+                    {meta.icon}
+                  </div>
+                  <div className={styles.wInfo}>
+                    <div className={styles.wName}>{w.name}</div>
+                    <div className={styles.wMeta}>{w.duration} min · {w.date}</div>
+                  </div>
+                  <div className={styles.wCal}>{w.calories} kcal</div>
                 </div>
-                <div className={styles.wCal}>{w.calories} kcal</div>
-              </div>
-            ))
+              )
+            })
           ) : (
             <p style={{ color: 'var(--text3)', fontSize: 13 }}>No workouts logged today</p>
           )}
@@ -114,7 +158,7 @@ export default function Dashboard() {
         {/* Water tracker */}
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
-            <span className={styles.panelTitle}>💧 Water intake</span>
+            <Drop size={14} weight="duotone" style={{ color: 'var(--sky)' }} /> Water intake
             <span className={styles.panelAction}>Log</span>
           </div>
           <WaterTracker 
@@ -195,13 +239,18 @@ function WaterTracker({ liters, goal, onUpdate }) {
                 height: 38,
                 borderRadius: 8,
                 border: `1.5px solid ${isFilled ? 'var(--sky)' : 'var(--border)'}`,
-                background: isFilled ? 'rgba(107,168,196,0.15)' : 'var(--bg)',
-                fontSize: 16,
+                background: isFilled ? 'rgba(107,168,196,0.18)' : 'var(--bg)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.15s',
               }}
             >
-              {isFilled ? '💧' : '+'}
+              {isFilled
+                ? <Drop size={16} weight="duotone" color="#6BA8C4" />
+                : <span style={{ fontSize: 14, color: 'var(--text3)' }}>+</span>
+              }
             </button>
           )
         })}
