@@ -8,17 +8,26 @@
     "weight": 53,
     "height": "167",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya",
-    "bmi" :""
+    "bmi": ""
   },
   {
     "id": "1777845639356",
     "name": "Rafaa",
     "email": "rafaa@test.com",
     "password": "123456",
-    "age": 25,
-    "weight": 70,
-    "height": 175,
-    "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley",
-    "bmi" :""
+    "age": "22",
+    "weight": "45",
+    "height": "155",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley"
+  },
+  {
+    "id": "1778276463231",
+    "name": "Aya",
+    "email": "aya@test.com",
+    "password": "15987a",
+    "age": "20",
+    "weight": "55",
+    "height": "160",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Adrian"
   }
 ]

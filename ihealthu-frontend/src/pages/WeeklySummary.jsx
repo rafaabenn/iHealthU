@@ -185,10 +185,6 @@ export default function WeeklySummary() {
             <span>Sleep Target</span>
             <strong>{data.goals.sleep} hours</strong>
           </div>
-          <div className={styles.goalLine}>
-            <span>Weight Goal</span>
-            <strong>{data.goals.weight} kg</strong>
-          </div>
         </div>
       </div>
     </div>

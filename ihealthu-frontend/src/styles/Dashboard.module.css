@@ -138,7 +138,20 @@
 .c3::after { background: var(--sky); }
 .c4::after { background: var(--lav); }
 
-.statIcon { font-size: 22px; margin-bottom: 10px; }
+.statIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.c1 .statIcon { background: rgba(74,124,111,0.12);  color: var(--sage);  }
+.c2 .statIcon { background: rgba(232,113,90,0.12);  color: var(--coral); }
+.c3 .statIcon { background: rgba(107,168,196,0.12); color: var(--sky);   }
+.c4 .statIcon { background: rgba(155,142,196,0.12); color: var(--lav);   }
 
 .statVal {
   font-size: 26px;

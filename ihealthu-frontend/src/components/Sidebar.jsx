@@ -1,26 +1,31 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import styles from '../styles/Sidebar.module.css'
+import {
+  Home, Dumbbell, Droplets, Moon, Smile,
+  Scale, Flame, Target, BarChart2, User
+} from 'lucide-react'
 
 const navItems = [
   {
     section: 'OVERVIEW', items: [
-      { to: '/dashboard', icon: '🏠', label: 'Home' },
-      { to: '/dashboard/activities', icon: '🏃', label: 'Activities', badge: null },
-      { to: '/dashboard/water', icon: '💧', label: 'Water' },
-      { to: '/dashboard/sleep', icon: '🌙', label: 'Sleep' },
-      { to: '/dashboard/mood', icon: '😊', label: 'Mood' },
+
+      { to: '/dashboard', icon: <Home size={16} />, label: 'Home' },
+      { to: '/dashboard/activities', icon: <Dumbbell size={16} />, label: 'Workouts' },
+      { to: '/dashboard/water', icon: <Droplets size={16} />, label: 'Water' },
+      { to: '/dashboard/sleep', icon: <Moon size={16} />, label: 'Sleep' },
+      { to: '/dashboard/mood', icon: <Smile size={16} />, label: 'Mood' },
     ]
   },
   {
     section: 'GOALS', items: [
-      { to: '/dashboard/goals', icon: '🎯', label: 'Daily goals' },
-      { to: '/dashboard/summary', icon: '📊', label: 'Weekly summary' },
+      { to: '/dashboard/goals', icon: <Target size={16} />, label: 'Daily goals' },
+      { to: '/dashboard/summary', icon: <BarChart2 size={16} />, label: 'Weekly summary' },
     ]
   },
   {
     section: 'ACCOUNT', items: [
-      { to: '/dashboard/profile', icon: '👤', label: 'My Profile' },
+      { to: '/dashboard/profile', icon: <User size={16} />, label: 'My Profile' },
     ]
   },
 ]
@@ -42,8 +47,8 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <div className={styles.logo}>
         <div className={styles.logoMark}>
-          <img src="public/image.png" alt="logo" style={{ width: '35px', height: '35px' ,margin:'5px'}} />
-          iHealth<span>U</span>
+          <img src="/image.png" alt="logo" style={{ width: '35px', height: '35px', margin: '5px' }} />
+          <span>i</span>Health<span>U</span>
         </div>
         <div className={styles.logoSub}>Your wellness companion</div>
       </div>
@@ -72,11 +77,11 @@ export default function Sidebar() {
 
       <div className={styles.sidebarFooter}>
         <div className={styles.userChip}>
-          <img 
-            src={user?.avatar || 'https://api.dicebear.com/9.x/micah/svg?seed=Adrian'} 
-            alt="Avatar" 
-            className={styles.avatar} 
-            style={{ objectFit: 'cover' }} 
+          <img
+            src={user?.avatar || 'https://api.dicebear.com/9.x/micah/svg?seed=Adrian'}
+            alt="Avatar"
+            className={styles.avatar}
+            style={{ objectFit: 'cover' }}
           />
           <div style={{ flex: 1 }}>
             <div className={styles.userName}>{user?.name || 'User'}</div>
