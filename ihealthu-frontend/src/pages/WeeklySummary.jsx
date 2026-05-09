@@ -111,7 +111,7 @@ export default function WeeklySummary() {
           </div>
           <div className={styles.goalLine}>
             <span>Water Target</span>
-            <strong>{data.goals.water} glasses</strong>
+            <strong>{data.goals.water} Litres</strong>
           </div>
           <div className={styles.goalLine}>
             <span>Sleep Target</span>

@@ -3,18 +3,30 @@
     "id": "1777503137317",
     "name": "Test User",
     "email": "test@test.com",
-    "password": "123456"
+    "password": "123456",
+    "age": 28,
+    "weight": 75,
+    "height": 180,
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya"
   },
   {
     "id": "1777845639356",
     "name": "Rafaa",
     "email": "rafaa@test.com",
-    "password": "123456"
+    "password": "123456",
+    "age": 25,
+    "weight": 70,
+    "height": 175,
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley"
   },
   {
     "id": "1778276463231",
     "name": "Aya",
     "email": "aya@test.com",
-    "password": "15987a"
+    "password": "15987a",
+    "age": "20",
+    "weight": "55",
+    "height": "160",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Adrian"
   }
 ]

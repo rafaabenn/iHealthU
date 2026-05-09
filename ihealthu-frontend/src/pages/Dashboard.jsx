@@ -24,10 +24,15 @@ export default function Dashboard() {
       .finally(() => setLoading(false))
   }, [])
 
+  const handleWaterUpdate = (newAmount) => {
+    setStats(prev => ({ ...prev, water: newAmount }))
+    // Optional: api.put('/water/today', { amount: newAmount }) if you had an endpoint
+  }
+
   const statCards = [
     { icon: '⏱️', val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—', unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1' },
     { icon: '🔥', val: stats?.calories ?? '—', unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2' },
-    { icon: '💧', val: stats?.water ?? '—', unit: 'glasses', label: 'Water intake', color: 'c3' },
+    { icon: '💧', val: stats?.water ?? '—', unit: 'L', label: 'Water intake', color: 'c3' },
     { icon: '😴', val: stats?.sleep ?? '—', unit: 'h', label: 'Sleep last night', color: 'c4' },
   ]
 
@@ -102,7 +107,11 @@ export default function Dashboard() {
             <span className={styles.panelTitle}>💧 Water intake</span>
             <span className={styles.panelAction}>Log</span>
           </div>
-          <WaterTracker glasses={stats?.water ?? 0} />
+          <WaterTracker 
+            liters={stats?.water ?? 0} 
+            goal={stats?.dailyWaterGoal ?? 2.0} 
+            onUpdate={handleWaterUpdate}
+          />
         </div>
       </div>
 
@@ -116,7 +125,7 @@ export default function Dashboard() {
           {[
             { label: 'Active Minutes', value: stats?.activeMinutes ?? 0, goal: stats?.activeMinutesGoal ?? 30, color: 'var(--sage)' },
             { label: 'Calories', value: stats?.calories ?? 0, goal: 500, color: 'var(--coral)' },
-            { label: 'Water', value: (stats?.water ?? 0) * 250, goal: 2000, color: 'var(--sky)' },
+            { label: 'Water', value: stats?.water ?? 0, goal: stats?.dailyWaterGoal ?? 2.0, color: 'var(--sky)' },
             { label: 'Sleep', value: (stats?.sleep ?? 0) * 60, goal: 480, color: 'var(--lav)' },
           ].map(g => (
             <div key={g.label}>
@@ -143,37 +152,52 @@ export default function Dashboard() {
   )
 }
 
-function WaterTracker({ glasses }) {
-  const [count, setCount] = useState(glasses)
-  const total = 8
+function WaterTracker({ liters, goal, onUpdate }) {
+  const currentLiters = liters
+  const total = goal
+  const percentage = Math.min(Math.round((currentLiters / total) * 100), 100)
+  const glasses = Math.round(currentLiters / 0.2)
+  const totalGlasses = Math.round(total / 0.2)
 
   return (
     <>
       <div style={{ textAlign: 'center', marginBottom: 12 }}>
-        <span style={{ fontSize: 32, fontWeight: 700, color: 'var(--sky)' }}>{count}</span>
-        <span style={{ fontSize: 14, color: 'var(--text2)' }}> / {total} glasses</span>
+        <div style={{ fontSize: 32, fontWeight: 700, color: 'var(--sky)', lineHeight: 1 }}>
+          {currentLiters.toFixed(1)}L
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--sky)', fontWeight: 600, marginBottom: 4 }}>
+          {percentage}% of daily goal
+        </div>
+        <div style={{ fontSize: 13, color: 'var(--text3)' }}>
+          Target: {total}L ({totalGlasses} glasses)
+        </div>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 7 }}>
-        {Array.from({ length: total }).map((_, i) => (
-          <button
-            key={i}
-            onClick={() => setCount(i + 1)}
-            style={{
-              height: 42,
-              borderRadius: 10,
-              border: `1.5px solid ${i < count ? 'var(--sky)' : 'var(--border)'}`,
-              background: i < count ? 'rgba(107,168,196,0.15)' : 'var(--bg)',
-              fontSize: 18,
-              cursor: 'pointer',
-              transition: 'all 0.15s',
-            }}
-          >
-            {i < count ? '💧' : '+'}
-          </button>
-        ))}
+      
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6 }}>
+        {Array.from({ length: 10 }).map((_, i) => {
+          const val = (i + 1) * 0.2
+          const isFilled = val <= currentLiters + 0.01 // tiny buffer for float math
+          return (
+            <button
+              key={i}
+              onClick={() => onUpdate(val)}
+              style={{
+                height: 38,
+                borderRadius: 8,
+                border: `1.5px solid ${isFilled ? 'var(--sky)' : 'var(--border)'}`,
+                background: isFilled ? 'rgba(107,168,196,0.15)' : 'var(--bg)',
+                fontSize: 16,
+                cursor: 'pointer',
+                transition: 'all 0.15s',
+              }}
+            >
+              {isFilled ? '💧' : '+'}
+            </button>
+          )
+        })}
       </div>
-      <p style={{ fontSize: 11, color: 'var(--text3)', textAlign: 'center', marginTop: 8 }}>
-        Goal: {total} glasses · {count * 250} ml consumed
+      <p style={{ fontSize: 11, color: 'var(--text3)', textAlign: 'center', marginTop: 10 }}>
+        Each glass is 0.2L · {glasses} glasses consumed
       </p>
     </>
   )
