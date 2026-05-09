@@ -31,12 +31,12 @@ function signToken(user: any): string {
 
 @Injectable()
 export class AuthService {
-  register(email: string, password: string) {
+  register(name: string, email: string, password: string) {
     const users = readUsers();
     const exists = users.find((u: any) => u.email === email);
     if (exists) throw new UnauthorizedException('Email already used');
 
-    const newUser = { id: Date.now().toString(), email, password };
+    const newUser = { id: Date.now().toString(), name, email, password };
     users.push(newUser);
     writeUsers(users);
 
@@ -53,5 +53,20 @@ export class AuthService {
 
     const token = signToken(user);
     return { message: 'Login successful', token, user: stripPassword(user) };
+  }
+
+  updateProfile(userId: string, data: any) {
+    const users = readUsers();
+    const index = users.findIndex((u: any) => u.id === userId);
+    if (index === -1) throw new UnauthorizedException('User not found');
+
+    const updatedUser = { ...users[index], ...data };
+    // Don't let them change the ID
+    updatedUser.id = userId;
+
+    users[index] = updatedUser;
+    writeUsers(users);
+
+    return { message: 'Profile updated', user: stripPassword(updatedUser) };
   }
 }

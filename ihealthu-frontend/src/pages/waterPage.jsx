@@ -2,42 +2,77 @@ import { useState, useEffect } from 'react'
 import api from '../services/api'
 import '../styles/water.css'
 
-const ML_PER_GLASS = 250
-
 const TIPS = [
   { icon: '⏰', title: 'Morning routine', text: 'Drink a glass right after waking up to kickstart hydration' },
   { icon: '🥤', title: 'Before meals',    text: 'Drinking before meals helps digestion and reduces appetite' },
   { icon: '🏋️', title: 'During workouts', text: 'Drink 200–300 mL every 20 minutes of intense exercise' },
 ]
 
-const DEFAULT_GLASSES = 8
-
 export default function WaterPage() {
   const [filled, setFilled]   = useState(0)
-  const [total, setTotal]     = useState(DEFAULT_GLASSES)
+  const [total, setTotal]     = useState(2.0)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/goals')
-      .then(res => {
-        if (res.data?.dailyWater) {
-          setTotal(Number(res.data.dailyWater))
-        }
+<<<<<<< HEAD
+    fetchWater()
+=======
+    Promise.all([
+      api.get('/goals'),
+      api.get('/daily/today'),
+    ])
+      .then(([goalsRes, dailyRes]) => {
+        if (goalsRes.data?.dailyWater) setTotal(Number(goalsRes.data.dailyWater))
+        if (dailyRes.data?.water)      setFilled(Number(dailyRes.data.water))
       })
       .catch(console.error)
       .finally(() => setLoading(false))
+>>>>>>> main
   }, [])
 
-  const percentage = Math.round((filled / total) * 100)
-  const liters     = ((filled * ML_PER_GLASS) / 1000).toFixed(1)
-  const goalLiters = ((total  * ML_PER_GLASS) / 1000).toFixed(1)
-
-  const handleGlassClick = (i) => {
-    // Click on already-filled glass → unfill from that index
-    // Click on next empty glass → fill up to that index
-    setFilled(i < filled ? i : i + 1)
+  const fetchWater = async () => {
+    try {
+      const res = await api.get('/dashboard/today')
+      if (res.data) {
+        setTotal(res.data.dailyWaterGoal || 2.0)
+        setFilled(Math.round(res.data.water / 0.2))
+      }
+    } catch (err) {
+      console.error('Failed to fetch water data', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
+  const handleGlassClick = async (i) => {
+    const newFilled = i < filled ? i : i + 1
+    setFilled(newFilled)
+    try {
+      await api.put('/dashboard/water', { amount: newFilled * 0.2 })
+    } catch (err) {
+      console.error('Failed to save water intake', err)
+    }
+  }
+
+  const currentLiters = filled * 0.2
+  const percentage = Math.min(Math.round((currentLiters / total) * 100), 100)
+  const liters     = currentLiters.toFixed(1)
+  const goalLiters = (total).toFixed(1)
+  const glassesGoal = Math.round(total / 0.2)
+
+<<<<<<< HEAD
+=======
+  const handleGlassClick = (i) => {
+<<<<<<< HEAD
+    const newFilled = i < filled ? i : i + 1
+    setFilled(newFilled)
+    api.post('/daily/today', { water: newFilled }).catch(console.error)
+=======
+    setFilled(i < filled ? i : i + 1)
+>>>>>>> main
+  }
+
+>>>>>>> main
   if (loading) {
     return (
       <div className="page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
@@ -56,7 +91,6 @@ export default function WaterPage() {
       </div>
 
       <div className="water-hero">
-        {/* Conic ring — reflects real percentage */}
         <div
           className="water-ring"
           style={{
@@ -69,20 +103,18 @@ export default function WaterPage() {
           </div>
         </div>
 
-        {/* Summary */}
         <div style={{ marginTop: -10 }}>
           <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 4 }}>Today you've had</div>
           <div className="water-hero-val">{liters} L</div>
           <div className="water-hero-sub">
-            Goal: {goalLiters} L ({total} glasses)
+            Goal: {goalLiters} L ({glassesGoal} glasses)
           </div>
         </div>
 
-        {/* Glasses grid */}
         <div style={{ width: '100%', marginTop: 16 }}>
-          <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 10 }}>Tap to log a glass</div>
+          <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 10 }}>Tap to log 0.2L</div>
           <div className="glass-grid">
-            {Array.from({ length: total }, (_, i) => (
+            {Array.from({ length: Math.ceil(total / 0.2) }, (_, i) => (
               <div
                 key={i}
                 className={`glass-lg ${i < filled ? 'filled' : ''}`}
@@ -95,7 +127,6 @@ export default function WaterPage() {
         </div>
       </div>
 
-      {/* Tips */}
       <div className="water-tips">
         {TIPS.map((tip, i) => (
           <div key={i} className="tip-card">
