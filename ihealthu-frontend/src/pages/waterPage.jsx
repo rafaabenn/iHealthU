@@ -15,20 +15,7 @@ export default function WaterPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-<<<<<<< HEAD
     fetchWater()
-=======
-    Promise.all([
-      api.get('/goals'),
-      api.get('/daily/today'),
-    ])
-      .then(([goalsRes, dailyRes]) => {
-        if (goalsRes.data?.dailyWater) setTotal(Number(goalsRes.data.dailyWater))
-        if (dailyRes.data?.water)      setFilled(Number(dailyRes.data.water))
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
->>>>>>> main
   }, [])
 
   const fetchWater = async () => {
@@ -36,7 +23,7 @@ export default function WaterPage() {
       const res = await api.get('/dashboard/today')
       if (res.data) {
         setTotal(res.data.dailyWaterGoal || 2.0)
-        setFilled(Math.round(res.data.water / 0.2))
+        setFilled(Math.round((res.data.water || 0) / 0.2))
       }
     } catch (err) {
       console.error('Failed to fetch water data', err)
@@ -61,19 +48,6 @@ export default function WaterPage() {
   const goalLiters    = total.toFixed(1)
   const glassesGoal   = Math.round(total / 0.2)
 
-<<<<<<< HEAD
-=======
-  const handleGlassClick = (i) => {
-<<<<<<< HEAD
-    const newFilled = i < filled ? i : i + 1
-    setFilled(newFilled)
-    api.post('/daily/today', { water: newFilled }).catch(console.error)
-=======
-    setFilled(i < filled ? i : i + 1)
->>>>>>> main
-  }
-
->>>>>>> main
   if (loading) {
     return (
       <div className="page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>

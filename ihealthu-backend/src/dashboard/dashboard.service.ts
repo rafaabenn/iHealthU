@@ -40,24 +40,16 @@ export class DashboardService {
 
     const allActivities: any[] = readJSON(ACTIVITIES_PATH) ?? [];
     const allGoals: Record<string, any> = readJSON(GOALS_PATH) ?? {};
-<<<<<<< HEAD
     const allWater: Record<string, any> = readJSON(WATER_LOGS_PATH) ?? {};
     const allSleep: Record<string, any> = readJSON(SLEEP_LOGS_PATH) ?? {};
- 
+
     const activities = allActivities.filter((a) => a.userId === userId);
     const goals = allGoals[userId] ?? {};
     const userWater = allWater[userId] ?? {};
     const userSleep = allSleep[userId] ?? {};
- 
-=======
 
-    const activities = allActivities.filter((a) => a.userId === userId);
-    const goals = allGoals[userId] ?? {};
-
->>>>>>> main
     const todayActivities = activities.filter((a) => a.date?.startsWith(today));
     const yesterdayActivities = activities.filter((a) => a.date?.startsWith(yesterday));
-
 
     const activeMinutes = todayActivities.reduce(
       (sum: number, a: any) => sum + Number(a.duration || 0), 0,
@@ -89,17 +81,15 @@ export class DashboardService {
       calories: a.calories,
     }));
 
-<<<<<<< HEAD
     // Find the most recent sleep log
-    const sleepLogs = userSleep ? Object.values(userSleep) : [];
-    const latestSleep: any = sleepLogs.length > 0 ? sleepLogs[sleepLogs.length - 1] : null;
-=======
+    const userSleepArr = sleepArray(userSleep);
+    const latestSleep: any = userSleepArr.length > 0 ? userSleepArr[0] : null;
+
     const currentStreak = this.streakService.checkAndUpdateStreak(
       userId,
       { calories, activeMinutes },
       goals,
     );
->>>>>>> main
 
     return {
       activeMinutes,
@@ -116,7 +106,6 @@ export class DashboardService {
     };
   }
 
-<<<<<<< HEAD
   updateWater(userId: string, amount: number) {
     const today    = new Date().toISOString().split('T')[0];
     const allWater = readJSON(WATER_LOGS_PATH) ?? {};
@@ -180,16 +169,8 @@ export class DashboardService {
     const goals = allGoals[userId] ?? {};
     const userWater = allWater[userId] ?? {};
     const userSleep = allSleep[userId] ?? {};
+    const userSleepArr = sleepArray(userSleep);
  
-=======
-  getSummary(userId: string) {
-    const allActivities: any[] = readJSON(ACTIVITIES_PATH) ?? [];
-    const allGoals: Record<string, any> = readJSON(GOALS_PATH) ?? {};
-
-    const activities = allActivities.filter((a) => a.userId === userId);
-    const goals = allGoals[userId] ?? {};
-
->>>>>>> main
     const now = new Date();
     now.setHours(23, 59, 59, 999);
     const weekAgo = new Date(now.getTime() - 7 * 86400000);
@@ -222,11 +203,8 @@ export class DashboardService {
       dailyData.push({ day: dayName, calories: dayCals });
     }
 
-<<<<<<< HEAD
     const todayStr = new Date().toISOString().split('T')[0];
  
-=======
->>>>>>> main
     return {
       totalCalories,
       totalWorkouts,
@@ -241,8 +219,4 @@ export class DashboardService {
       currentSleep: userSleepArr.find((s: any) => s.date === todayStr)?.duration || 0,
     };
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main
