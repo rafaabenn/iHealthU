@@ -6,8 +6,8 @@ const DB_PATH = path.join(__dirname, '../../data/goals.json');
 
 // Goals file structure — one object per user, keyed by userId:
 // {
-//   "userId-abc": { targetWeight: "70", dailyCalories: "400", ... },
-//   "userId-xyz": { targetWeight: "60", dailyCalories: "300", ... }
+//   "userId-abc": { dailyCalories: "400", ... },
+//   "userId-xyz": { dailyCalories: "300", ... }
 // }
 
 function readAllGoals(): Record<string, any> {
@@ -15,8 +15,7 @@ function readAllGoals(): Record<string, any> {
   try {
     const raw = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
     // If old flat format (before isolation), start fresh
-    const looksLikeOldFormat =
-      raw.targetWeight !== undefined || raw.dailyCalories !== undefined;
+    const looksLikeOldFormat = raw.dailyCalories !== undefined;
     if (looksLikeOldFormat) return {};
     return raw;
   } catch {

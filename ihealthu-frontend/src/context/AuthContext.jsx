@@ -1,8 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import api from '../services/api'
-
+//rendre les informations utilisateur et les fonctions login/logout accessibles partout dans l’application.
 const AuthContext = createContext(null)
-
+// Gérer l'état d'authentification, stocker le token et l'utilisateur, fournir login, register, logout.
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)

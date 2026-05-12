@@ -1,116 +1,92 @@
 [
   {
-<<<<<<< HEAD
-    "id": "1778287048550",
-    "userId": "1778286253017",
-    "type": "Swimming",
-    "duration": "72",
-    "date": "2026-05-09",
-    "calories": "500",
-=======
-    "id": "1778287140254",
-    "userId": "123456789012",
-    "type": "Running",
-    "duration": "7",
-    "date": "2026-05-09",
-    "calories": "300",
-    "notes": "cycling"
+    "id": "1778585685436",
+    "userId": "1777503137317",
+    "type": "Yoga",
+    "duration": "30",
+    "date": "2026-05-12",
+    "calories": 80,
+    "notes": ""
   },
   {
-    "id": "1778287120368",
-    "userId": "123456789012",
-    "type": "Running",
-    "duration": "2",
+    "id": "1778363212294",
+    "userId": "1778276463231",
+    "type": "Weight training",
+    "duration": "60",
     "date": "2026-05-09",
-    "calories": "100",
-    "notes": "walk"
+    "calories": 275,
+    "notes": ""
   },
   {
-    "id": "1778287084294",
-    "userId": "123456789012",
-    "type": "Running",
-    "duration": "10",
-    "date": "2026-05-09",
-    "calories": "200",
-    "notes": "run"
-  },
-  {
-    "id": "1778284562826",
+    "id": "1778361770231",
     "userId": "1777503137317",
     "type": "Running",
-    "duration": "35",
-    "date": "2026-05-08",
-    "calories": "456",
->>>>>>> main
+    "duration": "20",
+    "date": "2026-05-09",
+    "calories": 173,
     "notes": ""
   },
   {
-    "id": "1778278021711",
-    "userId": "1778276463231",
-    "type": "Swimming",
-    "duration": "60",
-    "date": "2026-05-08",
-    "calories": "260",
-    "notes": ""
-  },
-  {
-    "id": "1778277268261",
-    "userId": "1778276463231",
-    "type": "Running",
+    "id": "1778355489790",
+    "userId": "1777845639356",
+    "type": "Yoga",
     "duration": "45",
-    "date": "2026-05-08",
+    "date": "2026-05-09",
+    "calories": "300",
+    "notes": ""
+  },
+  {
+    "id": "1778295090547",
+    "userId": "1777845639356",
+    "type": "Cycling",
+    "duration": "50",
+    "date": "2026-05-09",
+    "calories": "500",
+    "notes": ""
+  },
+  {
+    "id": "1778295055069",
+    "userId": "1777845639356",
+    "type": "Swimming",
+    "duration": "30",
+    "date": "2026-05-09",
     "calories": "400",
     "notes": ""
   },
   {
-    "id": "1778199433587",
+    "id": "1778292875648",
     "userId": "1777503137317",
-    "type": "Cycling",
-    "duration": "60",
-    "date": "2026-05-08",
-    "calories": "350",
-    "notes": "good"
-  },
-  {
-    "id": "1778199374918",
-    "userId": "1777503137317",
-    "type": "Running",
-    "duration": "6",
-    "date": "2026-05-08",
-    "calories": "789",
-    "notes": "Cycling day"
-  },
-  {
-    "id": "1778199166001",
-    "userId": "1777503137317",
-    "type": "Running",
-    "duration": "45",
-    "date": "2026-05-08",
-    "calories": "350",
-    "notes": "running"
-  },
-  {
-    "id": "1778109035709",
-    "type": "Walking",
-    "duration": "10",
-    "date": "2026-05-06",
-    "calories": "",
+    "type": "Weight training",
+    "duration": "20",
+    "date": "2026-05-09",
+    "calories": "400",
     "notes": ""
   },
   {
-    "id": "1778084044363",
-    "type": "Cycling",
+    "id": "1778291379248",
+    "userId": "1777503137317",
+    "type": "Walking",
     "duration": "45",
-    "date": "2026-05-06",
+    "date": "2026-05-09",
     "calories": "300",
     "notes": ""
   },
   {
-    "id": "1778083416434",
-    "type": "Weight training",
-    "duration": "30",
-    "date": "2026-05-06",
-    "calories": "200",
-    "notes": "tiring"
+    "id": "act_r_08",
+    "userId": "1777845639356",
+    "type": "Running",
+    "duration": "65",
+    "date": "2026-05-08",
+    "calories": "350",
+    "notes": ""
+  },
+  {
+    "id": "act_r_07",
+    "userId": "1777845639356",
+    "type": "Cycling",
+    "duration": "70",
+    "date": "2026-05-07",
+    "calories": "400",
+    "notes": ""
   }
 ]

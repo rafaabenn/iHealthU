@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
 import api from '../services/api'
 import styles from '../styles/Goals.module.css'
+import { Fire, Barbell, Drop, Timer, Moon, FloppyDisk, CheckCircle } from '@phosphor-icons/react'
 
 const DEFAULT_GOALS = {
-  targetWeight: '',
-  dailyCalories: '',
-  weeklyWorkouts: '',
-  dailyWater: '',
+  dailyCalories:      '',
+  weeklyWorkouts:     '',
+  dailyWater:         '',
   dailyActiveMinutes: '',
-  sleepHours: '',
+  sleepHours:         '',
 }
 
 export default function Goals() {
-  const [goals, setGoals] = useState(DEFAULT_GOALS)
-  const [saved, setSaved] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [goals, setGoals]           = useState(DEFAULT_GOALS)
+  const [saved, setSaved]           = useState(false)
+  const [loading, setLoading]       = useState(true)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -38,12 +38,10 @@ export default function Goals() {
   }
 
   const goalFields = [
-    { name: 'targetWeight', icon: '⚖️', label: 'Target weight', unit: 'kg', placeholder: '70', type: 'number', hint: 'Your ideal body weight goal' },
-    { name: 'dailyCalories', icon: '🔥', label: 'Daily calories target', unit: 'kcal burned', placeholder: '400', type: 'number', hint: 'Calories to burn through exercise per day' },
-    { name: 'weeklyWorkouts', icon: '🏋️', label: 'Workouts per week', unit: 'sessions', placeholder: '4', type: 'number', hint: 'How many workout sessions per week' },
-    { name: 'dailyWater', icon: '💧', label: 'Daily water intake', unit: 'Litres', placeholder: '2.5', type: 'number', hint: 'Amount of water to drink per day', step: 0.1 },
-    { name: 'dailyActiveMinutes', icon: '⏱️', label: 'Daily active minutes', unit: 'min', placeholder: '30', type: 'number', hint: 'Total workout duration target per day' },
-    { name: 'sleepHours', icon: '🌙', label: 'Sleep target', unit: 'hours / night', placeholder: '8', type: 'number', hint: 'Target sleep duration', step: 0.5 },
+    { name: 'dailyCalories',      Icon: Fire,    color: '#E8715A', label: 'Daily calories target', unit: 'kcal burned', placeholder: '400',  type: 'number', hint: 'Calories to burn through exercise per day'  },
+    { name: 'dailyWater',         Icon: Drop,    color: '#6BA8C4', label: 'Daily water intake',     unit: 'Litres',     placeholder: '2.5',  type: 'number', hint: 'Amount of water to drink per day', step: 0.1 },
+    { name: 'dailyActiveMinutes', Icon: Timer,   color: '#4A7C6F', label: 'Daily active minutes',   unit: 'min',        placeholder: '30',   type: 'number', hint: 'Total workout duration target per day'      },
+    { name: 'sleepHours',         Icon: Moon,    color: '#9B8EC4', label: 'Sleep target',           unit: 'hours / night', placeholder: '8', type: 'number', hint: 'Target sleep duration', step: 0.5          },
   ]
 
   return (
@@ -53,7 +51,12 @@ export default function Goals() {
           <div className={styles.pageTitleSm}>Personal targets</div>
           <h1 className={styles.pageTitle}>Daily <span>Goals</span></h1>
         </div>
-        {saved && <div className={styles.savedBanner}>✓ Goals saved successfully!</div>}
+        {saved && (
+          <div className={styles.savedBanner} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <CheckCircle size={15} weight="duotone" color="var(--forest)" />
+            Goals saved successfully!
+          </div>
+        )}
       </div>
 
       <p style={{ fontSize: 14, color: 'var(--text2)', marginTop: -10 }}>
@@ -67,7 +70,9 @@ export default function Goals() {
           <div className={styles.goalsGrid}>
             {goalFields.map(f => (
               <div key={f.name} className={styles.goalCard}>
-                <div className={styles.goalIcon}>{f.icon}</div>
+                <div className={styles.goalIcon}>
+                  <f.Icon size={28} weight="duotone" color={f.color} />
+                </div>
                 <div className={styles.goalContent}>
                   <label className={styles.goalLabel}>{f.label}</label>
                   <p className={styles.goalHint}>{f.hint}</p>
@@ -89,8 +94,10 @@ export default function Goals() {
             ))}
           </div>
 
-          <button type="submit" className={styles.btnPrimary} disabled={submitting}>
-            {submitting ? 'Saving…' : '💾 Save goals'}
+          <button type="submit" className={styles.btnPrimary} disabled={submitting}
+            style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <FloppyDisk size={16} weight="duotone" />
+            {submitting ? 'Saving…' : 'Save goals'}
           </button>
         </form>
       )}

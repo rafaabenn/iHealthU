@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts'
 import api from '../services/api'
 import styles from '../styles/WeeklySummary.module.css'
 
@@ -6,6 +7,14 @@ export default function WeeklySummary() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [activeTab, setActiveTab] = useState('calories')
+
+  const metricsInfo = {
+    calories: { label: 'Calories Burned', unit: 'kcal', color: '#ff7e5f', maxDefault: 500 },
+    water: { label: 'Water Intake', unit: 'L', color: '#6ba8c4', maxDefault: 3 },
+    sleep: { label: 'Sleep Duration', unit: 'h', color: '#baabff', maxDefault: 10 },
+    activeMinutes: { label: 'Active Time', unit: 'min', color: '#a8d5c2', maxDefault: 60 }
+  }
 
   useEffect(() => {
     fetchSummary()
@@ -38,7 +47,26 @@ export default function WeeklySummary() {
     </div>
   )
 
-  const maxCals = data?.dailyData ? Math.max(...data.dailyData.map(d => d.calories), 500) : 500
+  const currentMetric = metricsInfo[activeTab]
+  
+  const chartData = data?.dailyData?.map(d => {
+    const dateObj = new Date(d.dateStr)
+    return {
+      ...d,
+      displayDate: `${d.day} ${dateObj.getDate()}/${dateObj.getMonth() + 1}`
+    }
+  }) || []
+
+  const maxVal = chartData.length > 0 
+    ? Math.max(...chartData.map(d => Number(d[activeTab]) || 0), currentMetric.maxDefault) 
+    : currentMetric.maxDefault
+
+  const bestDay = data?.dailyData?.reduce((prev, current) => 
+    (Number(prev[activeTab]) || 0) > (Number(current[activeTab]) || 0) ? prev : current
+  )
+  
+  const weeklyTotal = data?.dailyData?.reduce((acc, curr) => acc + (Number(curr[activeTab]) || 0), 0)
+  const weeklyAvg = data?.dailyData ? (weeklyTotal / data.dailyData.length) : 0
 
   return (
     <div className="page">
@@ -68,21 +96,61 @@ export default function WeeklySummary() {
       </div>
 
       <div className="panel" style={{ marginTop: 20 }}>
-        <div className="panel-header">
-          <div className="panel-title">Calorie Expenditure Trend</div>
+        <div className="panel-header" style={{ marginBottom: 16 }}>
+          <div className="panel-title">{currentMetric.label} Trend</div>
         </div>
-        <div className={styles.chartContainer}>
-          {data.dailyData.map((d, i) => (
-            <div key={i} className={styles.chartBarGroup}>
-              <div 
-                className={styles.chartBar} 
-                style={{ height: `${(d.calories / maxCals) * 100}%` }}
-              >
-                {d.calories > 0 && <span className={styles.barTooltip}>{d.calories}</span>}
-              </div>
-              <div className={styles.chartLabel}>{d.day}</div>
-            </div>
+        
+        <div className={styles.tabsContainer}>
+          {Object.entries(metricsInfo).map(([key, info]) => (
+            <button 
+              key={key}
+              className={`${styles.tab} ${activeTab === key ? styles.tabActive : ''}`}
+              onClick={() => setActiveTab(key)}
+            >
+              {info.label}
+            </button>
           ))}
+        </div>
+
+        <div className={styles.chartContainer}>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <defs>
+                <linearGradient id="colorMetric" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={currentMetric.color} stopOpacity={0.4}/>
+                  <stop offset="95%" stopColor={currentMetric.color} stopOpacity={0}/>
+                </linearGradient>
+              </defs>
+              <XAxis 
+                dataKey="displayDate" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 11, fill: 'var(--text3)', fontWeight: 600 }} 
+                dy={10}
+              />
+              <YAxis 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 11, fill: 'var(--text3)' }} 
+                domain={[0, 'auto']}
+              />
+              <Tooltip 
+                contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                labelStyle={{ fontWeight: 'bold', color: 'var(--text1)', marginBottom: '4px' }}
+                itemStyle={{ color: currentMetric.color, fontWeight: 'bold' }}
+                formatter={(value) => [`${Number(value).toFixed(activeTab === 'water' ? 1 : 0)} ${currentMetric.unit}`, currentMetric.label]}
+              />
+              <Area 
+                type="monotone" 
+                dataKey={activeTab} 
+                stroke={currentMetric.color} 
+                strokeWidth={3}
+                fillOpacity={1} 
+                fill="url(#colorMetric)" 
+                animationDuration={800}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
       </div>
 
@@ -94,13 +162,13 @@ export default function WeeklySummary() {
           <div className={styles.insightItem}>
             <div className={styles.insightIcon}>✅</div>
             <div className={styles.insightText}>
-              Your most active day was <strong>{data.dailyData.reduce((prev, current) => (prev.calories > current.calories) ? prev : current).day}</strong>.
+              Your best day for {currentMetric.label.toLowerCase()} was <strong>{bestDay?.day || 'N/A'}</strong> with <strong>{Number(bestDay?.[activeTab] || 0).toFixed(activeTab === 'water' ? 1 : 0)} {currentMetric.unit}</strong>.
             </div>
           </div>
           <div className={styles.insightItem}>
             <div className={styles.insightIcon}>💡</div>
             <div className={styles.insightText}>
-              You are averaging <strong>{Math.round(data.totalCalories / 7)} kcal</strong> per day this week.
+              You are averaging <strong>{weeklyAvg.toFixed(activeTab === 'water' ? 1 : 0)} {currentMetric.unit}</strong> per day this week.
             </div>
           </div>
         </div>
@@ -116,10 +184,6 @@ export default function WeeklySummary() {
           <div className={styles.goalLine}>
             <span>Sleep Target</span>
             <strong>{data.goals.sleep} hours</strong>
-          </div>
-          <div className={styles.goalLine}>
-            <span>Weight Goal</span>
-            <strong>{data.goals.weight} kg</strong>
           </div>
         </div>
       </div>

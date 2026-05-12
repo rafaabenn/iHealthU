@@ -1,0 +1,232 @@
+.page {
+  animation: fadeIn 0.5s ease-out;
+  padding-bottom: 40px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text1);
+  margin: 0;
+}
+
+.title span {
+  color: var(--sage);
+}
+
+.subtitle {
+  font-size: 14px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.mainCard {
+  background: white;
+  border-radius: 30px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+  border: 1px solid var(--border);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 32px;
+}
+
+.question {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text1);
+  margin-bottom: 32px;
+}
+
+.moodGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.moodBtn {
+  background: var(--bg);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 24px 12px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.moodBtn:hover {
+  transform: translateY(-5px);
+  background: white;
+  border-color: var(--border);
+}
+
+.moodBtn.selected {
+  background: white;
+  border-color: var(--sage);
+  box-shadow: 0 10px 20px rgba(168, 213, 194, 0.2);
+}
+
+.emoji {
+  font-size: 42px;
+  line-height: 1;
+}
+
+.moodLabel {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text2);
+}
+
+.noteArea {
+  width: 100%;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  transition: all 0.2s;
+  margin-bottom: 24px;
+}
+
+.noteArea:focus {
+  outline: none;
+  background: white;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(168, 213, 194, 0.1);
+}
+
+.btnSave {
+  padding: 16px 40px;
+  background: var(--sage);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btnSave:hover {
+  background: #94c8b3;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(168, 213, 194, 0.3);
+}
+
+.historySection {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.historyTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text1);
+  margin-bottom: 20px;
+}
+
+.historyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.historyDay {
+  background: white;
+  border-radius: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: slideUp 0.3s ease-out backwards;
+  position: relative;
+  cursor: default;
+}
+
+.historyDay.hasNote {
+  border-color: rgba(168, 213, 194, 0.4);
+}
+
+.notePreview {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+.noteIcon {
+  font-size: 10px;
+  opacity: 0.5;
+}
+
+.noteTooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  background: #3d3d4e;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  width: 180px;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.2s;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.noteTooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #3d3d4e transparent transparent transparent;
+}
+
+.historyDay:hover .noteTooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dayName {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dayEmoji {
+  font-size: 24px;
+}
+
+@media (max-width: 600px) {
+  .moodGrid { grid-template-columns: repeat(3, 1fr); }
+}

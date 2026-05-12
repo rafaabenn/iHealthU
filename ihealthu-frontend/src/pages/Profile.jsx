@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import styles from '../styles/Profile.module.css'
+import { User, Camera, PencilSimple } from '@phosphor-icons/react'
 
 const PRESET_AVATARS = [
   'https://api.dicebear.com/9.x/micah/svg?seed=Adrian',
@@ -15,21 +16,10 @@ const PRESET_AVATARS = [
 export default function Profile() {
   const { user, setUser } = useAuth()
   const [profileForm, setProfileForm] = useState({
-    name: '',
-    email: '',
-    age: '',
-    weight: '',
-    height: '',
-    avatar: ''
-  })
-  const [goalsForm, setGoalsForm] = useState({
-    sleepHours: '',
-    dailyWater: '',
-    weeklyWorkouts: ''
+    name: '', email: '', age: '', weight: '', height: '', avatar: ''
   })
   const [loading, setLoading] = useState(true)
   const [savingProfile, setSavingProfile] = useState(false)
-  const [savingGoals, setSavingGoals] = useState(false)
   const [status, setStatus] = useState({ type: '', message: '' })
 
   useEffect(() => {
@@ -43,22 +33,10 @@ export default function Profile() {
         avatar: user.avatar || ''
       })
     }
-
-    // Fetch current goals
-    api.get('/goals')
-      .then(res => {
-        setGoalsForm({
-          sleepHours: res.data.sleepHours || '',
-          dailyWater: res.data.dailyWater || '',
-          weeklyWorkouts: res.data.weeklyWorkouts || ''
-        })
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false))
+    setLoading(false)
   }, [user])
 
   const handleProfileChange = e => setProfileForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  const handleGoalsChange = e => setGoalsForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
 
   const showStatus = (type, message) => {
     setStatus({ type, message })
@@ -66,11 +44,9 @@ export default function Profile() {
   }
 
   const handleUpdateProfile = async (e) => {
-    e.preventDefault()
-    setSavingProfile(true)
+    e.preventDefault(); setSavingProfile(true)
     try {
       const res = await api.put('/auth/profile', profileForm)
-      // Update session storage and context
       sessionStorage.setItem('user', JSON.stringify(res.data.user))
       setUser(res.data.user)
       showStatus('success', 'Profile updated successfully!')
@@ -81,25 +57,16 @@ export default function Profile() {
     }
   }
 
-  const handleUpdateGoals = async (e) => {
-    e.preventDefault()
-    setSavingGoals(true)
-    try {
-      await api.put('/goals', goalsForm)
-      showStatus('success', 'Goals updated successfully!')
-    } catch (err) {
-      showStatus('error', 'Failed to update goals')
-    } finally {
-      setSavingGoals(false)
-    }
-  }
-
   if (loading) return <div className="page-loading">Loading profile...</div>
 
   return (
     <div className={styles.page}>
       <header className={styles.header}>
-        <h1 className={styles.title}>👤 My <span>Profile</span></h1>
+        <h1 className={styles.title}>
+          <User size={26} weight="duotone" color="var(--sage)"
+            style={{ verticalAlign: 'middle', marginRight: 8 }} />
+          My <span>Profile</span>
+        </h1>
         <p className={styles.subtitle}>Manage your personal information and wellness targets</p>
       </header>
 
@@ -108,11 +75,13 @@ export default function Profile() {
           <div className={styles.avatarCard}>
             <div className={styles.avatarWrapper}>
               <img
-                src={user?.avatar || `https://api.dicebear.com/9.x/micah/svg?seed=Adrian`}
+                src={user?.avatar || 'https://api.dicebear.com/9.x/micah/svg?seed=Adrian'}
                 alt="Avatar"
                 className={styles.avatarImg}
               />
-              <div className={styles.changeAvatarBtn}>📷</div>
+              <div className={styles.changeAvatarBtn}>
+                <Camera size={15} weight="duotone" color="#fff" />
+              </div>
             </div>
             <h2 className={styles.avatarName}>{user?.name}</h2>
             <p className={styles.avatarEmail}>{user?.email}</p>
@@ -123,12 +92,51 @@ export default function Profile() {
               {status.message}
             </div>
           )}
+          {profileForm.weight && profileForm.height ? (() => {
+            const bmi = profileForm.weight / Math.pow(profileForm.height / 100, 2)
+            const rounded = Math.round(bmi * 10) / 10
+            const category =
+              bmi < 18.5 ? { label: 'Underweight', color: '#4587a3ff', pct: 10 } :
+                bmi < 25 ? { label: 'Normal', color: '#4e8b6aff', pct: 38 } :
+                  bmi < 30 ? { label: 'Overweight', color: '#c58a59', pct: 65 } :
+                    { label: 'Obese', color: '#c94b4bff', pct: 88 }
+
+            return (
+              <div className={styles.bmiCard}>
+                <p className={styles.bmiTitle}>BMI Score</p>
+                <div className={styles.bmiScoreRow}>
+                  <span className={styles.bmiValue} style={{ color: category.color }}>
+                    {rounded}
+                  </span>
+                  <span className={styles.bmiCategory} style={{ color: category.color, background: category.color + '22' }}>
+                    {category.label}
+                  </span>
+                </div>
+                <div className={styles.bmiTrack}>
+                  <div className={styles.bmiThumb} style={{ left: `${category.pct}%`, background: category.color }} />
+                </div>
+                <div className={styles.bmiLegend}>
+                  <span>&lt;18.5</span><span>18.5–24.9</span><span>25–29.9</span><span>30+</span>
+                </div>
+              </div>
+            )
+          })() : (
+            <div className={styles.bmiCard}>
+              <p className={styles.bmiTitle}>BMI Score</p>
+              <p className={styles.bmiEmpty}>Enter your weight and height to calculate your BMI.</p>
+              <p className={styles.bmiLegend}>
+               BMI (Body Mass Index) is a simple health indicator calculated using a person's weight and height. It helps estimate whether a person has a healthy body weight range.
+              </p>
+            </div>
+          )}
         </aside>
 
         <main className={styles.content}>
           <div className={styles.panel}>
             <div className={styles.panelHeader}>
-              <span className={styles.panelIcon}>📝</span>
+              <span className={styles.panelIcon}>
+                <PencilSimple size={20} weight="duotone" color="var(--sage)" />
+              </span>
               <h2 className={styles.panelTitle}>Personal Information</h2>
             </div>
             <form onSubmit={handleUpdateProfile}>
@@ -148,118 +156,32 @@ export default function Profile() {
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Full Name</label>
-                  <input
-                    name="name"
-                    value={profileForm.name}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="Enter your name"
-                  />
+                  <input name="name" value={profileForm.name} onChange={handleProfileChange}
+                    className={styles.input} placeholder="Enter your name" />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Email Address</label>
-                  <input
-                    name="email"
-                    value={profileForm.email}
-                    disabled
-                    className={styles.input}
-                  />
+                  <input name="email" value={profileForm.email} disabled className={styles.input} />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Age</label>
-                  <input
-                    type="number"
-                    name="age"
-                    value={profileForm.age}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="e.g. 25"
-                  />
+                  <input type="number" name="age" value={profileForm.age}
+                    onChange={handleProfileChange} className={styles.input} placeholder="e.g. 25" />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Weight (kg)</label>
-                  <input
-                    type="number"
-                    name="weight"
-                    value={profileForm.weight}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="e.g. 70"
-                  />
+                  <input type="number" name="weight" value={profileForm.weight}
+                    onChange={handleProfileChange} className={styles.input} placeholder="e.g. 70" />
                 </div>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Height (cm)</label>
-                  <input
-                    type="number"
-                    name="height"
-                    value={profileForm.height}
-                    onChange={handleProfileChange}
-                    className={styles.input}
-                    placeholder="e.g. 180"
-                  />
+                  <input type="number" name="height" value={profileForm.height}
+                    onChange={handleProfileChange} className={styles.input} placeholder="e.g. 180" />
                 </div>
               </div>
-              <button
-                type="submit"
-                className={styles.btnPrimary}
-                style={{ marginTop: 24 }}
-                disabled={savingProfile}
-              >
+              <button type="submit" className={styles.btnPrimary}
+                style={{ marginTop: 24 }} disabled={savingProfile}>
                 {savingProfile ? 'Saving...' : 'Save Personal Info'}
-              </button>
-            </form>
-          </div>
-
-          <div className={styles.panel}>
-            <div className={styles.panelHeader}>
-              <span className={styles.panelIcon}>🎯</span>
-              <h2 className={styles.panelTitle}>Personal Goals</h2>
-            </div>
-            <form onSubmit={handleUpdateGoals}>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Sleep Goal (hours)</label>
-                  <input
-                    type="number"
-                    step="0.5"
-                    name="sleepHours"
-                    value={goalsForm.sleepHours}
-                    onChange={handleGoalsChange}
-                    className={styles.input}
-                    placeholder="e.g. 8"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Water Goal (Litres)</label>
-                  <input
-                    type="number"
-                    step="0.1"
-                    name="dailyWater"
-                    value={goalsForm.dailyWater}
-                    onChange={handleGoalsChange}
-                    className={styles.input}
-                    placeholder="e.g. 2.5"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Weekly Workout Goal</label>
-                  <input
-                    type="number"
-                    name="weeklyWorkouts"
-                    value={goalsForm.weeklyWorkouts}
-                    onChange={handleGoalsChange}
-                    className={styles.input}
-                    placeholder="sessions per week"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className={styles.btnPrimary}
-                style={{ marginTop: 24 }}
-                disabled={savingGoals}
-              >
-                {savingGoals ? 'Saving...' : 'Save Goals'}
               </button>
             </form>
           </div>

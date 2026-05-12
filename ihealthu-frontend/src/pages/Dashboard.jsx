@@ -1,21 +1,79 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import styles from '../styles/Dashboard.module.css'
 
+import {
+  Timer, Fire, Drop, Bed, Leaf,
+  Barbell, Bicycle, Person, Footprints,
+  Waves, Lightning, Heartbeat, HandWaving
+} from '@phosphor-icons/react'
+
+const WORKOUT_ICONS = {
+  Running: { icon: <Heartbeat size={17} weight="duotone" />, color: '#E85D3A', bg: 'rgba(232,93,58,0.1)' },
+  Cycling: { icon: <Bicycle size={17} weight="duotone" />, color: '#3A9BE8', bg: 'rgba(58,155,232,0.1)' },
+  Swimming: { icon: <Waves size={17} weight="duotone" />, color: '#3AB8E8', bg: 'rgba(58,184,232,0.1)' },
+  Yoga: { icon: <Person size={17} weight="duotone" />, color: '#9B6FE8', bg: 'rgba(155,111,232,0.1)' },
+  'Weight training': { icon: <Barbell size={17} weight="duotone" />, color: '#E8A23A', bg: 'rgba(232,162,58,0.1)' },
+  Walking: { icon: <Footprints size={17} weight="duotone" />, color: '#5AE872', bg: 'rgba(90,232,114,0.1)' },
+  HIIT: { icon: <Lightning size={17} weight="duotone" />, color: '#E8C83A', bg: 'rgba(232,200,58,0.1)' },
+  Other: { icon: <Heartbeat size={17} weight="duotone" />, color: '#E85D9B', bg: 'rgba(232,93,155,0.1)' },
+}
+
+// ── 30 quotes — one per day, cycling every month ──────────────────────────
 const QUOTES = [
-  "Every step forward is a step toward a healthier you.",
-  "Small progress is still progress. Keep moving.",
-  "Your body keeps the score — make today count.",
-  "Consistency beats perfection every single time.",
+  { text: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn" },
+  { text: "The groundwork of all happiness is health.", author: "Leigh Hunt" },
+  { text: "To keep the body in good health is a duty, otherwise we shall not be able to keep our mind strong and clear.", author: "Buddha" },
+  { text: "Physical fitness is not only one of the most important keys to a healthy body, it is the basis of dynamic and creative intellectual activity.", author: "JFK" },
+  { text: "A healthy outside starts from the inside.", author: "Robert Urich" },
+  { text: "The first wealth is health.", author: "Ralph Waldo Emerson" },
+  { text: "Health is not valued until sickness comes.", author: "Thomas Fuller" },
+  { text: "Motivation is what gets you started. Habit is what keeps you going.", author: "Jim Ryun" },
+  { text: "Small progress is still progress. Keep moving.", author: "iHealthU" },
+  { text: "Consistency beats perfection every single time.", author: "iHealthU" },
+  { text: "Your body keeps the score — make today count.", author: "iHealthU" },
+  { text: "Every step forward is a step toward a healthier you.", author: "iHealthU" },
+  { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
+  { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
+  { text: "The pain you feel today will be the strength you feel tomorrow.", author: "Arnold Schwarzenegger" },
+  { text: "Take care of your body. It's the only place you have to live.", author: "Jim Rohn" },
+  { text: "An early morning walk is a blessing for the whole day.", author: "Henry Thoreau" },
+  { text: "Movement is medicine for creating change in a person's physical, emotional, and mental states.", author: "Carol Welch" },
+  { text: "The body achieves what the mind believes.", author: "Napoleon Hill" },
+  { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
+  { text: "Take care of your body and it will take care of you.", author: "iHealthU" },
+  { text: "Strength does not come from the physical capacity. It comes from an indomitable will.", author: "Gandhi" },
+  { text: "Eat well, move daily, hydrate often, sleep lots, love your body.", author: "iHealthU" },
+  { text: "No matter how slow you go, you are still lapping everyone on the couch.", author: "iHealthU" },
+  { text: "Rest when you're weary. Refresh and renew yourself, your body, your mind.", author: "Ralph Marston" },
+  { text: "Take care of yourself so you can take care of others.", author: "iHealthU" },
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "Your health is an investment, not an expense.", author: "iHealthU" },
+  { text: "Don't wish for it. Work for it.", author: "iHealthU" },
+  { text: "Every workout is a step in the right direction.", author: "iHealthU" },
 ]
+
+function getDailyQuote() {
+  const now = new Date()
+  // day-of-year gives a stable number that changes at midnight
+  const start   = new Date(now.getFullYear(), 0, 0)
+  const dayOfYear = Math.floor((now - start) / 86400000)
+  return QUOTES[dayOfYear % QUOTES.length]
+}
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
-  const today = new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })
-  const [quote] = useState(() => QUOTES[Math.floor(Math.random() * QUOTES.length)])
+  
+  const today = new Date().toLocaleDateString('en-GB', { 
+    weekday: 'long', day: 'numeric', month: 'long',
+  })
+  
+  const [quote] = useState(() => getDailyQuote())
 
   useEffect(() => {
     fetchStats()
@@ -38,11 +96,28 @@ export default function Dashboard() {
   }
 
   const statCards = [
-    { icon: '⏱️', val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—', unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1' },
-    { icon: '🔥', val: stats?.calories ?? '—', unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2' },
-    { icon: '💧', val: stats ? (Number(stats.water) || 0).toFixed(1) : '—', unit: 'L', label: 'Water intake', color: 'c3' },
-    { icon: '😴', val: stats?.sleep ?? '—', unit: 'h', label: 'Sleep last night', color: 'c4' },
+    {
+      icon: <Timer size={22} weight="duotone" />,
+      val: stats ? `${Math.floor(stats.activeMinutes / 60)}h ${stats.activeMinutes % 60}m` : '—',
+      unit: '', label: 'Active Minutes', delta: stats?.activeMinutesDelta, color: 'c1'
+    },
+    {
+      icon: <Fire size={22} weight="duotone" />,
+      val: stats?.calories ?? '—',
+      unit: 'kcal', label: 'Calories burned', delta: stats?.caloriesDelta, color: 'c2'
+    },
+    {
+      icon: <Drop size={22} weight="duotone" />,
+      val: stats ? (Number(stats.water) || 0).toFixed(1) : '—',
+      unit: 'L', label: 'Water intake', color: 'c3'
+    },
+    {
+      icon: <Bed size={22} weight="duotone" />,
+      val: stats?.sleep ?? '—',
+      unit: 'h', label: 'Sleep last night', color: 'c4'
+    },
   ]
+
 
   return (
     <div className={styles.page}>
@@ -51,7 +126,8 @@ export default function Dashboard() {
         <div>
           <div className={styles.pageTitleSm}>{today}</div>
           <h1 className={styles.pageTitle}>
-            Good morning, <span>{user?.name?.split(' ')[0] || 'there'}</span> 👋
+            Good morning, <span>{user?.name?.split(' ')[0] || 'there'}</span>{' '}
+            <HandWaving size={20} weight="duotone" color="#4A7C6F" />
           </h1>
         </div>
         <div className={styles.topbarRight}>
@@ -61,9 +137,8 @@ export default function Dashboard() {
 
       {/* Quote banner */}
       <div className={styles.quoteBanner}>
-        <span className={styles.quoteLeaf}>🌿</span>
-        <p className={styles.quoteText}>
-          <strong>Daily reminder —</strong> {quote}
+        <Leaf size={24} weight="duotone" style={{ color: 'var(--mint)', flexShrink: 0 }} />        <p className={styles.quoteText}>
+          <strong>Daily reminder —</strong> {quote.text}
         </p>
       </div>
 
@@ -88,39 +163,37 @@ export default function Dashboard() {
         {/* Today's workouts */}
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
-            <span className={styles.panelTitle}>Today's workouts</span>
-            <span className={styles.panelAction}>+ Add</span>
+            <span className={styles.panelTitle}>Today's activities</span>
+            <span className={styles.panelAction} onClick={() => navigate("/dashboard/activities")}>+ Add</span>
           </div>
           {loading ? (
             <p style={{ color: 'var(--text3)', fontSize: 13 }}>Loading…</p>
           ) : stats?.workouts?.length ? (
-            stats.workouts.map((w, i) => (
-              <div key={i} className={styles.workoutItem}>
-                <div className={`${styles.wIcon} ${styles[`w${(i%4)+1}`]}`}>{w.icon}</div>
-                <div className={styles.wInfo}>
-                  <div className={styles.wName}>{w.name}</div>
-                  <div className={styles.wMeta}>{w.duration} min · {w.date}</div>
+
+            stats.workouts.map((w, i) => {
+              const meta = WORKOUT_ICONS[w.name] ?? WORKOUT_ICONS.Other
+              return (
+                <div key={i} className={styles.workoutItem}>
+                  <div
+                    className={styles.wIcon}
+                    style={{ background: meta.bg, color: meta.color }}
+                  >
+                    {meta.icon}
+                  </div>
+                  <div className={styles.wInfo}>
+                    <div className={styles.wName}>{w.name}</div>
+                    <div className={styles.wMeta}>{w.duration} min · {w.date}</div>
+                  </div>
+                  <div className={styles.wCal}>{w.calories} kcal</div>
                 </div>
-                <div className={styles.wCal}>{w.calories} kcal</div>
-              </div>
-            ))
+              )
+            })
           ) : (
             <p style={{ color: 'var(--text3)', fontSize: 13 }}>No workouts logged today</p>
           )}
         </div>
 
-        {/* Water tracker */}
-        <div className={styles.panel}>
-          <div className={styles.panelHeader}>
-            <span className={styles.panelTitle}>💧 Water intake</span>
-            <span className={styles.panelAction}>Log</span>
-          </div>
-          <WaterTracker 
-            liters={stats?.water ?? 0} 
-            goal={stats?.dailyWaterGoal ?? 2.0} 
-            onUpdate={handleWaterUpdate}
-          />
-        </div>
+        
       </div>
 
       {/* Progress goals */}
@@ -180,7 +253,7 @@ function WaterTracker({ liters, goal, onUpdate }) {
           Target: {total.toFixed(1)}L ({totalGlasses} glasses)
         </div>
       </div>
-      
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 6 }}>
         {Array.from({ length: Math.ceil(total / 0.2) }).map((_, i) => {
           const val = (i + 1) * 0.2
@@ -193,13 +266,18 @@ function WaterTracker({ liters, goal, onUpdate }) {
                 height: 38,
                 borderRadius: 8,
                 border: `1.5px solid ${isFilled ? 'var(--sky)' : 'var(--border)'}`,
-                background: isFilled ? 'rgba(107,168,196,0.15)' : 'var(--bg)',
-                fontSize: 16,
+                background: isFilled ? 'rgba(107,168,196,0.18)' : 'var(--bg)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 cursor: 'pointer',
                 transition: 'all 0.15s',
               }}
             >
-              {isFilled ? '💧' : '+'}
+              {isFilled
+                ? <Drop size={16} weight="duotone" color="#6BA8C4" />
+                : <span style={{ fontSize: 14, color: 'var(--text3)' }}>+</span>
+              }
             </button>
           )
         })}

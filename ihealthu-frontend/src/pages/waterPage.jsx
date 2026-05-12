@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import api from '../services/api'
 import '../styles/water.css'
+import { Drop, Clock, ForkKnife, Barbell } from '@phosphor-icons/react'
 
 const TIPS = [
-  { icon: '⏰', title: 'Morning routine', text: 'Drink a glass right after waking up to kickstart hydration' },
-  { icon: '🥤', title: 'Before meals',    text: 'Drinking before meals helps digestion and reduces appetite' },
-  { icon: '🏋️', title: 'During workouts', text: 'Drink 200–300 mL every 20 minutes of intense exercise' },
+  { Icon: Clock,     title: 'Morning routine', text: 'Drink a glass right after waking up to kickstart hydration' },
+  { Icon: ForkKnife, title: 'Before meals',    text: 'Drinking before meals helps digestion and reduces appetite' },
+  { Icon: Barbell,   title: 'During workouts', text: 'Drink 200–300 mL every 20 minutes of intense exercise' },
 ]
 
 export default function WaterPage() {
@@ -55,10 +56,10 @@ export default function WaterPage() {
   }
 
   const currentLiters = filled * 0.2
-  const percentage = Math.min(Math.round((currentLiters / total) * 100), 100)
-  const liters     = currentLiters.toFixed(1)
-  const goalLiters = (total).toFixed(1)
-  const glassesGoal = Math.round(total / 0.2)
+  const percentage    = Math.min(Math.round((currentLiters / total) * 100), 100)
+  const liters        = currentLiters.toFixed(1)
+  const goalLiters    = total.toFixed(1)
+  const glassesGoal   = Math.round(total / 0.2)
 
 <<<<<<< HEAD
 =======
@@ -86,7 +87,10 @@ export default function WaterPage() {
       <div className="topbar">
         <div>
           <div className="page-title-sm">Stay hydrated</div>
-          <h1 className="page-title">💧 Water <span>Intake</span></h1>
+          <h1 className="page-title">
+            <Drop size={26} weight="duotone" color="var(--sky)" style={{ verticalAlign: 'middle', marginRight: 6 }} />
+            Water <span>Intake</span>
+          </h1>
         </div>
       </div>
 
@@ -120,7 +124,10 @@ export default function WaterPage() {
                 className={`glass-lg ${i < filled ? 'filled' : ''}`}
                 onClick={() => handleGlassClick(i)}
               >
-                {i < filled ? '💧' : '+'}
+                {i < filled
+                  ? <Drop size={22} weight="duotone" color="#6BA8C4" />
+                  : <span style={{ fontSize: 18, opacity: 0.6 }}>+</span>
+                }
               </div>
             ))}
           </div>
@@ -130,7 +137,9 @@ export default function WaterPage() {
       <div className="water-tips">
         {TIPS.map((tip, i) => (
           <div key={i} className="tip-card">
-            <div className="tip-icon">{tip.icon}</div>
+            <div className="tip-icon">
+              <tip.Icon size={24} weight="duotone" color="var(--sky)" />
+            </div>
             <div className="tip-title">{tip.title}</div>
             <div className="tip-text">{tip.text}</div>
           </div>

@@ -84,9 +84,11 @@
 }
 
 .navIcon {
-  font-size: 15px;
   width: 22px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .navBadge {

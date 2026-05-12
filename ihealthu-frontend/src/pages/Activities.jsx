@@ -2,17 +2,41 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import styles from '../styles/Activities.module.css'
+import {
+  PersonSimpleRun, Heartbeat, Bicycle, Waves, Person, Barbell,
+  Footprints, Lightning, Trophy, Fire, Timer,
+  PencilSimple, Plus, X, Trash, CircleNotch, CalendarBlank
+} from '@phosphor-icons/react'
 
 const TYPES = ['Running', 'Cycling', 'Swimming', 'Yoga', 'Weight training', 'Walking', 'HIIT', 'Other']
+
 const META = {
-  Running:           { icon: '🏃', color: '#E85D3A', bg: 'rgba(232,93,58,0.1)',  tag: 'Cardio'     },
-  Cycling:           { icon: '🚴', color: '#3A9BE8', bg: 'rgba(58,155,232,0.1)', tag: 'Cardio'     },
-  Swimming:          { icon: '🏊', color: '#3AB8E8', bg: 'rgba(58,184,232,0.1)', tag: 'Cardio'     },
-  Yoga:              { icon: '🧘', color: '#9B6FE8', bg: 'rgba(155,111,232,0.1)',tag: 'Flexibility' },
-  'Weight training': { icon: '🏋️', color: '#E8A23A', bg: 'rgba(232,162,58,0.1)', tag: 'Strength'   },
-  Walking:           { icon: '👟', color: '#5AE872', bg: 'rgba(90,232,114,0.1)', tag: 'Cardio'     },
-  HIIT:              { icon: '⚡', color: '#E8C83A', bg: 'rgba(232,200,58,0.1)', tag: 'Intensity'  },
-  Other:             { icon: '🤸', color: '#E85D9B', bg: 'rgba(232,93,155,0.1)', tag: 'Activity'   },
+  Running:           { Icon: PersonSimpleRun, color: '#e85d3ad2', bg: 'rgba(232,93,58,0.1)',   tag: 'Cardio'      },
+  Cycling:           { Icon: Bicycle,         color: '#3a9ae8da', bg: 'rgba(58,155,232,0.1)',  tag: 'Cardio'      },
+  Swimming:          { Icon: Waves,           color: '#3AB8E8',   bg: 'rgba(58,184,232,0.1)',  tag: 'Cardio'      },
+  Yoga:              { Icon: Person,          color: '#9b6fe8e0', bg: 'rgba(155,111,232,0.1)', tag: 'Flexibility' },
+  'Weight training': { Icon: Barbell,         color: '#edad4ddc', bg: 'rgba(232,162,58,0.1)',  tag: 'Strength'    },
+  Walking:           { Icon: Footprints,      color: '#53b863d0', bg: 'rgba(90,232,114,0.1)',  tag: 'Cardio'      },
+  HIIT:              { Icon: Lightning,       color: '#E8C83A',   bg: 'rgba(232,200,58,0.1)',  tag: 'Intensity'   },
+  Other:             { Icon: Heartbeat,       color: '#e85d9ccf', bg: 'rgba(232,93,155,0.1)',  tag: 'Activity'    },
+}
+
+// MET (Metabolic Equivalent of Task) values per activity type
+const MET = {
+  Running:           9.8,
+  Cycling:           7.5,
+  Swimming:          8.0,
+  Yoga:              3.0,
+  'Weight training': 5.0,
+  Walking:           3.5,
+  HIIT:              10.0,
+  Other:             5.0,
+}
+
+// Formula: calories = MET × weight(kg) × duration(hours)
+const calcCalories = (type, durationMin, weightKg) => {
+  if (!durationMin || !weightKg) return ''
+  return Math.round(MET[type] * Number(weightKg) * (Number(durationMin) / 60))
 }
 
 const emptyForm = {
@@ -31,6 +55,7 @@ export default function Activities() {
   const [editing, setEditing]       = useState(null)
   const [form, setForm]             = useState(emptyForm)
   const [filter, setFilter]         = useState('All')
+  const [dateFilter, setDateFilter] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError]           = useState(null)
   const formRef = useRef(null)
@@ -41,8 +66,8 @@ export default function Activities() {
       const res = await api.get('/activities')
       setActivities(res.data)
     } catch (err) {
-      if (err.response?.status === 401) setError('Session expirée — reconnecte-toi.')
-      else setError('Erreur de chargement des activités.')
+      if (err.response?.status === 401) setError('Session expired — please log in again.')
+      else setError('Failed to load activities.')
     } finally { setLoading(false) }
   }
   useEffect(() => { fetchActivities() }, [])
@@ -52,14 +77,29 @@ export default function Activities() {
       setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60)
   }, [showForm])
 
-  const handleChange = e => setForm(f => ({ ...f, [e.target.name]: e.target.value }))
-  const openAdd  = () => { setEditing(null); setForm(emptyForm); setShowForm(true) }
+  const handleChange = e => {
+    const { name, value } = e.target
+    setForm(f => {
+      const updated = { ...f, [name]: value }
+      // Recalculate calories whenever type or duration changes
+      if (name === 'duration' || name === 'type') {
+        const weight = Number(user?.weight)
+        updated.calories = calcCalories(updated.type, Number(updated.duration), weight)
+      }
+      return updated
+    })
+  }
+
+  const openAdd = () => {
+    setEditing(null)
+    setForm({ ...emptyForm, calories: '' })
+    setShowForm(true)
+  }
   const closeForm = () => { setShowForm(false); setEditing(null) }
 
   const handleSubmit = async e => {
     e.preventDefault(); setSubmitting(true)
     const tempId = 'temp_' + Date.now()
-
     if (editing) {
       setActivities(prev => prev.map(a =>
         (a.id === editing || a._id === editing) ? { ...a, ...form } : a
@@ -82,22 +122,38 @@ export default function Activities() {
 
   const handleEdit = a => {
     setForm({
-      type: a.type, duration: a.duration,
-      date: a.date?.split('T')[0], calories: a.calories, notes: a.notes || '',
+      type:     a.type,
+      duration: a.duration,
+      date:     a.date?.split('T')[0],
+      calories: a.calories,
+      notes:    a.notes || '',
     })
     setEditing(a.id || a._id); setShowForm(true)
   }
 
   const handleDelete = async id => {
-    if (!confirm('Supprimer cette activité ?')) return
+    if (!confirm('Delete this activity?')) return
     setActivities(prev => prev.filter(a => (a.id || a._id) !== id))
     try { await api.delete(`/activities/${id}`) }
     catch { fetchActivities() }
   }
 
-  const filtered = filter === 'All' ? activities : activities.filter(a => a.type === filter)
-  const totalCal = activities.reduce((s, a) => s + Number(a.calories || 0), 0)
-  const totalMin = activities.reduce((s, a) => s + Number(a.duration || 0), 0)
+  // When the user picks a type chip, also recalculate calories
+  const handleTypeSelect = (type) => {
+    setForm(f => {
+      const weight = Number(user?.weight)
+      const calories = calcCalories(type, Number(f.duration), weight)
+      return { ...f, type, calories }
+    })
+  }
+
+  const filtered = activities.filter(a => {
+    const matchType = filter === 'All' || a.type === filter
+    const matchDate = !dateFilter || a.date?.startsWith(dateFilter)
+    return matchType && matchDate
+  })
+  const totalCal = filtered.reduce((s, a) => s + Number(a.calories || 0), 0)
+  const totalMin = filtered.reduce((s, a) => s + Number(a.duration || 0), 0)
 
   return (
     <div className={styles.page}>
@@ -113,28 +169,34 @@ export default function Activities() {
           </h1>
         </div>
         <button className={styles.btnAdd} onClick={openAdd}>
-          <span>+</span> Add workout
+          <Plus size={16} weight="bold" /> Add workout
         </button>
       </div>
 
       {/* STATS */}
       <div className={styles.statsRow}>
         <div className={styles.statCard}>
-          <span className={styles.statEmoji}>🏆</span>
+          <span className={styles.statEmoji}>
+            <Trophy size={30} weight="duotone" color="#E8A23A" />
+          </span>
           <div>
-            <div className={styles.statVal}>{activities.length}</div>
+            <div className={styles.statVal}>{filtered.length}</div>
             <div className={styles.statLabel}>Total Workouts</div>
           </div>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statEmoji}>🔥</span>
+          <span className={styles.statEmoji}>
+            <Fire size={30} weight="duotone" color="#E85D3A" />
+          </span>
           <div>
             <div className={styles.statVal}>{totalCal.toLocaleString()} <span className={styles.statUnit}>kcal</span></div>
             <div className={styles.statLabel}>Calories Burned</div>
           </div>
         </div>
         <div className={styles.statCard}>
-          <span className={styles.statEmoji}>⏱️</span>
+          <span className={styles.statEmoji}>
+            <Timer size={30} weight="duotone" color="#4A7C6F" />
+          </span>
           <div>
             <div className={styles.statVal}>{Math.floor(totalMin / 60)}h {totalMin % 60}m</div>
             <div className={styles.statLabel}>Active Time</div>
@@ -149,24 +211,36 @@ export default function Activities() {
       {showForm && (
         <div className={styles.formCard} ref={formRef}>
           <div className={styles.formHeader}>
-            <span className={styles.formTitle}>{editing ? '✏️ Edit Workout' : '🆕 New Workout'}</span>
-            <button className={styles.closeBtn} onClick={closeForm}>✕</button>
+            <span className={styles.formTitle}>
+              {editing
+                ? <><PencilSimple size={15} weight="duotone" /> Edit Workout</>
+                : <><Plus size={15} weight="bold" /> New Workout</>
+              }
+            </span>
+            <button className={styles.closeBtn} onClick={closeForm}>
+              <X size={16} />
+            </button>
           </div>
 
+          {/* Activity type picker */}
           <div className={styles.typePicker}>
-            {TYPES.map(t => (
-              <button
-                key={t}
-                type="button"
-                className={`${styles.typeChip} ${form.type === t ? styles.typeChipActive : ''}`}
-                style={form.type === t
-                  ? { background: META[t].bg, borderColor: META[t].color, color: META[t].color }
-                  : {}}
-                onClick={() => setForm(f => ({ ...f, type: t }))}
-              >
-                {META[t].icon} {t}
-              </button>
-            ))}
+            {TYPES.map(t => {
+              const m = META[t]
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  className={`${styles.typeChip} ${form.type === t ? styles.typeChipActive : ''}`}
+                  style={form.type === t
+                    ? { background: m.bg, borderColor: m.color, color: m.color }
+                    : { borderColor: m.color + '60' }}
+                  onClick={() => handleTypeSelect(t)}
+                >
+                  <m.Icon size={14} weight="duotone" color={m.color} />
+                  {t}
+                </button>
+              )
+            })}
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -175,22 +249,69 @@ export default function Activities() {
                 <label className={styles.label}>Date</label>
                 <input type="date" name="date" value={form.date} onChange={handleChange} className={styles.input} required />
               </div>
+
               <div className={styles.formGroup}>
                 <label className={styles.label}>Duration (min)</label>
-                <input type="number" name="duration" value={form.duration} onChange={handleChange}
-                  className={styles.input} min="1" required placeholder="45" />
+                <input
+                  type="number"
+                  name="duration"
+                  value={form.duration}
+                  onChange={handleChange}
+                  className={styles.input}
+                  min="1"
+                  required
+                  placeholder="45"
+                />
               </div>
+
               <div className={styles.formGroup}>
-                <label className={styles.label}>Calories burned</label>
-                <input type="number" name="calories" value={form.calories} onChange={handleChange}
-                  className={styles.input} placeholder="350" />
+                <label className={styles.label}>
+                  Calories burned
+                  {user?.weight
+                    ? <span style={{ fontSize: 11, color: 'var(--text3)', fontWeight: 400, marginLeft: 6 }}>
+                        auto-calculated
+                      </span>
+                    : <span style={{ fontSize: 11, color: 'var(--coral)', fontWeight: 400, marginLeft: 6 }}>
+                        add weight in profile for auto-calc
+                      </span>
+                  }
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="number"
+                    name="calories"
+                    value={form.calories}
+                    onChange={handleChange}
+                    className={styles.input}
+                    placeholder={user?.weight ? 'Enter duration first' : '350'}
+                    style={{ paddingRight: 44 }}
+                  />
+                  <span style={{
+                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                    fontSize: 12, color: 'var(--text3)', pointerEvents: 'none'
+                  }}>
+                    kcal
+                  </span>
+                </div>
+                {user?.weight && form.duration && (
+                  <p style={{ fontSize: 11, color: 'var(--text3)', marginTop: 4 }}>
+                    Based on MET {MET[form.type]} · {user.weight} kg · {form.duration} min
+                  </p>
+                )}
               </div>
+
               <div className={styles.formGroup} style={{ gridColumn: '1 / -1' }}>
                 <label className={styles.label}>Notes</label>
-                <input name="notes" value={form.notes} onChange={handleChange}
-                  className={styles.input} placeholder="How was your session?" />
+                <input
+                  name="notes"
+                  value={form.notes}
+                  onChange={handleChange}
+                  className={styles.input}
+                  placeholder="How was your session?"
+                />
               </div>
             </div>
+
             <div className={styles.formActions}>
               <button type="button" className={styles.btnCancel} onClick={closeForm}>Cancel</button>
               <button type="submit" className={styles.btnSave} disabled={submitting}>
@@ -202,34 +323,66 @@ export default function Activities() {
       )}
 
       {/* FILTERS */}
-      <div className={styles.filterRow}>
-        {['All', ...TYPES].map(t => (
-          <button
-            key={t}
-            className={`${styles.filterPill} ${filter === t ? styles.filterPillActive : ''}`}
-            style={filter === t && t !== 'All'
-              ? { background: META[t].bg, borderColor: META[t].color, color: META[t].color }
-              : {}}
-            onClick={() => setFilter(t)}
-          >
-            {t !== 'All' && <span style={{ marginRight: 4 }}>{META[t].icon}</span>}{t}
-          </button>
-        ))}
+      <div className={styles.filterRow} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', flex: 1 }}>
+          {['All', ...TYPES].map(t => {
+            const m = t !== 'All' ? META[t] : null
+            return (
+              <button
+                key={t}
+                className={`${styles.filterPill} ${filter === t ? styles.filterPillActive : ''}`}
+                style={m
+                  ? filter === t
+                    ? { background: m.bg, borderColor: m.color, color: m.color }
+                    : { borderColor: m.color + '60' }
+                  : {}}
+                onClick={() => setFilter(t)}
+              >
+                {m && <m.Icon size={14} weight="duotone" color={m.color} />}
+                {t}
+              </button>
+            )
+          })}
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ fontSize: 13, color: 'var(--text3)', fontWeight: 600 }}>Filter Date:</span>
+          <input
+            type="date"
+            value={dateFilter}
+            onChange={e => setDateFilter(e.target.value)}
+            className={styles.input}
+            style={{ padding: '6px 12px', width: 'auto', minHeight: 36 }}
+          />
+          {dateFilter && (
+            <button
+              onClick={() => setDateFilter('')}
+              style={{ background: 'none', border: 'none', color: 'var(--text3)', cursor: 'pointer' }}
+            >
+              <X size={16} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* LIST */}
       <div className={styles.list}>
         {loading ? (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>⏳</div>
+            <div className={styles.emptyIcon}>
+              <CircleNotch size={48} weight="bold" color="var(--text3)"
+                style={{ animation: 'spin 1s linear infinite' }} />
+            </div>
             <p>Loading your workouts…</p>
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
           </div>
         ) : filtered.length === 0 ? (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>👟</div>
+            <div className={styles.emptyIcon}>
+              <Footprints size={48} weight="duotone" color="var(--text3)" />
+            </div>
             <p>No workouts yet{filter !== 'All' ? ` for ${filter}` : ''}.</p>
             <button className={styles.btnSave} onClick={openAdd} style={{ marginTop: 20 }}>
-              + Add your first workout
+              <Plus size={14} weight="bold" /> Add your first workout
             </button>
           </div>
         ) : (
@@ -237,23 +390,23 @@ export default function Activities() {
             const m   = META[a.type] || META.Other
             const tid = String(a.id || '').startsWith('temp_')
             return (
-              <div
-                key={a.id || a._id}
-                className={styles.card}
-                style={{ opacity: tid ? 0.5 : 1 }}
-              >
+              <div key={a.id || a._id} className={styles.card} style={{ opacity: tid ? 0.5 : 1 }}>
                 <div className={styles.cardBar} style={{ background: m.color }} />
                 <div className={styles.cardIcon} style={{ background: m.bg }}>
-                  {m.icon}
+                  <m.Icon size={22} weight="duotone" color={m.color} />
                 </div>
                 <div className={styles.cardInfo}>
                   <div className={styles.cardName}>{a.type}</div>
                   <div className={styles.cardMeta}>
-                    <span className={styles.cardTag}
-                      style={{ background: m.bg, color: m.color }}>{m.tag}</span>
-                    <span>📅 {new Date(a.date).toLocaleDateString('en-GB',
-                      { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                    <span>⏱ {a.duration} min</span>
+                    <span className={styles.cardTag} style={{ background: m.bg, color: m.color }}>{m.tag}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <CalendarBlank size={12} weight="duotone" color={m.color} />
+                      {new Date(a.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Timer size={12} weight="duotone" color={m.color} />
+                      {a.duration} min
+                    </span>
                     {a.notes && <span className={styles.cardNote}>· {a.notes}</span>}
                   </div>
                 </div>
@@ -263,12 +416,13 @@ export default function Activities() {
                   </div>
                   {!tid && (
                     <div className={styles.cardActions}>
-                      <button className={styles.actionBtn} onClick={() => handleEdit(a)} title="Edit">✏️</button>
-                      <button
-                        className={`${styles.actionBtn} ${styles.actionBtnDel}`}
-                        onClick={() => handleDelete(a.id || a._id)}
-                        title="Delete"
-                      >🗑️</button>
+                      <button className={styles.actionBtn} onClick={() => handleEdit(a)} title="Edit">
+                        <PencilSimple size={15} weight="duotone" color="var(--sage)" />
+                      </button>
+                      <button className={`${styles.actionBtn} ${styles.actionBtnDel}`}
+                        onClick={() => handleDelete(a.id || a._id)} title="Delete">
+                        <Trash size={15} weight="duotone" color="var(--coral)" />
+                      </button>
                     </div>
                   )}
                 </div>

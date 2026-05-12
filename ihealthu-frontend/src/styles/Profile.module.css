@@ -27,7 +27,9 @@
 }
 
 @media (max-width: 800px) {
-  .profileGrid { grid-template-columns: 1fr; }
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .sidebar {
@@ -110,7 +112,10 @@
   padding-bottom: 15px;
 }
 
-.panelIcon { font-size: 20px; }
+.panelIcon {
+  font-size: 20px;
+}
+
 .panelTitle {
   font-size: 16px;
   font-weight: 700;
@@ -124,7 +129,9 @@
 }
 
 @media (max-width: 600px) {
-  .formGrid { grid-template-columns: 1fr; }
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .formGroup {
@@ -154,7 +161,7 @@
 .input:focus {
   border-color: var(--sage);
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(74,124,111,0.1);
+  box-shadow: 0 0 0 3px rgba(74, 124, 111, 0.1);
 }
 
 .input:disabled {
@@ -181,7 +188,7 @@
 .btnPrimary:hover:not(:disabled) {
   background: var(--sage);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(28,74,62,0.2);
+  box-shadow: 0 4px 12px rgba(28, 74, 62, 0.2);
 }
 
 .btnPrimary:disabled {
@@ -236,5 +243,83 @@
   text-align: center;
 }
 
-.success { background: #E8F4F0; color: var(--forest); }
-.error { background: #FCE8E8; color: #B02020; }
+.success {
+  background: #E8F4F0;
+  color: var(--forest);
+}
+
+.error {
+  background: #FCE8E8;
+  color: #B02020;
+}
+
+/* ---- BMI card ---- */
+.bmiCard {
+  background: var(--surface, #fff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.bmiCard>.bmiTitle {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  color: var(--text2);
+}
+
+.bmiScoreRow {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bmiValue {
+  font-size: 44px;
+  font-weight: 800;
+}
+
+.bmiCategory {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+
+.bmiTrack {
+  position: relative;
+  height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(to right, #2980a5 0%, #31a36f 30%, #c58a59 60%, #b65454 100%);
+  margin-bottom: 6px;
+}
+
+.bmiThumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  transition: left 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bmiLegend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #aaa;
+}
+
+.bmiEmpty {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.5;
+  text-align: center;
+  padding: 12px 0;
+}
