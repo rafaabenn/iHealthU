@@ -5,9 +5,9 @@
     "email": "test@test.com",
     "password": "123456",
     "age": "20",
-    "weight": "53",
+    "weight": "40",
     "height": "160",
-    "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?hair=dannyPhantom,fonze,full,pixie&hairColor=000000,77311d,9287ff,ac6651,e0ddff,f4d150,f9c9b6,fc909f,ffeba4&mouth=smile,laughing,smirk&seed=Aidan",
     "bmi": ""
   },
   {
@@ -29,5 +29,15 @@
     "weight": "55",
     "height": "160",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Adrian"
+  },
+  {
+    "id": "1778585950511",
+    "name": "Marwa Riad",
+    "email": "riadmarwa05@gmail.com",
+    "password": "Marwaton5",
+    "age": "21",
+    "weight": "55",
+    "height": "168",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley"
   }
 ]

@@ -1,5 +1,14 @@
 [
   {
+    "id": "1778585685436",
+    "userId": "1777503137317",
+    "type": "Yoga",
+    "duration": "30",
+    "date": "2026-05-12",
+    "calories": 80,
+    "notes": ""
+  },
+  {
     "id": "1778363212294",
     "userId": "1778276463231",
     "type": "Weight training",
@@ -62,6 +71,22 @@
     "calories": "300",
     "notes": ""
   },
-  { "id": "act_r_08", "userId": "1777845639356", "type": "Running",  "duration": "65", "date": "2026-05-08", "calories": "350", "notes": "" },
-  { "id": "act_r_07", "userId": "1777845639356", "type": "Cycling",  "duration": "70", "date": "2026-05-07", "calories": "400", "notes": "" }
+  {
+    "id": "act_r_08",
+    "userId": "1777845639356",
+    "type": "Running",
+    "duration": "65",
+    "date": "2026-05-08",
+    "calories": "350",
+    "notes": ""
+  },
+  {
+    "id": "act_r_07",
+    "userId": "1777845639356",
+    "type": "Cycling",
+    "duration": "70",
+    "date": "2026-05-07",
+    "calories": "400",
+    "notes": ""
+  }
 ]
