@@ -48,6 +48,26 @@ export default function WaterPage() {
   const goalLiters    = total.toFixed(1)
   const glassesGoal   = Math.round(total / 0.2)
 
+  // Dynamic sizing refined for "single line" feel
+  let cols = glassesGoal;
+  let glassHeight = 42;
+  let iconSize = 18;
+  let fontSize = 16;
+
+  if (glassesGoal > 12) {
+    cols = 10; // Max 10 per row for larger goals
+    glassHeight = 36;
+    iconSize = 16;
+    fontSize = 14;
+  }
+
+  if (glassesGoal > 25) {
+    cols = 12; // Even more columns for very large goals
+    glassHeight = 32;
+    iconSize = 14;
+    fontSize = 12;
+  }
+
   if (loading) {
     return (
       <div className="page" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
@@ -92,15 +112,20 @@ export default function WaterPage() {
         <div style={{ width: '100%', marginTop: 16 }}>
           <div style={{ fontSize: 13, opacity: 0.7, marginBottom: 10 }}>Tap to log 0.2L</div>
           <div className="glass-grid">
-            {Array.from({ length: Math.ceil(total / 0.2) }, (_, i) => (
+            {Array.from({ length: glassesGoal }, (_, i) => (
               <div
                 key={i}
                 className={`glass-lg ${i < filled ? 'filled' : ''}`}
+                style={{ 
+                  height: glassHeight, 
+                  fontSize: fontSize,
+                  flex: `0 0 calc((100% - ${(cols - 1) * 8}px) / ${cols})`
+                }}
                 onClick={() => handleGlassClick(i)}
               >
                 {i < filled
-                  ? <Drop size={22} weight="duotone" color="#6BA8C4" />
-                  : <span style={{ fontSize: 18, opacity: 0.6 }}>+</span>
+                  ? <Drop size={iconSize} weight="duotone" color="#6BA8C4" />
+                  : <span style={{ opacity: 0.6 }}>+</span>
                 }
               </div>
             ))}

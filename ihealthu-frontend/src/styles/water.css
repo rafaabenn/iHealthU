@@ -39,18 +39,23 @@
 .water-ring-text { position: relative; z-index: 1; text-align: center; }
 .water-ring-pct { font-size: 28px; font-weight: 700; }
 .water-ring-label { font-size: 11px; opacity: 0.8; }
-.glass-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 16px; }
+.glass-grid { 
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px; 
+  margin-top: 16px; 
+}
 .glass-lg {
-  height: 54px;
   border-radius: 12px;
   border: 2px solid rgba(255,255,255,0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
   cursor: pointer;
   transition: all .2s;
   background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
 }
 .glass-lg.filled { background: rgba(255,255,255,0.9); border-color: #fff; }
 .glass-lg:hover { transform: scale(1.08); }

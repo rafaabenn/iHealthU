@@ -17,6 +17,8 @@ import breakfastImg from '../assets/meals/breakfast.png'
 import lunchImg from '../assets/meals/lunch.png'
 import dinnerImg from '../assets/meals/dinner.png'
 import snackImg from '../assets/meals/snack.png'
+import preWorkoutImg from '../assets/meals/pre-workout.jpg'
+import postWorkoutImg from '../assets/meals/post-workout.jpg'
 
 const WORKOUT_ICONS = {
   Running: { icon: <Heartbeat size={17} weight="duotone" />, color: '#E85D3A', bg: 'rgba(232,93,58,0.1)' },
@@ -138,7 +140,7 @@ const MEAL_SUGGESTIONS = [
     color: '#E8715A',
     bg: '#FFF2F0',
     icon: <Bolt size={14} weight="fill" />,
-    image: breakfastImg,
+    image: preWorkoutImg,
     ingredients: ['1 slice whole-grain bread', '1 tbsp peanut butter', '1 small banana', '1 tsp honey', 'Pinch of cinnamon'],
     steps: ['Toast the bread.', 'Spread peanut butter evenly.', 'Slice banana and arrange on top.', 'Drizzle with honey.', 'Add a pinch of cinnamon.']
   },
@@ -154,11 +156,12 @@ const MEAL_SUGGESTIONS = [
     color: '#3AB8E8',
     bg: '#F0F9FF',
     icon: <Bolt size={14} weight="fill" />,
-    image: lunchImg,
+    image: postWorkoutImg,
     ingredients: ['1 whole-wheat wrap', '100g turkey breast', 'Handful of baby spinach', '1/4 avocado', '2 tbsp hummus'],
     steps: ['Spread hummus on the wrap.', 'Layer turkey and spinach.', 'Add avocado slices.', 'Roll tightly.', 'Slice in half and serve.']
   }
 ]
+
 
 function getDailyQuote() {
   const now = new Date()
@@ -424,9 +427,11 @@ export default function Dashboard() {
           <span>iHealthU</span>
         </div>
         <p className={styles.footerCopy}>© 2026 iHealthU. All rights reserved.</p>
-        <div className={styles.footerSocial}>
-          <a href="#"><InstagramLogo size={18} /></a>
-          <a href="#"><GithubLogo size={18} /></a>
+        <div className={styles.footerTeam}>
+          <span>GHAMMAD Aya</span>
+          <span>BENNOUR Rafaa</span>
+          <span>RIAD Marwa</span>
+          <span>AMANZOU Amal</span>
         </div>
       </footer>
 
