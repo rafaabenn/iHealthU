@@ -33,16 +33,7 @@
     "currentStreak": 2,
     "lastStreakDate": "2026-05-14"
   },
-  {
-    "id": "1778585950511",
-    "name": "Marwa Riad",
-    "email": "riadmarwa05@gmail.com",
-    "password": "Marwaton5",
-    "age": "21",
-    "weight": "55",
-    "height": "168",
-    "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley"
-  },
+
   {
     "id": "demo_presentation_2026",
     "name": "Demo User",
@@ -54,12 +45,6 @@
     "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley",
     "currentStreak": 14,
     "lastStreakDate": "2026-05-14"
-  },
-  {
-    "id": "1778774252819",
-    "name": "marwa ",
-    "email": "marwa@lol.com",
-    "password": "123456"
   },
   {
     "id": "1778774279978",
