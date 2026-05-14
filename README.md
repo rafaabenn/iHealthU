@@ -152,7 +152,7 @@ Two accounts are available out of the box for testing:
 | Email | Password |
 |---|---|
 | test@test.com | 123456 |
-| sara@test.com | 123456 |
+| rafaa@test.com | 123456 |
 
 ---
 

@@ -147,7 +147,7 @@ function getDailyQuote() {
   const now = new Date()
   const start = new Date(now.getFullYear(), 0, 0)
   const dayOfYear = Math.floor((now - start) / 86400000)
-  return QUOTES[Math.floor(Math.random() *QUOTES.length ) ]
+  return QUOTES[Math.floor(Math.random() * QUOTES.length)]
 }
 
 function getGreeting() {
@@ -281,7 +281,6 @@ export default function Dashboard() {
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
             <span className={styles.panelTitle}>Today's progress</span>
-            <span className={styles.panelAction} onClick={() => navigate("/dashboard/goals")}>View all →</span>
           </div>
           <div className={styles.goalsGrid}>
             {[
@@ -363,9 +362,9 @@ export default function Dashboard() {
             </button>
             <div className={styles.carouselDots}>
               {[...Array(Math.ceil(MEAL_SUGGESTIONS.length / 3))].map((_, i) => (
-                <div 
-                  key={i} 
-                  className={`${styles.dot} ${mealIndex / 3 === i ? styles.dotActive : ''}`} 
+                <div
+                  key={i}
+                  className={`${styles.dot} ${mealIndex / 3 === i ? styles.dotActive : ''}`}
                   onClick={() => setMealIndex(i * 3)}
                 />
               ))}
