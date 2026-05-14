@@ -1,7 +1,5 @@
 # 🌿 iHealthU — Your Personal Wellness Companion
 
-![iHealthU Logo](/ihealthu-frontend/public/logo1.png)
-
 iHealthU is a modern, premium wellness tracking application designed to help users monitor their physical and mental health. From activity logging and calorie tracking to mood journaling and hydration monitoring, iHealthU provides a holistic view of your daily well-being.
 
 ---
