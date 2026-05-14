@@ -111,10 +111,10 @@ iHealthU/
 
 ## 👥 Meet the Team
 
-*   **GHAMMAD Aya** — Frontend Developer & UI/UX Design
-*   **BENNOUR Rafaa** — Backend Developer & System Architecture
-*   **RIAD Marwa** — Quality Assurance & Documentation
-*   **AMANZOU Amal** — Data Analysis & Wellness Research
+*   **GHAMMAD Aya**
+*   **BENNOUR Rafaa** 
+*   **RIAD Marwa**
+*   **AMANZOU Amal**
 
 ---
 
