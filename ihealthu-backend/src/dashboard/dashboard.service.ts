@@ -18,7 +18,6 @@ function writeJSON(filePath: string, data: any) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
-/** Normalises both old (object keyed by date) and new (array) sleep formats. */
 function sleepArray(raw: any): any[] {
   if (!raw) return [];
   if (Array.isArray(raw)) return raw;
@@ -65,7 +64,7 @@ export class DashboardService {
         ? Math.round(((activeMinutes - activeMinutesYesterday) / activeMinutesYesterday) * 100)
         : null;
 
-    const calories = todayActivities.reduce(
+    const calories = todayActivities.reduce( 
       (sum: number, a: any) => sum + Number(a.calories || 0), 0,
     );
     const caloriesYesterday = yesterdayActivities.reduce(

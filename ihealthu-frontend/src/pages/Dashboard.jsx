@@ -10,7 +10,7 @@ import {
   Waves, Lightning, Heartbeat, HandWaving,
   Sun, Moon, CookingPot, X, CheckCircle,
   ApplePodcastsLogo, Lightning as Bolt,
-  CaretLeft, CaretRight, InstagramLogo, GithubLogo
+  CaretLeft, CaretRight
 } from '@phosphor-icons/react'
 
 import breakfastImg from '../assets/meals/breakfast.png'
@@ -144,9 +144,6 @@ const MEAL_SUGGESTIONS = [
 
 
 function getDailyQuote() {
-  const now = new Date()
-  const start = new Date(now.getFullYear(), 0, 0)
-  const dayOfYear = Math.floor((now - start) / 86400000)
   return QUOTES[Math.floor(Math.random() * QUOTES.length)]
 }
 

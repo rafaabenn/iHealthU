@@ -8,7 +8,6 @@
     "weight": "55",
     "height": "160",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?seed=Amaya",
-    "bmi": "",
     "currentStreak": 2,
     "lastStreakDate": "2026-05-14"
   },
@@ -54,6 +53,24 @@
     "height": "175",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley",
     "currentStreak": 14,
+    "lastStreakDate": "2026-05-14"
+  },
+  {
+    "id": "1778774252819",
+    "name": "marwa ",
+    "email": "marwa@lol.com",
+    "password": "123456"
+  },
+  {
+    "id": "1778774279978",
+    "name": "marwa",
+    "email": "marwa@ihealthu.com",
+    "password": "123456",
+    "age": "20",
+    "weight": "56",
+    "height": "167",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?hair=dannyPhantom,fonze,full,pixie&hairColor=000000,77311d,9287ff,ac6651,e0ddff,f4d150,f9c9b6,fc909f,ffeba4&mouth=smile,laughing,smirk&seed=Adrian",
+    "currentStreak": 1,
     "lastStreakDate": "2026-05-14"
   }
 ]

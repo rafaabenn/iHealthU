@@ -1,5 +1,23 @@
 [
   {
+    "id": "1778774689926",
+    "userId": "1778774279978",
+    "type": "Walking",
+    "duration": "30",
+    "date": "2026-05-14",
+    "calories": 98,
+    "notes": ""
+  },
+  {
+    "id": "1778774456192",
+    "userId": "1778774279978",
+    "type": "Weight training",
+    "duration": "60",
+    "date": "2026-05-14",
+    "calories": 280,
+    "notes": "leg day"
+  },
+  {
     "id": "1778717327971",
     "userId": "1778276463231",
     "type": "Walking",

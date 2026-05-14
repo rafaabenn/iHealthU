@@ -1,6 +1,5 @@
-/**
- * Returns the current date in YYYY-MM-DD format using local time.
- */
+//c'est juste une portion de code pour avoir une forme de date specifique "YYYY-MM-DD"
+
 export function getLocalDateString(date: Date = new Date()): string {
   const offset = date.getTimezoneOffset();
   const localDate = new Date(date.getTime() - (offset * 60 * 1000));

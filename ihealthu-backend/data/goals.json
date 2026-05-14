@@ -28,5 +28,11 @@
     "dailyWater": "2.5",
     "dailyActiveMinutes": "45",
     "sleepHours": "8"
+  },
+  "1778774279978": {
+    "dailyCalories": "300",
+    "dailyWater": "2",
+    "dailyActiveMinutes": "60",
+    "sleepHours": "7"
   }
 }

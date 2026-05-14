@@ -53,7 +53,7 @@ export default function Register() {
             <label className={styles.label}>Full name</label>
             <input name="name" value={form.name} onChange={handleChange}
               className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-              placeholder="Alex Martin" />
+              placeholder="GHAMMAD AYA " />
             {errors.name && <span className={styles.fieldError}>{errors.name}</span>}
           </div>
           <div className={styles.formGroup}>

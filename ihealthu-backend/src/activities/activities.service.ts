@@ -71,7 +71,9 @@ export class ActivitiesService {
       (a: any) => !(a.id === id && a.userId === userId))
     if (filtered.length === activities.length) throw new NotFoundException('Activity not found');
     this.writeActivities(filtered);
+    this.syncStreak(userId);
     return { message: 'Deleted' };
+    
   }
 
   private syncStreak(userId: string) {
@@ -115,4 +117,4 @@ export class ActivitiesService {
     fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
     fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
   }
-}
+}

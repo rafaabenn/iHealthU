@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import styles from '../styles/Sidebar.module.css'
 import {
   Home, Dumbbell, Droplets, Moon, Smile,
-  Scale, Flame, Target, BarChart2, User
+  Scale, Flame, Target, BarChart2, User, LogOut
 } from 'lucide-react'
 
 const navItems = [
@@ -92,7 +92,7 @@ export default function Sidebar() {
             className={styles.logoutBtn}
             title="Logout"
           >
-            ⎋
+            <LogOut size={18} />
           </button>
         </div>
       </div>

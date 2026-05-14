@@ -4,12 +4,6 @@ import * as path from 'path';
 
 const DB_PATH = path.join(__dirname, '../../data/goals.json');
 
-
-
-
-
-
-
 function readAllGoals(): Record<string, any> {
   if (!fs.existsSync(DB_PATH)) return {};
   try {

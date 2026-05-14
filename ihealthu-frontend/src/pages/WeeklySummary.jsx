@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip } from 'recharts'
+import { BarChart2, Flame, Dumbbell, Timer, CheckCircle, Lightbulb, AlertTriangle } from 'lucide-react'
 import api from '../services/api'
 import styles from '../styles/WeeklySummary.module.css'
 
@@ -51,7 +52,9 @@ export default function WeeklySummary() {
 
   if (error) return (
     <div className={styles.errorPage}>
-      <div style={{ fontSize: 48 }}>⚠️</div>
+      <div style={{ fontSize: 48, color: '#ffcc00', marginBottom: 20 }}>
+        <AlertTriangle size={64} />
+      </div>
       <p>{error}</p>
       <button onClick={fetchSummary} className="btn-primary" style={{ marginTop: 20 }}>Retry</button>
     </div>
@@ -83,7 +86,7 @@ export default function WeeklySummary() {
       <div className="topbar">
         <div>
           <div className="page-title-sm">Performance Review</div>
-          <h1 className="page-title">📊 Weekly <span>Summary</span></h1>
+          <h1 className="page-title"><BarChart2 style={{ marginRight: 10, verticalAlign: 'middle' }} /> Weekly <span>Summary</span></h1>
         </div>
         <div className="week-nav">
           <button className="nav-btn" onClick={() => changeWeek(-7)}>←</button>
@@ -102,17 +105,17 @@ export default function WeeklySummary() {
 
       <div className={styles.statsGrid}>
         <div className={styles.summaryCard}>
-          <div className={styles.cardIcon}>🔥</div>
+          <div className={styles.cardIcon} style={{ color: '#ff7e5f' }}><Flame size={24} /></div>
           <div className={styles.cardLabel}>Weekly Burn</div>
           <div className={styles.cardVal}>{data.totalCalories} <span>kcal</span></div>
         </div>
         <div className={styles.summaryCard}>
-          <div className={styles.cardIcon}>🏋️</div>
+          <div className={styles.cardIcon} style={{ color: '#a8d5c2' }}><Dumbbell size={24} /></div>
           <div className={styles.cardLabel}>Workouts</div>
           <div className={styles.cardVal}>{data.totalWorkouts} <span>sessions</span></div>
         </div>
         <div className={styles.summaryCard}>
-          <div className={styles.cardIcon}>⏱️</div>
+          <div className={styles.cardIcon} style={{ color: '#baabff' }}><Timer size={24} /></div>
           <div className={styles.cardLabel}>Active Time</div>
           <div className={styles.cardVal}>{data.totalDuration} <span>min</span></div>
         </div>
@@ -183,13 +186,13 @@ export default function WeeklySummary() {
             <div className="panel-title">Wellness Insights</div>
           </div>
           <div className={styles.insightItem}>
-            <div className={styles.insightIcon}>✅</div>
+            <div className={styles.insightIcon} style={{ color: '#4caf50' }}><CheckCircle size={20} /></div>
             <div className={styles.insightText}>
               Your best day for {currentMetric.label.toLowerCase()} was <strong>{bestDay?.day || 'N/A'}</strong> with <strong>{Number(bestDay?.[activeTab] || 0).toFixed(activeTab === 'water' ? 1 : 0)} {currentMetric.unit}</strong>.
             </div>
           </div>
           <div className={styles.insightItem}>
-            <div className={styles.insightIcon}>💡</div>
+            <div className={styles.insightIcon} style={{ color: '#ffc107' }}><Lightbulb size={20} /></div>
             <div className={styles.insightText}>
               You are averaging <strong>{weeklyAvg.toFixed(activeTab === 'water' ? 1 : 0)} {currentMetric.unit}</strong> per day this week.
             </div>
