@@ -22,9 +22,21 @@ export class ActivitiesService {
     private readonly goalsService: GoalsService,
   ) { }
 
-  findAll(userId: string) {
+  findAll(userId: string, endDateParam?: string) {
     const activities = this.readActivities();
-    return activities.filter((a: any) => a.userId === userId);
+    const userActivities = activities.filter((a: any) => a.userId === userId);
+
+    if (!endDateParam) return userActivities;
+
+    const end = new Date(endDateParam);
+    end.setHours(23, 59, 59, 999);
+    const start = new Date(end.getTime() - 7 * 86400000);
+    start.setHours(0, 0, 0, 0);
+
+    return userActivities.filter((a: any) => {
+      const d = new Date(a.date);
+      return d >= start && d <= end;
+    });
   }
 
   create(userId: string, body: any) {

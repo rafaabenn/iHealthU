@@ -12,8 +12,9 @@ export default function Sleep() {
     startTime: '22:00',
     endTime: '06:00'
   })
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
 
-  useEffect(() => { fetchLogs() }, [])
+  useEffect(() => { fetchLogs(endDate) }, [endDate])
 
   useEffect(() => {
     const existingLog = logs.find(l => l.date === form.date)
@@ -22,9 +23,10 @@ export default function Sleep() {
     }
   }, [form.date, logs])
 
-  const fetchLogs = async () => {
+  const fetchLogs = async (date) => {
+    setLoading(true)
     try {
-      const res = await api.get('/sleep')
+      const res = await api.get(`/sleep?endDate=${date}`)
       setLogs(Array.isArray(res.data) ? res.data : [])
     } catch (err) {
       console.error('Failed to fetch sleep logs', err)
@@ -32,6 +34,14 @@ export default function Sleep() {
       setLoading(false)
     }
   }
+
+  const changeWeek = (offset) => {
+    const d = new Date(endDate)
+    d.setDate(d.getDate() + offset)
+    setEndDate(d.toISOString().split('T')[0])
+  }
+
+  const isToday = endDate === new Date().toISOString().split('T')[0]
 
   const calculateDuration = (start, end) => {
     const [sH, sM] = start.split(':').map(Number)
@@ -70,6 +80,19 @@ export default function Sleep() {
           <Moon size={26} weight="duotone" color="var(--lav)" style={{ verticalAlign: 'middle', marginRight: 6 }} />
           Sleep <span>Tracker</span>
         </h1>
+        <div className="week-nav">
+          <button className="nav-btn" onClick={() => changeWeek(-7)}>←</button>
+          <div className="week-label">
+            {endDate} (Week)
+          </div>
+          <button
+            className="nav-btn"
+            onClick={() => changeWeek(7)}
+            disabled={isToday}
+          >
+            →
+          </button>
+        </div>
       </header>
 
       <div className={styles.grid}>

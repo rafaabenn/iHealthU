@@ -43,5 +43,17 @@
     "weight": "55",
     "height": "168",
     "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley"
+  },
+  {
+    "id": "demo_presentation_2026",
+    "name": "Demo User",
+    "email": "demo@ihealthu.com",
+    "password": "password123",
+    "age": "25",
+    "weight": "70",
+    "height": "175",
+    "avatar": "https://api.dicebear.com/9.x/micah/svg?mouth=smile,laughing&seed=Riley",
+    "currentStreak": 14,
+    "lastStreakDate": "2026-05-14"
   }
 ]

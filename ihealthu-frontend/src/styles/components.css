@@ -225,3 +225,45 @@
 .bmi-big { font-size: 28px; font-weight: 700; color: var(--forest); letter-spacing: -1px; }
 .bmi-cat { font-size: 11px; color: var(--sage); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
 .bmi-footer { display: flex; justify-content: space-between; font-size: 10px; color: var(--text3); }
+
+/* Week Navigation */
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: var(--forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn:hover {
+  background: var(--bg);
+}
+
+.nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.week-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text2);
+  min-width: 140px;
+  text-align: center;
+}

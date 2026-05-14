@@ -151,5 +151,131 @@
     "date": "2026-05-07",
     "calories": "400",
     "notes": ""
+  },
+  {
+    "id": "act_demo_0",
+    "userId": "demo_presentation_2026",
+    "type": "Running",
+    "duration": "36",
+    "date": "2026-05-14",
+    "calories": 298,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_1",
+    "userId": "demo_presentation_2026",
+    "type": "Cycling",
+    "duration": "57",
+    "date": "2026-05-13",
+    "calories": 278,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_2",
+    "userId": "demo_presentation_2026",
+    "type": "Running",
+    "duration": "33",
+    "date": "2026-05-12",
+    "calories": 301,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_3",
+    "userId": "demo_presentation_2026",
+    "type": "Yoga",
+    "duration": "30",
+    "date": "2026-05-11",
+    "calories": 392,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_4",
+    "userId": "demo_presentation_2026",
+    "type": "Swimming",
+    "duration": "31",
+    "date": "2026-05-10",
+    "calories": 440,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_5",
+    "userId": "demo_presentation_2026",
+    "type": "Cycling",
+    "duration": "43",
+    "date": "2026-05-09",
+    "calories": 409,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_6",
+    "userId": "demo_presentation_2026",
+    "type": "Walking",
+    "duration": "49",
+    "date": "2026-05-08",
+    "calories": 321,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_7",
+    "userId": "demo_presentation_2026",
+    "type": "Running",
+    "duration": "58",
+    "date": "2026-05-07",
+    "calories": 383,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_8",
+    "userId": "demo_presentation_2026",
+    "type": "Yoga",
+    "duration": "36",
+    "date": "2026-05-06",
+    "calories": 391,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_9",
+    "userId": "demo_presentation_2026",
+    "type": "Swimming",
+    "duration": "49",
+    "date": "2026-05-05",
+    "calories": 349,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_10",
+    "userId": "demo_presentation_2026",
+    "type": "Walking",
+    "duration": "53",
+    "date": "2026-05-04",
+    "calories": 301,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_11",
+    "userId": "demo_presentation_2026",
+    "type": "Walking",
+    "duration": "47",
+    "date": "2026-05-03",
+    "calories": 375,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_12",
+    "userId": "demo_presentation_2026",
+    "type": "Swimming",
+    "duration": "58",
+    "date": "2026-05-02",
+    "calories": 397,
+    "notes": "Demo workout session"
+  },
+  {
+    "id": "act_demo_13",
+    "userId": "demo_presentation_2026",
+    "type": "Walking",
+    "duration": "43",
+    "date": "2026-05-01",
+    "calories": 300,
+    "notes": "Demo workout session"
   }
 ]

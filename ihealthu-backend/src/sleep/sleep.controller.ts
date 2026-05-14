@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { SleepService } from './sleep.service';
 import { JwtGuard } from '../auth/jwt.guard';
 import { UserId } from '../auth/user-id.decorator';
@@ -9,8 +9,8 @@ export class SleepController {
   constructor(private readonly sleepService: SleepService) {}
 
   @Get()
-  getLogs(@UserId() userId: string) {
-    return this.sleepService.getLogs(userId);
+  getLogs(@UserId() userId: string, @Query('endDate') endDate?: string) {
+    return this.sleepService.getLogs(userId, endDate);
   }
 
   @Get('today')

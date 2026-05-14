@@ -8,6 +8,7 @@ export default function WeeklySummary() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [activeTab, setActiveTab] = useState('calories')
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0])
 
   const metricsInfo = {
     calories: { label: 'Calories Burned', unit: 'kcal', color: '#ff7e5f', maxDefault: 500 },
@@ -17,20 +18,29 @@ export default function WeeklySummary() {
   }
 
   useEffect(() => {
-    fetchSummary()
-  }, [])
+    fetchSummary(endDate)
+  }, [endDate])
 
-  const fetchSummary = async () => {
+  const fetchSummary = async (date) => {
+    setLoading(true)
     try {
-      const res = await api.get('/dashboard/summary')
+      const res = await api.get(`/dashboard/summary?endDate=${date}`)
       setData(res.data)
     } catch (err) {
       console.error('Failed to fetch summary', err)
-      setError('Could not load summary data. Please ensure the backend is running.')
+      setError('Could not load summary data.')
     } finally {
       setLoading(false)
     }
   }
+
+  const changeWeek = (offset) => {
+    const d = new Date(endDate)
+    d.setDate(d.getDate() + offset)
+    setEndDate(d.toISOString().split('T')[0])
+  }
+
+  const isToday = endDate === new Date().toISOString().split('T')[0]
 
   if (loading) return (
     <div className={styles.loading}>
@@ -74,6 +84,19 @@ export default function WeeklySummary() {
         <div>
           <div className="page-title-sm">Performance Review</div>
           <h1 className="page-title">📊 Weekly <span>Summary</span></h1>
+        </div>
+        <div className="week-nav">
+          <button className="nav-btn" onClick={() => changeWeek(-7)}>←</button>
+          <div className="week-label">
+            {data?.dailyData?.[0]?.dateStr} - {data?.dailyData?.[6]?.dateStr}
+          </div>
+          <button 
+            className="nav-btn" 
+            onClick={() => changeWeek(7)}
+            disabled={isToday}
+          >
+            →
+          </button>
         </div>
       </div>
 

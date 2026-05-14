@@ -22,9 +22,21 @@ export class SleepService {
     private readonly goalsService: GoalsService,
   ) { }
 
-  getLogs(userId: string) {
+  getLogs(userId: string, endDateParam?: string) {
     const allLogs = readJSON(SLEEP_LOGS_PATH) ?? {};
-    return allLogs[userId] ?? [];
+    const userLogs = allLogs[userId] ?? [];
+
+    if (!endDateParam) return userLogs;
+
+    const end = new Date(endDateParam);
+    end.setHours(23, 59, 59, 999);
+    const start = new Date(end.getTime() - 7 * 86400000);
+    start.setHours(0, 0, 0, 0);
+
+    return userLogs.filter((log: any) => {
+      const d = new Date(log.date);
+      return d >= start && d <= end;
+    });
   }
 
   addLog(userId: string, data: { date: string; startTime: string; endTime: string; duration: number }) {

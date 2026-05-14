@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, Body, UseGuards, Query } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { JwtGuard } from '../auth/jwt.guard';
 import { UserId } from '../auth/user-id.decorator';
@@ -14,8 +14,8 @@ export class DashboardController {
   }
 
   @Get('summary')
-  getSummary(@UserId() userId: string) {
-    return this.dashboardService.getSummary(userId);
+  getSummary(@UserId() userId: string, @Query('endDate') endDate?: string) {
+    return this.dashboardService.getSummary(userId, endDate);
   }
 
   @Put('water')

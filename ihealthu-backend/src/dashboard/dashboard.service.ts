@@ -158,7 +158,7 @@ export class DashboardService {
     );
   }
 
-  getSummary(userId: string) {
+  getSummary(userId: string, endDateParam?: string) {
     const allActivities: any[] = readJSON(ACTIVITIES_PATH) ?? [];
     const allGoals: Record<string, any> = readJSON(GOALS_PATH) ?? {};
     const allWater: Record<string, any> = readJSON(WATER_LOGS_PATH) ?? {};
@@ -170,7 +170,7 @@ export class DashboardService {
     const userSleep = allSleep[userId] ?? {};
     const userSleepArr = sleepArray(userSleep);
 
-    const now = new Date();
+    const now = endDateParam ? new Date(endDateParam) : new Date();
     now.setHours(23, 59, 59, 999);
     const weekAgo = new Date(now.getTime() - 7 * 86400000);
     weekAgo.setHours(0, 0, 0, 0);
@@ -191,7 +191,7 @@ export class DashboardService {
     const dailyData: any[] = [];
 
     for (let i = 6; i >= 0; i--) {
-      const d = new Date();
+      const d = endDateParam ? new Date(endDateParam) : new Date();
       d.setDate(d.getDate() - i);
       const dateStr = getLocalDateString(d);
       const dayName = d.toLocaleDateString('en-US', { weekday: 'short' });

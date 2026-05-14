@@ -58,19 +58,20 @@ export default function Activities() {
   const [dateFilter, setDateFilter] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError]           = useState(null)
+  const [endDate, setEndDate]       = useState(new Date().toISOString().split('T')[0])
   const formRef = useRef(null)
 
-  const fetchActivities = async () => {
+  const fetchActivities = async (date) => {
     setLoading(true); setError(null)
     try {
-      const res = await api.get('/activities')
+      const res = await api.get(`/activities?endDate=${date}`)
       setActivities(res.data)
     } catch (err) {
       if (err.response?.status === 401) setError('Session expired — please log in again.')
       else setError('Failed to load activities.')
     } finally { setLoading(false) }
   }
-  useEffect(() => { fetchActivities() }, [])
+  useEffect(() => { fetchActivities(endDate) }, [endDate])
 
   useEffect(() => {
     if (showForm && formRef.current)
@@ -147,6 +148,14 @@ export default function Activities() {
     })
   }
 
+  const changeWeek = (offset) => {
+    const d = new Date(endDate)
+    d.setDate(d.getDate() + offset)
+    setEndDate(d.toISOString().split('T')[0])
+  }
+
+  const isToday = endDate === new Date().toISOString().split('T')[0]
+
   const filtered = activities.filter(a => {
     const matchType = filter === 'All' || a.type === filter
     const matchDate = !dateFilter || a.date?.startsWith(dateFilter)
@@ -167,6 +176,19 @@ export default function Activities() {
           <h1 className={styles.title}>
             Workouts <span className={styles.accent}>&amp; Activities</span>
           </h1>
+        </div>
+        <div className="week-nav">
+          <button className="nav-btn" onClick={() => changeWeek(-7)}>←</button>
+          <div className="week-label">
+            {endDate} (Week)
+          </div>
+          <button
+            className="nav-btn"
+            onClick={() => changeWeek(7)}
+            disabled={isToday}
+          >
+            →
+          </button>
         </div>
         <button className={styles.btnAdd} onClick={openAdd}>
           <Plus size={16} weight="bold" /> Add workout

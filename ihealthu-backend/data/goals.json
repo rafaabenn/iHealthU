@@ -22,5 +22,11 @@
     "dailyWater": "2",
     "dailyActiveMinutes": "30",
     "sleepHours": "8"
+  },
+  "demo_presentation_2026": {
+    "dailyCalories": "600",
+    "dailyWater": "2.5",
+    "dailyActiveMinutes": "45",
+    "sleepHours": "8"
   }
 }
