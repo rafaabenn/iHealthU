@@ -151,8 +151,8 @@ Two accounts are available out of the box for testing:
 
 | Email | Password |
 |---|---|
+| demo@ihealthu.com | password123 |
 | test@test.com | 123456 |
-| rafaa@test.com | 123456 |
 
 ---
 
