@@ -121,7 +121,7 @@ export class DashboardService {
 
     writeJSON(WATER_LOGS_PATH, allWater);
 
-    // Sync streak immediately
+    
     this.syncStreak(userId);
 
     return { success: true, water: amount };

@@ -21,7 +21,7 @@ const META = {
   Other:             { Icon: Heartbeat,       color: '#e85d9ccf', bg: 'rgba(232,93,155,0.1)',  tag: 'Activity'    },
 }
 
-// MET (Metabolic Equivalent of Task) values per activity type
+
 const MET = {
   Running:           9.8,
   Cycling:           7.5,
@@ -33,7 +33,7 @@ const MET = {
   Other:             5.0,
 }
 
-// Formula: calories = MET × weight(kg) × duration(hours)
+
 const calcCalories = (type, durationMin, weightKg) => {
   if (!durationMin || !weightKg) return ''
   return Math.round(MET[type] * Number(weightKg) * (Number(durationMin) / 60))

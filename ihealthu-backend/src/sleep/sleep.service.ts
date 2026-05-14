@@ -63,14 +63,14 @@ export class SleepService {
 
     allLogs[userId].sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
-    // Keep only last 30 logs
+    
     if (allLogs[userId].length > 30) {
       allLogs[userId] = allLogs[userId].slice(0, 30);
     }
 
     fs.writeFileSync(SLEEP_LOGS_PATH, JSON.stringify(allLogs, null, 2));
     
-    // Sync streak
+    
     this.syncStreak(userId);
 
     return result;
@@ -82,7 +82,7 @@ export class SleepService {
       allLogs[userId] = allLogs[userId].filter(log => log.id !== logId);
       fs.writeFileSync(SLEEP_LOGS_PATH, JSON.stringify(allLogs, null, 2));
       
-      // Sync streak
+      
       this.syncStreak(userId);
     }
     return { success: true };
@@ -116,7 +116,7 @@ export class SleepService {
     yesterdayDate.setDate(yesterdayDate.getDate() - 1);
     const yesterday = getLocalDateString(yesterdayDate);
 
-    // Normalize sleep logs
+    
     const sleepLogs = Array.isArray(userSleep) ? userSleep : Object.entries(userSleep).map(([date, v]: [string, any]) => ({ date, ...v }));
     const latestSleepLog = sleepLogs[0];
     const isTodayOrYesterday = latestSleepLog && (latestSleepLog.date === today || latestSleepLog.date === yesterday);

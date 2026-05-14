@@ -174,7 +174,7 @@
   margin-top: 7px;
 }
 
-/* Dashboard Grid (Progress + Activities) */
+
 .dashboardGrid {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -182,7 +182,7 @@
   width: 100%;
 }
 
-/* Meal Suggestions */
+
 .mealSection {
   margin-bottom: 0;
 }
@@ -203,7 +203,7 @@
   color: var(--text);
 }
 
-/* Carousel Controls */
+
 .carouselControls {
   display: flex;
   align-items: center;
@@ -357,7 +357,7 @@
 }
 
 
-/* Modal Styles */
+
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -480,7 +480,7 @@
   flex: 1;
 }
 
-/* Custom Scrollbar for Modal */
+
 .modalScrollArea::-webkit-scrollbar {
   width: 6px;
 }
@@ -671,7 +671,7 @@
   border-radius: 6px;
 }
 
-/* Goals Styles */
+
 .goalsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

@@ -32,7 +32,7 @@ body {
   display: flex;
 }
 
-/* Shared utility classes */
+
 .tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
 .tag-green { background: #E8F4F0; color: var(--forest); }
 .tag-orange { background: #FEF0DC; color: #B05E00; }
@@ -43,7 +43,7 @@ body {
 .up { color: var(--sage); }
 .dn { color: var(--coral); }
 
-/* Scrollbar styling */
+
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 2px; }

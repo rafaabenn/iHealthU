@@ -1,4 +1,4 @@
-/* ── CSS tokens (matched to screenshot palette) ─────────────── */
+
 .page {
   --teal:        #1B4A3F;
   --teal-light:  rgba(27,74,63,0.08);
@@ -17,7 +17,7 @@
   font-family: 'DM Sans', 'Segoe UI', sans-serif;
 }
 
-/* ── topbar ─────────────────────────────────────────────────── */
+
 .topbar {
   display: flex;
   align-items: flex-start;
@@ -43,7 +43,7 @@
 }
 .accent { color: var(--teal); }
 
-/* ── add button ─────────────────────────────────────────────── */
+
 .btnAdd {
   display: flex;
   align-items: center;
@@ -65,7 +65,7 @@
 .btnAdd:hover  { transform: translateY(-2px); box-shadow: 0 8px 24px var(--teal-shadow); }
 .btnAdd:active { transform: scale(0.97); }
 
-/* ── stats ──────────────────────────────────────────────────── */
+
 .statsRow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -103,7 +103,7 @@
   font-weight: 500;
 }
 
-/* ── error ──────────────────────────────────────────────────── */
+
 .errorBanner {
   background: rgba(220,38,38,0.06);
   color: #b91c1c;
@@ -114,7 +114,7 @@
   margin-bottom: 20px;
 }
 
-/* ── form card ──────────────────────────────────────────────── */
+
 .formCard {
   background: var(--card-bg);
   border-radius: 20px;
@@ -150,7 +150,7 @@
 }
 .closeBtn:hover { background: var(--teal-light); color: var(--teal); }
 
-/* type picker chips */
+
 .typePicker {
   display: flex;
   flex-wrap: wrap;
@@ -174,7 +174,7 @@
 .typeChip:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
 .typeChipActive { font-weight: 700; }
 
-/* form fields */
+
 .formGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -235,7 +235,7 @@
 .btnSave:hover    { transform: translateY(-1px); }
 .btnSave:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
-/* ── filter row ─────────────────────────────────────────────── */
+
 .filterRow {
   display: flex;
   flex-wrap: wrap;
@@ -263,7 +263,7 @@
   background: var(--teal-light);
 }
 
-/* ── list & cards ───────────────────────────────────────────── */
+
 .list { display: flex; flex-direction: column; gap: 10px; }
 
 .card {
@@ -358,7 +358,7 @@
 .actionBtn:hover     { background: var(--teal-light); }
 .actionBtnDel:hover  { background: rgba(220,38,38,0.07); }
 
-/* ── empty state ────────────────────────────────────────────── */
+
 .empty {
   text-align: center;
   padding: 60px 20px;
@@ -369,7 +369,7 @@
 }
 .emptyIcon { font-size: 48px; margin-bottom: 12px; }
 
-/* ── responsive ─────────────────────────────────────────────── */
+
 @media (max-width: 640px) {
   .page       { padding: 20px 16px 60px; }
   .statsRow   { grid-template-columns: 1fr; gap: 10px; }

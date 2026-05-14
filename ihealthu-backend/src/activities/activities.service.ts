@@ -45,7 +45,7 @@ export class ActivitiesService {
     activities.unshift(newActivity);
     this.writeActivities(activities);
 
-    // Sync streak
+    
     this.syncStreak(userId);
 
     return newActivity;
@@ -59,7 +59,7 @@ export class ActivitiesService {
     activities[index] = { ...activities[index], ...body };
     this.writeActivities(activities);
 
-    // Sync streak
+    
     this.syncStreak(userId);
 
     return activities[index];
@@ -93,7 +93,7 @@ export class ActivitiesService {
     yesterdayDate.setDate(yesterdayDate.getDate() - 1);
     const yesterday = getLocalDateString(yesterdayDate);
 
-    // Handle both array and object formats for sleep
+    
     const sleepLogs = Array.isArray(userSleep) ? userSleep : Object.entries(userSleep).map(([date, v]: [string, any]) => ({ date, ...v }));
     const latestSleepLog = sleepLogs[0];
     const isTodayOrYesterday = latestSleepLog && (latestSleepLog.date === today || latestSleepLog.date === yesterday);

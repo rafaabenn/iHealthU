@@ -23,9 +23,9 @@ function stripPassword(user: any) {
 
 function signToken(user: any): string {
   return jwt.sign(
-    { id: user.id, email: user.email },  // payload stored inside the token
+    { id: user.id, email: user.email },  
     JWT_SECRET,
-    { expiresIn: '7d' },                 // token expires after 7 days
+    { expiresIn: '7d' },                 
   );
 }
 
@@ -61,7 +61,7 @@ export class AuthService {
     if (index === -1) throw new UnauthorizedException('User not found');
 
     const updatedUser = { ...users[index], ...data };
-    // Don't let them change the ID
+    
     updatedUser.id = userId;
 
     users[index] = updatedUser;

@@ -1,13 +1,7 @@
-//Verifies the token on every protected request
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException,} from '@nestjs/common';
 import * as jwt from 'jsonwebtoken';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change-this-to-a-long-random-secret-in-production';
-
-// This guard runs BEFORE the controller method.
-// It reads the Authorization header, verifies the token,
-// and attaches the userId to the request object so controllers can use it.
-// If the token is missing or invalid it throws 401 and the controller never runs.
 
 @Injectable()
 export class JwtGuard implements CanActivate {
@@ -23,7 +17,7 @@ export class JwtGuard implements CanActivate {
 
     try {
       const payload = jwt.verify(token, JWT_SECRET) as { id: string; email: string };
-      // Attach userId to the request — controllers read it from here
+      
       request.userId = payload.id;
       return true;
     } catch {

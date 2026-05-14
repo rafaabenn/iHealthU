@@ -253,7 +253,7 @@
   color: #B02020;
 }
 
-/* ---- BMI card ---- */
+
 .bmiCard {
   background: var(--surface, #fff);
   border: 1px solid var(--border, #e5e7eb);

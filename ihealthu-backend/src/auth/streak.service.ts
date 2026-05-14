@@ -44,7 +44,7 @@ export class StreakService {
     const user = users[userIndex];
     const todayStr = getLocalDateString();
     
-    // Check if we already incremented today
+    
     if (user.lastStreakDate === todayStr) {
       return user.currentStreak ?? 0;
     }
@@ -58,18 +58,18 @@ export class StreakService {
     yesterday.setDate(yesterday.getDate() - 1);
     const yesterdayStr = getLocalDateString(yesterday);
 
-    // A missed day is when the last update was BEFORE yesterday
+    
     const lastDateStr = user.lastStreakDate;
     const missedDay = lastDateStr && lastDateStr < yesterdayStr;
 
     if (allGoalsMet) {
-      // If we missed a day, reset to 1, otherwise increment
+      
       user.currentStreak = missedDay ? 1 : (user.currentStreak ?? 0) + 1;
       user.lastStreakDate = todayStr;
       users[userIndex] = user;
       writeUsers(users);
     } else if (missedDay) {
-      // If goals not met AND we missed yesterday, reset to 0
+      
       user.currentStreak = 0;
       user.lastStreakDate = null;
       users[userIndex] = user;
@@ -97,7 +97,7 @@ export class StreakService {
     if (Number(goals.sleepHours) > 0)
       checks.push(stats.sleep >= Number(goals.sleepHours));
 
-    // Must have at least one goal defined and all met
+    
     return checks.length > 0 && checks.every(Boolean);
   }
 }

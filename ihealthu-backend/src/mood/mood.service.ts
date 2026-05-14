@@ -24,7 +24,7 @@ export class MoodService {
     const allLogs = readJSON(MOOD_LOGS_PATH) ?? {};
     if (!allLogs[userId]) allLogs[userId] = {};
     
-    // Store by date to ensure only one mood per day
+    
     allLogs[userId][data.date] = {
       mood: data.mood,
       note: data.note,

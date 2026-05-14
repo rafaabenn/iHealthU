@@ -1,4 +1,4 @@
-/* Panel */
+
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -25,7 +25,7 @@
 }
 .panel-action:hover { background: rgba(74,124,111,0.18); }
 
-/* StatCard */
+
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -55,7 +55,7 @@
 .up { color: var(--sage); }
 .dn { color: var(--coral); }
 
-/* WorkoutItem & WorkoutCard */
+
 .workout-item {
   display: flex;
   align-items: center;
@@ -90,7 +90,7 @@
   border-radius: 8px;
 }
 
-/* GoalItem */
+
 .goal-item { margin-bottom: 12px; }
 .goal-item:last-child { margin-bottom: 0; }
 .goal-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
@@ -107,7 +107,7 @@
 .gf3 { background: linear-gradient(90deg, var(--amber), #F0C070); }
 .gf4 { background: linear-gradient(90deg, var(--lav), #B8AED8); }
 
-/* MoodSelector (small buttons) */
+
 .mood-row { display: flex; gap: 7px; justify-content: space-between; margin: 6px 0 14px; }
 .mood-btn {
   flex: 1;
@@ -130,12 +130,12 @@
   box-shadow: 0 4px 12px rgba(232,168,74,0.2);
 }
 
-/* MoodHistory */
+
 .mood-history { display: flex; gap: 4px; align-items: flex-end; height: 38px; }
 .mbar { flex: 1; border-radius: 3px; background: var(--mint); opacity: 0.45; }
 .mbar.today { opacity: 1; background: var(--amber); }
 
-/* WaterGlasses (small) */
+
 .water-glasses { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin: 4px 0 12px; }
 .glass {
   height: 42px;
@@ -159,7 +159,7 @@
 }
 .water-label { font-size: 12px; color: var(--text2); margin-top: 8px; display: flex; justify-content: space-between; }
 
-/* QuickActions */
+
 .quick-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
 .qa-btn {
   background: var(--forest);
@@ -182,7 +182,7 @@
 .qa-btn.outline { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
 .qa-btn.outline:hover { background: var(--bg); border-color: var(--sage); color: var(--forest); }
 
-/* Topbar */
+
 .topbar {
   display: flex;
   align-items: flex-start;
@@ -219,14 +219,14 @@
   cursor: pointer;
 }
 
-/* BmiArc (small for home) */
+
 .bmi-arc-wrap { position: relative; display: flex; justify-content: center; margin: 4px 0 6px; }
 .bmi-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-28%); text-align: center; }
 .bmi-big { font-size: 28px; font-weight: 700; color: var(--forest); letter-spacing: -1px; }
 .bmi-cat { font-size: 11px; color: var(--sage); font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; }
 .bmi-footer { display: flex; justify-content: space-between; font-size: 10px; color: var(--text3); }
 
-/* Week Navigation */
+
 .week-nav {
   display: flex;
   align-items: center;

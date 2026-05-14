@@ -8,7 +8,7 @@ export default function Sleep() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({
-    date: new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD
+    date: new Date().toLocaleDateString('en-CA'), 
     startTime: '22:00',
     endTime: '06:00'
   })

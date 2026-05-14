@@ -3,7 +3,7 @@ import { ActivitiesService } from './activities.service';
 import { JwtGuard } from '../auth/jwt.guard';
 import { UserId } from '../auth/user-id.decorator';
 
-@UseGuards(JwtGuard)          // every route in this controller requires a valid token
+@UseGuards(JwtGuard)
 @Controller('activities')
 export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}

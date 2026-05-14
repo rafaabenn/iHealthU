@@ -49,21 +49,21 @@ export default function WaterPage() {
   const goalLiters    = total.toFixed(1)
   const glassesGoal   = Math.round(total / 0.2)
 
-  // Dynamic sizing refined for "single line" feel
+  
   let cols = glassesGoal;
   let glassHeight = 42;
   let iconSize = 18;
   let fontSize = 16;
 
   if (glassesGoal > 12) {
-    cols = 10; // Max 10 per row for larger goals
+    cols = 10; 
     glassHeight = 36;
     iconSize = 16;
     fontSize = 14;
   }
 
   if (glassesGoal > 25) {
-    cols = 12; // Even more columns for very large goals
+    cols = 12; 
     glassHeight = 32;
     iconSize = 14;
     fontSize = 12;
