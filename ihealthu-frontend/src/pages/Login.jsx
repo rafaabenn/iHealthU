@@ -30,7 +30,7 @@ export default function Login() {
     <div className={styles.authPage}>
       <div className={styles.authCard}>
         <div className={styles.authLogo}>
-          <img src="public/logo1.png" alt="logo" style={{ width: '35px', height: '35px' ,margin:'5px'}} />
+          <img src="/logo1.png" alt="logo" style={{ width: '35px', height: '35px' ,margin:'5px'}} />
           iHealth<span>U</span>
         </div>
         <p className={styles.authSubtitle}>Sign in to your wellness dashboard</p>

@@ -1,5 +1,59 @@
 [
   {
+    "id": "1778717327971",
+    "userId": "1778276463231",
+    "type": "Walking",
+    "duration": "90",
+    "date": "2026-05-14",
+    "calories": 289,
+    "notes": ""
+  },
+  {
+    "id": "1778716825058",
+    "userId": "1777503137317",
+    "type": "Cycling",
+    "duration": "20",
+    "date": "2026-05-14",
+    "calories": 138,
+    "notes": ""
+  },
+  {
+    "id": "1778716813138",
+    "userId": "1777503137317",
+    "type": "Running",
+    "duration": "45",
+    "date": "2026-05-14",
+    "calories": 404,
+    "notes": ""
+  },
+  {
+    "id": "1778714959416",
+    "userId": "1777503137317",
+    "type": "Swimming",
+    "duration": "60",
+    "date": "2026-05-13",
+    "calories": 440,
+    "notes": ""
+  },
+  {
+    "id": "1778713228451",
+    "userId": "1778276463231",
+    "type": "HIIT",
+    "duration": "50",
+    "date": "2026-05-13",
+    "calories": 458,
+    "notes": ""
+  },
+  {
+    "id": "1778710576504",
+    "userId": "1777503137317",
+    "type": "HIIT",
+    "duration": "70",
+    "date": "2026-05-13",
+    "calories": 642,
+    "notes": ""
+  },
+  {
     "id": "1778688054794",
     "userId": "1777503137317",
     "type": "Running",

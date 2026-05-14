@@ -42,15 +42,23 @@ export default function Mood() {
     }
   }
 
+  const [saveMsg, setSaveMsg] = useState('')
+
+  const showToast = (msg) => {
+    setSaveMsg(msg)
+    setTimeout(() => setSaveMsg(''), 3000)
+  }
+
   const handleSave = async () => {
     if (!selectedMood) return
     setSaving(true)
     try {
       const res = await api.post('/mood', { date: todayStr, mood: selectedMood, note })
       setHistory(prev => ({ ...prev, [todayStr]: res.data }))
-      alert('Mood saved for today!')
+      showToast("Today's mood saved!")
     } catch (err) {
       console.error('Failed to save mood', err)
+      showToast('Failed to save mood. Please try again.')
     } finally {
       setSaving(false)
     }
@@ -119,6 +127,22 @@ export default function Mood() {
         >
           {saving ? 'Saving...' : "Save Today's Mood"}
         </button>
+
+        {saveMsg && (
+          <div style={{
+            marginTop: 12,
+            padding: '10px 16px',
+            borderRadius: 10,
+            background: saveMsg.includes('Failed') ? 'rgba(232,93,58,0.12)' : 'rgba(74,124,111,0.12)',
+            color: saveMsg.includes('Failed') ? 'var(--coral)' : 'var(--sage)',
+            fontSize: 13,
+            fontWeight: 600,
+            textAlign: 'center',
+            border: `1px solid ${saveMsg.includes('Failed') ? 'rgba(232,93,58,0.3)' : 'rgba(74,124,111,0.3)'}`,
+          }}>
+            {saveMsg.includes('Failed') ? '✗' : '✓'} {saveMsg}
+          </div>
+        )}
       </div>
 
       <section className={styles.historySection}>

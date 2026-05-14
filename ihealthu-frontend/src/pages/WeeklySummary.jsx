@@ -178,12 +178,16 @@ export default function WeeklySummary() {
             <div className="panel-title">Goal Adherence</div>
           </div>
           <div className={styles.goalLine}>
+            <span>Calories Target</span>
+            <strong>{data.goals.calories || 0} kcal</strong>
+          </div>
+          <div className={styles.goalLine}>
             <span>Water Target</span>
-            <strong>{data.goals.water} Litres</strong>
+            <strong>{data.goals.water || 0} Litres</strong>
           </div>
           <div className={styles.goalLine}>
             <span>Sleep Target</span>
-            <strong>{data.goals.sleep} hours</strong>
+            <strong>{data.goals.sleep || 0} hours</strong>
           </div>
         </div>
       </div>

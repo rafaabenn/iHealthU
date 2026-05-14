@@ -34,7 +34,7 @@ export class GoalsService {
     const all = readAllGoals();
     return all[userId] ?? {};
   }
- 
+
   update(userId: string, body: any) {
     const all = readAllGoals();
     all[userId] = body;

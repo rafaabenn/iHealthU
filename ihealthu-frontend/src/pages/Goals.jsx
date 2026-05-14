@@ -5,7 +5,6 @@ import { Fire, Barbell, Drop, Timer, Moon, FloppyDisk, CheckCircle } from '@phos
 
 const DEFAULT_GOALS = {
   dailyCalories:      '',
-  weeklyWorkouts:     '',
   dailyWater:         '',
   dailyActiveMinutes: '',
   sleepHours:         '',

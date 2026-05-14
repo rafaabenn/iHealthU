@@ -40,27 +40,7 @@ const QUOTES = [
   { text: "The first wealth is health.", author: "Ralph Waldo Emerson" },
   { text: "Health is not valued until sickness comes.", author: "Thomas Fuller" },
   { text: "Motivation is what gets you started. Habit is what keeps you going.", author: "Jim Ryun" },
-  { text: "Small progress is still progress. Keep moving.", author: "iHealthU" },
-  { text: "Consistency beats perfection every single time.", author: "iHealthU" },
-  { text: "Your body keeps the score — make today count.", author: "iHealthU" },
-  { text: "Every step forward is a step toward a healthier you.", author: "iHealthU" },
-  { text: "Success is the sum of small efforts repeated day in and day out.", author: "Robert Collier" },
-  { text: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius" },
-  { text: "The pain you feel today will be the strength you feel tomorrow.", author: "Arnold Schwarzenegger" },
-  { text: "An early morning walk is a blessing for the whole day.", author: "Henry Thoreau" },
-  { text: "Movement is medicine for creating change in a person's physical, emotional, and mental states.", author: "Carol Welch" },
-  { text: "The body achieves what the mind believes.", author: "Napoleon Hill" },
-  { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-  { text: "Take care of your body and it will take care of you.", author: "iHealthU" },
-  { text: "Strength does not come from the physical capacity. It comes from an indomitable will.", author: "Gandhi" },
-  { text: "Eat well, move daily, hydrate often, sleep lots, love your body.", author: "iHealthU" },
-  { text: "No matter how slow you go, you are still lapping everyone on the couch.", author: "iHealthU" },
-  { text: "Rest when you're weary. Refresh and renew yourself, your body, your mind.", author: "Ralph Marston" },
-  { text: "Take care of yourself so you can take care of others.", author: "iHealthU" },
-  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-  { text: "Your health is an investment, not an expense.", author: "iHealthU" },
-  { text: "Don't wish for it. Work for it.", author: "iHealthU" },
-  { text: "Every workout is a step in the right direction.", author: "iHealthU" },
+  { text: "Small progress is still progress. Keep moving.", author: "iHealthU" }
 ]
 
 const MEAL_SUGGESTIONS = [
@@ -167,7 +147,14 @@ function getDailyQuote() {
   const now = new Date()
   const start = new Date(now.getFullYear(), 0, 0)
   const dayOfYear = Math.floor((now - start) / 86400000)
-  return QUOTES[dayOfYear % QUOTES.length]
+  return QUOTES[Math.floor(Math.random() *QUOTES.length ) ]
+}
+
+function getGreeting() {
+  const h = new Date().getHours()
+  if (h < 12) return 'Good morning'
+  if (h < 18) return 'Good afternoon'
+  return 'Good evening'
 }
 
 export default function Dashboard() {
@@ -252,7 +239,7 @@ export default function Dashboard() {
         <div>
           <div className={styles.pageTitleSm}>{today}</div>
           <h1 className={styles.pageTitle}>
-            Good morning, <span>{user?.name?.split(' ')[0] || 'there'}</span>{' '}
+            {getGreeting()}, <span>{user?.name?.split(' ')[0] || 'there'}</span>{' '}
             <HandWaving size={20} weight="duotone" color="#4A7C6F" />
           </h1>
         </div>
@@ -299,9 +286,9 @@ export default function Dashboard() {
           <div className={styles.goalsGrid}>
             {[
               { label: 'Active', value: stats?.activeMinutes ?? 0, goal: stats?.activeMinutesGoal ?? 30, color: 'var(--sage)', icon: <Timer size={14} weight="bold" /> },
-              { label: 'Cals', value: stats?.calories ?? 0, goal: 500, color: 'var(--coral)', icon: <Fire size={14} weight="bold" /> },
+              { label: 'Cals', value: stats?.calories ?? 0, goal: stats?.caloriesGoal ?? 500, color: 'var(--coral)', icon: <Fire size={14} weight="bold" /> },
               { label: 'Water', value: stats?.water ?? 0, goal: stats?.dailyWaterGoal ?? 2.0, color: 'var(--sky)', icon: <Drop size={14} weight="bold" /> },
-              { label: 'Sleep', value: (stats?.sleep ?? 0) * 60, goal: 480, color: 'var(--lav)', icon: <Bed size={14} weight="bold" /> },
+              { label: 'Sleep', value: (stats?.sleep ?? 0) * 60, goal: (stats?.sleepGoal ?? 8) * 60, color: 'var(--lav)', icon: <Bed size={14} weight="bold" /> },
             ].map(g => (
               <div key={g.label} className={styles.goalItem}>
                 <div className={styles.goalMeta}>

@@ -8,8 +8,8 @@ export default function Sleep() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [form, setForm] = useState({
-    date: new Date().toISOString().split('T')[0],
-    startTime: '01:00',
+    date: new Date().toLocaleDateString('en-CA'), // YYYY-MM-DD
+    startTime: '22:00',
     endTime: '06:00'
   })
 
@@ -125,7 +125,7 @@ export default function Sleep() {
             <Bed size={40} weight="duotone" color="rgba(255,255,255,0.9)" />
           </div>
           <div className={styles.summaryTitle}>Weekly Average</div>
-          <div className={styles.summaryVal}>{weeklyAvg} <span>hours / night</span></div>
+          <div className={styles.summaryVal}>{duration.toFixed(1)} <span>hours / night</span></div>
           <p className={styles.summaryHint}>
             Consistent sleep helps with muscle recovery and mental focus.
           </p>

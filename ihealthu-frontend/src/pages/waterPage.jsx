@@ -35,8 +35,9 @@ export default function WaterPage() {
   const handleGlassClick = async (i) => {
     const newFilled = i < filled ? i : i + 1
     setFilled(newFilled)
+    const amount = Math.round(newFilled * 0.2 * 100) / 100
     try {
-      await api.put('/dashboard/water', { amount: newFilled * 0.2 })
+      await api.put('/dashboard/water', { amount })
     } catch (err) {
       console.error('Failed to save water intake', err)
     }
